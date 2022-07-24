@@ -20,25 +20,15 @@ import { generateMessageID } from './generics'
 const getTmpFilesDirectory = () => tmpdir()
 
 const getImageProcessingLibrary = async() => {
-	const [jimp, sharp] = await Promise.all([
+	const [jimp] = await Promise.all([
 		(async() => {
 			const jimp = await (
 				import('jimp')
 					.catch(() => { })
 			)
 			return jimp
-		})(),
-		(async() => {
-			const sharp = await (
-				import('sharp')
-					.catch(() => { })
-			)
-			return sharp
 		})()
 	])
-	if(sharp) {
-		return { sharp }
-	}
 
 	if(jimp) {
 		return { jimp }
@@ -103,13 +93,7 @@ export const extractImageThumb = async(bufferOrFilePath: Readable | Buffer | str
 	}
 
 	const lib = await getImageProcessingLibrary()
-	if('sharp' in lib) {
-		const result = await lib.sharp!.default(bufferOrFilePath)
-			.resize(width)
-			.jpeg({ quality: 50 })
-			.toBuffer()
-		return result
-	} else {
+	
 		const { read, MIME_JPEG, RESIZE_BILINEAR, AUTO } = lib.jimp
 
 		const jimp = await read(bufferOrFilePath as any)
@@ -118,7 +102,7 @@ export const extractImageThumb = async(bufferOrFilePath: Readable | Buffer | str
 			.resize(width, AUTO, RESIZE_BILINEAR)
 			.getBufferAsync(MIME_JPEG)
 		return result
-	}
+	
 }
 
 export const generateProfilePicture = async(mediaUpload: WAMediaUpload) => {
@@ -133,14 +117,7 @@ export const generateProfilePicture = async(mediaUpload: WAMediaUpload) => {
 
 	const lib = await getImageProcessingLibrary()
 	let img: Promise<Buffer>
-	if('sharp' in lib) {
-		img = lib.sharp!.default(bufferOrFilePath)
-			.resize(640, 640)
-			.jpeg({
-				quality: 50,
-			})
-			.toBuffer()
-	} else {
+	
 		const { read, MIME_JPEG, RESIZE_BILINEAR } = lib.jimp
 		const jimp = await read(bufferOrFilePath as any)
 		const min = Math.min(jimp.getWidth(), jimp.getHeight())
@@ -149,8 +126,8 @@ export const generateProfilePicture = async(mediaUpload: WAMediaUpload) => {
 		img = cropped
 			.quality(50)
 			.resize(640, 640, RESIZE_BILINEAR)
-			.getBufferAsync(MIME_JPEG)
-	}
+	 	.getBufferAsync(MIME_JPEG)
+	
 
 	return {
 		img: await img,
