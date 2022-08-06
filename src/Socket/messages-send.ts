@@ -583,7 +583,11 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				const additionalAttributes: BinaryNodeAttributes = {};
 				// required for delete
 				if (isDeleteMsg) {
-					additionalAttributes.edit = "7";
+					if (isJidGroup(content.delete?.remoteJid as string) && !content.delete?.fromMe) {
+						additionalAttributes.edit = "8";
+					} else {
+						additionalAttributes.edit = "7";
+					}
 				}
 				fullMsg.message = patchMessageForMdIfRequired(fullMsg.message!);
 				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalAttributes });
