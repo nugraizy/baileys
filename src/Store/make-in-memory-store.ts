@@ -100,10 +100,8 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 		});
 		ev.on("contacts.update", (updates) => {
 			for (const update of updates) {
-				if (contacts[update.id!]) {
+				if (update) {
 					Object.assign(contacts[update.id!], update);
-				} else {
-					logger.debug({ update }, "got update for non-existant contact");
 				}
 			}
 		});
