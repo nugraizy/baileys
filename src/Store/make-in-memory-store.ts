@@ -34,7 +34,7 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 
 	const chats = new KeyedDB(chatKey, (c) => c.id);
 	const messages: { [_: string]: ReturnType<typeof makeMessagesDictionary> } = {};
-	const contacts: { [_: string]: Contact } = {};
+	let contacts: { [_: string]: Contact } = {};
 	const groupMetadata: { [_: string]: GroupMetadata } = {};
 	const presences: { [id: string]: { [participant: string]: PresenceData } } = {};
 	const state: ConnectionState = { connection: "close" };
@@ -102,8 +102,11 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 			for (const update of updates) {
 				if (update) {
 					if (!contacts[update.id!] && update.id) {
+						if(!contacts[update.id]) {
+							//@ts-ignore
+							contacts[update.id] = {};
+						}
 						Object.assign(contacts[update.id!], update);
-						continue
 					} else if (update.id) {
 						Object.assign(contacts[update.id!], update);
 					}
