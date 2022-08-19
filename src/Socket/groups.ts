@@ -21,12 +21,30 @@ export const makeGroupsSocket = (config: SocketConfig) => {
 	)
 
 	const groupMetadata = async(jid: string) => {
-		const result = await groupQuery(
-			jid,
-			'get',
-			[ { tag: 'query', attrs: { request: 'interactive' } } ]
-		)
-		return extractGroupMetadata(result)
+		try {
+			const result = await groupQuery(
+				jid,
+				'get',
+				[ { tag: 'query', attrs: { request: 'interactive' } } ]
+			)
+			return extractGroupMetadata(result)
+		} catch(err) {
+			return {
+				id: "",
+				subject: "",
+				subjectOwner: "",
+				subjectTime: 0,
+				size: 0,
+				creation: 0,
+				owner: "",
+				desc: undefined,
+				descId: undefined,
+				restrict: false,
+				announce: false,
+				participants: [],
+				ephemeralDuration: undefined
+			}
+		}
 	}
 
 	return {
