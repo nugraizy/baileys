@@ -101,7 +101,12 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 		ev.on("contacts.update", (updates) => {
 			for (const update of updates) {
 				if (update) {
-					Object.assign(contacts[update.id!], update);
+					if (!contacts[update.id!] && update.id) {
+						Object.assign(contacts[update.id!], update);
+						continue
+					} else if (update.id) {
+						Object.assign(contacts[update.id!], update);
+					}
 				}
 			}
 		});
