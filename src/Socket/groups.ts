@@ -121,7 +121,8 @@ export const makeGroupsSocket = (config: SocketConfig) => {
 			const node = getBinaryNodeChild(result, action)
 			const participantsAffected = getBinaryNodeChildren(node!, 'participant')
 			return participantsAffected.map(p => {
-				return { status: p.attrs.error || '200', jid: p.attrs.jid }
+				const attrs = getBinaryNodeChildren(p, 'add_request')?.[0]?.attrs
+				return { status: p.attrs.error || '200', jid: p.attrs.jid, ...(action == "add" ? p.attrs.error == "403" ? { code: attrs?.code, expiration: attrs?.expiration } : {} : {}) }
 			})
 		},
 		groupUpdateDescription: async(jid: string, description?: string) => {
