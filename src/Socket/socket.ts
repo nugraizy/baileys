@@ -98,7 +98,7 @@ export const makeSocket = ({
 			ws.on('frame', onOpen)
 			ws.on('close', onClose)
 			ws.on('error', onClose)
-		})
+		}).catch(err => err)
 			.finally(() => {
 				ws.off('frame', onOpen)
 				ws.off('close', onClose)
@@ -135,6 +135,8 @@ export const makeSocket = ({
 				},
 			)
 			return result as any
+		} catch(err) {
+			return err
 		} finally {
 			ws.off(`TAG:${msgId}`, onRecv!)
 			ws.off('close', onErr!) // if the socket closes, you'll never receive the message
