@@ -8,7 +8,7 @@ import { BufferJSON } from './generics'
 // do not use in your own systems please
 const KEY_MAP: { [T in keyof SignalDataTypeMap]: string } = {
 	'pre-key': 'preKeys',
-	'session': 'sessions',
+	session: 'sessions',
 	'sender-key': 'senderKeys',
 	'app-state-sync-key': 'appStateSyncKeys',
 	'app-state-sync-version': 'appStateVersions',
@@ -20,11 +20,11 @@ const KEY_MAP: { [T in keyof SignalDataTypeMap]: string } = {
  *
  * DO NOT USE IN A PROD ENVIRONMENT, only meant to serve as an example
  * */
-export const useSingleFileAuthState = (filename: string, logger?: Logger): { state: AuthenticationState, saveState: () => void } => {
+export const useSingleFileAuthState = (filename: string, logger?: Logger): { state: AuthenticationState; saveState: () => void } => {
 	// require fs here so that in case "fs" is not available -- the app does not crash
 	const { readFileSync, writeFileSync, existsSync } = require('fs')
 	let creds: AuthenticationCreds
-	let keys: any = { }
+	let keys: any = {}
 
 	// save the authentication state to a file
 	const saveState = () => {
@@ -36,16 +36,13 @@ export const useSingleFileAuthState = (filename: string, logger?: Logger): { sta
 		)
 	}
 
-	if(existsSync(filename)) {
-		const result = JSON.parse(
-			readFileSync(filename, { encoding: 'utf-8' }),
-			BufferJSON.reviver
-		)
+	if (existsSync(filename)) {
+		const result = JSON.parse(readFileSync(filename, { encoding: 'utf-8' }), BufferJSON.reviver)
 		creds = result.creds
 		keys = result.keys
 	} else {
 		creds = initAuthCreds()
-		keys = { }
+		keys = {}
 	}
 
 	return {
@@ -54,25 +51,23 @@ export const useSingleFileAuthState = (filename: string, logger?: Logger): { sta
 			keys: {
 				get: (type, ids) => {
 					const key = KEY_MAP[type]
-					return ids.reduce(
-						(dict, id) => {
-							let value = keys[key]?.[id]
-							if(value) {
-								if(type === 'app-state-sync-key') {
-									value = proto.AppStateSyncKeyData.fromObject(value)
-								}
-
-								dict[id] = value
+					return ids.reduce((dict, id) => {
+						let value = keys[key]?.[id]
+						if (value) {
+							if (type === 'app-state-sync-key') {
+								value = proto.Message.AppStateSyncKeyData.fromObject(value)
 							}
 
-							return dict
-						}, { }
-					)
+							dict[id] = value
+						}
+
+						return dict
+					}, {})
 				},
 				set: (data) => {
-					for(const _key in data) {
+					for (const _key in data) {
 						const key = KEY_MAP[_key as keyof SignalDataTypeMap]
-						keys[key] = keys[key] || { }
+						keys[key] = keys[key] || {}
 						Object.assign(keys[key], data[_key])
 					}
 

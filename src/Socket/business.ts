@@ -6,13 +6,9 @@ import { makeMessagesRecvSocket } from './messages-recv'
 
 export const makeBusinessSocket = (config: SocketConfig) => {
 	const sock = makeMessagesRecvSocket(config)
-	const {
-		authState,
-		query,
-		waUploadToServer
-	} = sock
+	const { authState, query, waUploadToServer } = sock
 
-	const getCatalog = async(jid?: string, limit = 10) => {
+	const getCatalog = async (jid?: string, limit = 10) => {
 		jid = jid || authState.creds.me?.id
 		jid = jidNormalizedUser(jid!)
 		const result = await query({
@@ -32,17 +28,17 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 					content: [
 						{
 							tag: 'limit',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from(limit.toString())
 						},
 						{
 							tag: 'width',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from('100')
 						},
 						{
 							tag: 'height',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from('100')
 						}
 					]
@@ -52,7 +48,7 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 		return parseCatalogNode(result)
 	}
 
-	const getCollections = async(jid?: string, limit = 51) => {
+	const getCollections = async (jid?: string, limit = 51) => {
 		jid = jid || authState.creds.me?.id
 		jid = jidNormalizedUser(jid!)
 		const result = await query({
@@ -67,27 +63,27 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 				{
 					tag: 'collections',
 					attrs: {
-						biz_jid: jid,
+						biz_jid: jid
 					},
 					content: [
 						{
 							tag: 'collection_limit',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from(limit.toString())
 						},
 						{
 							tag: 'item_limit',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from(limit.toString())
 						},
 						{
 							tag: 'width',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from('100')
 						},
 						{
 							tag: 'height',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from('100')
 						}
 					]
@@ -98,7 +94,7 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 		return parseCollectionsNode(result)
 	}
 
-	const getOrderDetails = async(orderId: string, tokenBase64: string) => {
+	const getOrderDetails = async (orderId: string, tokenBase64: string) => {
 		const result = await query({
 			tag: 'iq',
 			attrs: {
@@ -117,23 +113,23 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 					content: [
 						{
 							tag: 'image_dimensions',
-							attrs: { },
+							attrs: {},
 							content: [
 								{
 									tag: 'width',
-									attrs: { },
+									attrs: {},
 									content: Buffer.from('100')
 								},
 								{
 									tag: 'height',
-									attrs: { },
+									attrs: {},
 									content: Buffer.from('100')
 								}
 							]
 						},
 						{
 							tag: 'token',
-							attrs: { },
+							attrs: {},
 							content: Buffer.from(tokenBase64)
 						}
 					]
@@ -144,7 +140,7 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 		return parseOrderDetailsNode(result)
 	}
 
-	const productUpdate = async(productId: string, update: ProductUpdate) => {
+	const productUpdate = async (productId: string, update: ProductUpdate) => {
 		update = await uploadingNecessaryImagesOfProduct(update, waUploadToServer)
 		const editNode = toProductNode(productId, update)
 
@@ -159,7 +155,19 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 				{
 					tag: 'product_catalog_edit',
 					attrs: { v: '1' },
-					content: [ editNode ]
+					content: [
+						editNode,
+						{
+							tag: 'width',
+							attrs: {},
+							content: '100'
+						},
+						{
+							tag: 'height',
+							attrs: {},
+							content: '100'
+						}
+					]
 				}
 			]
 		})
@@ -170,7 +178,9 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 		return parseProductNode(productNode!)
 	}
 
-	const productCreate = async(create: ProductCreate) => {
+	const productCreate = async (create: ProductCreate) => {
+		// ensure isHidden is defined
+		create.isHidden = !!create.isHidden
 		create = await uploadingNecessaryImagesOfProduct(create, waUploadToServer)
 		const createNode = toProductNode(undefined, create)
 
@@ -185,7 +195,19 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 				{
 					tag: 'product_catalog_add',
 					attrs: { v: '1' },
-					content: [ createNode ]
+					content: [
+						createNode,
+						{
+							tag: 'width',
+							attrs: {},
+							content: '100'
+						},
+						{
+							tag: 'height',
+							attrs: {},
+							content: '100'
+						}
+					]
 				}
 			]
 		})
@@ -196,7 +218,7 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 		return parseProductNode(productNode!)
 	}
 
-	const productDelete = async(productIds: string[]) => {
+	const productDelete = async (productIds: string[]) => {
 		const result = await query({
 			tag: 'iq',
 			attrs: {
@@ -208,19 +230,17 @@ export const makeBusinessSocket = (config: SocketConfig) => {
 				{
 					tag: 'product_catalog_delete',
 					attrs: { v: '1' },
-					content: productIds.map(
-						id => ({
-							tag: 'product',
-							attrs: { },
-							content: [
-								{
-									tag: 'id',
-									attrs: { },
-									content: Buffer.from(id)
-								}
-							]
-						})
-					)
+					content: productIds.map((id) => ({
+						tag: 'product',
+						attrs: {},
+						content: [
+							{
+								tag: 'id',
+								attrs: {},
+								content: Buffer.from(id)
+							}
+						]
+					}))
 				}
 			]
 		})

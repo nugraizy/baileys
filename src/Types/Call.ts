@@ -1,4 +1,3 @@
-
 export type WACallUpdateType = 'offer' | 'ringing' | 'timeout' | 'reject' | 'accept'
 
 export type WACallEvent = {

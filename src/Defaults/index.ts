@@ -1,4 +1,5 @@
-import type { CommonSocketConfig, LegacySocketConfig, MediaType, SocketConfig } from '../Types'
+import { proto } from '../../WAProto'
+import type { MediaType, SocketConfig } from '../Types'
 import { Browsers } from '../Utils'
 import logger from '../Utils/logger'
 import { version } from './baileys-version.json'
@@ -15,20 +16,25 @@ export const WA_DEFAULT_EPHEMERAL = 7 * 24 * 60 * 60
 export const NOISE_MODE = 'Noise_XX_25519_AESGCM_SHA256\0\0\0\0'
 export const DICT_VERSION = 2
 export const KEY_BUNDLE_TYPE = Buffer.from([5])
-export const NOISE_WA_HEADER = Buffer.from(
-	[ 87, 65, 6, DICT_VERSION ]
-) // last is "DICT_VERSION"
+export const NOISE_WA_HEADER = Buffer.from([87, 65, 6, DICT_VERSION]) // last is "DICT_VERSION"
 /** from: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url */
 export const URL_REGEX = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi
+export const URL_EXCLUDE_REGEX = /.*@.*/
 
 export const WA_CERT_DETAILS = {
-	SERIAL: 0,
+	SERIAL: 0
 }
 
-const BASE_CONNECTION_CONFIG: CommonSocketConfig = {
+export const PROCESSABLE_HISTORY_TYPES = [
+	proto.Message.HistorySyncNotification.HistorySyncType.INITIAL_BOOTSTRAP,
+	proto.Message.HistorySyncNotification.HistorySyncType.PUSH_NAME,
+	proto.Message.HistorySyncNotification.HistorySyncType.RECENT,
+	proto.Message.HistorySyncNotification.HistorySyncType.FULL
+]
+
+export const DEFAULT_CONNECTION_CONFIG: SocketConfig = {
 	version: version as any,
 	browser: Browsers.baileys('Chrome'),
-
 	waWebSocketUrl: 'wss://web.whatsapp.com/ws/chat',
 	connectTimeoutMs: 20_000,
 	keepAliveIntervalMs: 15_000,
@@ -37,35 +43,48 @@ const BASE_CONNECTION_CONFIG: CommonSocketConfig = {
 	emitOwnEvents: true,
 	defaultQueryTimeoutMs: 60_000,
 	customUploadHosts: [],
-	retryRequestDelayMs: 250
-}
-
-export const DEFAULT_CONNECTION_CONFIG: SocketConfig = {
-	...BASE_CONNECTION_CONFIG,
+	retryRequestDelayMs: 250,
+	fireInitQueries: true,
 	auth: undefined as any,
-	downloadHistory: true,
 	markOnlineOnConnect: true,
 	syncFullHistory: false,
+	shouldSyncHistoryMessage: () => true,
 	linkPreviewImageThumbnailWidth: 192,
 	transactionOpts: { maxCommitRetries: 10, delayBetweenTriesMs: 3000 },
-	getMessage: async() => undefined
+	generateHighQualityLinkPreview: false,
+	options: {},
+	getMessage: async () => undefined
 }
 
-export const DEFAULT_LEGACY_CONNECTION_CONFIG: LegacySocketConfig = {
-	...BASE_CONNECTION_CONFIG,
-	waWebSocketUrl: 'wss://web.whatsapp.com/ws',
-	phoneResponseTimeMs: 20_000,
-	expectResponseTimeout: 60_000,
-}
-
-export const MEDIA_PATH_MAP: { [T in MediaType]: string } = {
+export const MEDIA_PATH_MAP: { [T in MediaType]?: string } = {
 	image: '/mms/image',
 	video: '/mms/video',
 	document: '/mms/document',
 	audio: '/mms/audio',
 	sticker: '/mms/image',
-	history: '',
+	'thumbnail-link': '/mms/image',
+	'product-catalog-image': '/product/image',
 	'md-app-state': ''
+}
+
+export const MEDIA_HKDF_KEY_MAPPING = {
+	audio: 'Audio',
+	document: 'Document',
+	gif: 'Video',
+	image: 'Image',
+	ppic: '',
+	product: 'Image',
+	ptt: 'Audio',
+	sticker: 'Image',
+	video: 'Video',
+	'thumbnail-document': 'Document Thumbnail',
+	'thumbnail-image': 'Image Thumbnail',
+	'thumbnail-video': 'Video Thumbnail',
+	'thumbnail-link': 'Link Thumbnail',
+	'md-msg-hist': 'History',
+	'md-app-state': 'App State',
+	'product-catalog-image': '',
+	'payment-bg-image': 'Payment Background'
 }
 
 export const MEDIA_KEYS = Object.keys(MEDIA_PATH_MAP) as MediaType[]

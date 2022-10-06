@@ -94,7 +94,7 @@ export const signalStorage = ({ creds, keys }: SignalAuthState) => ({
 		}
 	},
 	removePreKey: (id: number) => keys.set({ 'pre-key': { [id]: null } }),
-	loadSignedPreKey: (keyId: number) => {
+	loadSignedPreKey: () => {
 		const key = creds.signedPreKey
 		return {
 			privKey: Buffer.from(key.keyPair.private),
@@ -127,7 +127,7 @@ export const decryptGroupSignalProto = (group: string, user: string, msg: Buffer
 	return cipher.decrypt(Buffer.from(msg))
 }
 
-export const processSenderKeyMessage = async (authorJid: string, item: proto.ISenderKeyDistributionMessage, auth: SignalAuthState) => {
+export const processSenderKeyMessage = async (authorJid: string, item: proto.Message.ISenderKeyDistributionMessage, auth: SignalAuthState) => {
 	const builder = new GroupSessionBuilder(signalStorage(auth))
 	const senderName = jidToSignalSenderKeyName(item.groupId!, authorJid)
 

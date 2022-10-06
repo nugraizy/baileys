@@ -3,10 +3,11 @@ import axios from 'axios'
 import { promises as fs } from 'fs'
 import { Logger } from 'pino'
 import { proto } from '../../WAProto'
-import { MEDIA_KEYS, URL_REGEX, WA_DEFAULT_EPHEMERAL } from '../Defaults'
+import { MEDIA_KEYS, URL_EXCLUDE_REGEX, URL_REGEX, WA_DEFAULT_EPHEMERAL } from '../Defaults'
 import {
 	AnyMediaMessageContent,
 	AnyMessageContent,
+	DownloadableMessage,
 	MediaGenerationOptions,
 	MediaType,
 	MessageContentGenerationOptions,
@@ -22,7 +23,7 @@ import {
 	WAProto,
 	WATextMessage
 } from '../Types'
-import { jidNormalizedUser } from '../WABinary'
+import { isJidGroup, jidNormalizedUser } from '../WABinary'
 import { generateMessageID, unixTimestampSeconds } from './generics'
 import { downloadContentFromMessage, encryptedStream, generateThumbnail, getAudioDuration, MediaDownloadOptions } from './messages-media'
 
@@ -35,33 +36,41 @@ type MediaUploadData = {
 	fileName?: string
 	jpegThumbnail?: string
 	mimetype?: string
+	width?: number
+	height?: number
 }
 
-const MIMETYPE_MAP: { [T in MediaType]: string } = {
+const MIMETYPE_MAP: { [T in MediaType]?: string } = {
 	image: 'image/jpeg',
 	video: 'video/mp4',
 	document: 'application/pdf',
 	audio: 'audio/ogg; codecs=opus',
 	sticker: 'image/webp',
-	history: 'application/x-protobuf',
-	'md-app-state': 'application/x-protobuf'
+	'product-catalog-image': 'image/jpeg'
 }
 
 const MessageTypeProto = {
-	image: WAProto.ImageMessage,
-	video: WAProto.VideoMessage,
-	audio: WAProto.AudioMessage,
-	sticker: WAProto.StickerMessage,
-	document: WAProto.DocumentMessage
+	image: WAProto.Message.ImageMessage,
+	video: WAProto.Message.VideoMessage,
+	audio: WAProto.Message.AudioMessage,
+	sticker: WAProto.Message.StickerMessage,
+	document: WAProto.Message.DocumentMessage
 } as const
 
-const ButtonType = proto.ButtonsMessage.ButtonsMessageHeaderType
+const ButtonType = proto.Message.ButtonsMessage.HeaderType
+
+/**
+ * Uses a regex to test whether the string contains a URL, and returns the URL if it does.
+ * @param text eg. hello https://google.com
+ * @returns the URL, eg. https://google.com
+ */
+export const extractUrlFromText = (text: string) => (!URL_EXCLUDE_REGEX.test(text) ? text.match(URL_REGEX)?.[0] : undefined)
 
 export const generateLinkPreviewIfRequired = async (text: string, getUrlInfo: MessageGenerationOptions['getUrlInfo'], logger: MessageGenerationOptions['logger']) => {
-	const matchedUrls = text.match(URL_REGEX)
-	if (!!getUrlInfo && matchedUrls) {
+	const url = extractUrlFromText(text)
+	if (!!getUrlInfo && url) {
 		try {
-			const urlInfo = await getUrlInfo(matchedUrls[0])
+			const urlInfo = await getUrlInfo(url)
 			return urlInfo
 		} catch (error) {
 			// ignore if fails
@@ -124,10 +133,9 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
 	const requiresDurationComputation = mediaType === 'audio' && typeof uploadData.seconds === 'undefined'
 	const requiresThumbnailComputation = (mediaType === 'image' || mediaType === 'video') && typeof uploadData['jpegThumbnail'] === 'undefined'
 	const requiresOriginalForSomeProcessing = requiresDurationComputation || requiresThumbnailComputation
-	const { mediaKey, encWriteStream, bodyPath, fileEncSha256, fileSha256, fileLength, didSaveToTmpPath } = await encryptedStream(uploadData.media, mediaType, requiresOriginalForSomeProcessing)
+	const { mediaKey, encWriteStream, bodyPath, fileEncSha256, fileSha256, fileLength, didSaveToTmpPath } = await encryptedStream(uploadData.media, options.mediaTypeOverride || mediaType, requiresOriginalForSomeProcessing)
 	// url safe Base64 encode the SHA256 hash of the body
-	const fileEncSha256B64 = encodeURIComponent(fileEncSha256.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, ''))
-
+	const fileEncSha256B64 = fileEncSha256.toString('base64')
 	const [{ mediaUrl, directPath }] = await Promise.all([
 		(async () => {
 			const result = await options.upload(encWriteStream, { fileEncSha256B64, mediaType, timeoutMs: options.mediaUploadTimeoutMs })
@@ -137,7 +145,14 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
 		(async () => {
 			try {
 				if (requiresThumbnailComputation) {
-					uploadData.jpegThumbnail = await generateThumbnail(bodyPath!, mediaType as any, options)
+					const { thumbnail, originalImageDimensions } = await generateThumbnail(bodyPath!, mediaType as any, options)
+					uploadData.jpegThumbnail = thumbnail
+					if (!uploadData.width && originalImageDimensions) {
+						uploadData.width = originalImageDimensions.width
+						uploadData.height = originalImageDimensions.height
+						logger?.debug('set dimensions')
+					}
+
 					logger?.debug('generated thumbnail')
 				}
 
@@ -186,7 +201,7 @@ export const prepareDisappearingMessageSettingContent = (ephemeralExpiration?: n
 		ephemeralMessage: {
 			message: {
 				protocolMessage: {
-					type: WAProto.ProtocolMessage.ProtocolMessageType.EPHEMERAL_SETTING,
+					type: WAProto.Message.ProtocolMessage.Type.EPHEMERAL_SETTING,
 					ephemeralExpiration
 				}
 			}
@@ -247,6 +262,17 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
 			extContent.description = urlInfo.description
 			extContent.title = urlInfo.title
 			extContent.previewType = 0
+
+			const img = urlInfo.highQualityThumbnail
+			if (img) {
+				extContent.thumbnailDirectPath = img.directPath
+				extContent.mediaKey = img.mediaKey
+				extContent.mediaKeyTimestamp = img.mediaKeyTimestamp
+				extContent.thumbnailWidth = img.width
+				extContent.thumbnailHeight = img.height
+				extContent.thumbnailSha256 = img.fileSha256
+				extContent.thumbnailEncSha256 = img.fileEncSha256
+			}
 		}
 
 		m.extendedTextMessage = extContent
@@ -257,22 +283,22 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
 		}
 
 		if (contactLen === 1) {
-			m.contactMessage = WAProto.ContactMessage.fromObject(message.contacts.contacts[0])
+			m.contactMessage = WAProto.Message.ContactMessage.fromObject(message.contacts.contacts[0])
 		} else {
-			m.contactsArrayMessage = WAProto.ContactsArrayMessage.fromObject(message.contacts)
+			m.contactsArrayMessage = WAProto.Message.ContactsArrayMessage.fromObject(message.contacts)
 		}
 	} else if ('location' in message) {
-		m.locationMessage = WAProto.LocationMessage.fromObject(message.location)
+		m.locationMessage = WAProto.Message.LocationMessage.fromObject(message.location)
 	} else if ('react' in message) {
 		if (!message.react.senderTimestampMs) {
 			message.react.senderTimestampMs = Date.now()
 		}
 
-		m.reactionMessage = WAProto.ReactionMessage.fromObject(message.react)
+		m.reactionMessage = WAProto.Message.ReactionMessage.fromObject(message.react)
 	} else if ('delete' in message) {
 		m.protocolMessage = {
 			key: message.delete,
-			type: WAProto.ProtocolMessage.ProtocolMessageType.REVOKE
+			type: WAProto.Message.ProtocolMessage.Type.REVOKE
 		}
 	} else if ('forward' in message) {
 		m = generateForwardMessageContent(message.forward, message.force)
@@ -292,17 +318,26 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
 				m.buttonsResponseMessage = {
 					selectedButtonId: message.buttonReply.id,
 					selectedDisplayText: message.buttonReply.displayText,
-					type: proto.ButtonsResponseMessage.ButtonsResponseMessageType.DISPLAY_TEXT
+					type: proto.Message.ButtonsResponseMessage.Type.DISPLAY_TEXT
 				}
 				break
 		}
+	} else if ('product' in message) {
+		const { imageMessage } = await prepareWAMessageMedia({ image: message.product.productImage }, options)
+		m.productMessage = WAProto.Message.ProductMessage.fromObject({
+			...message,
+			product: {
+				...message.product,
+				productImage: imageMessage
+			}
+		})
 	} else {
 		m = await prepareWAMessageMedia(message, options)
 	}
 
 	if ('buttons' in message && !!message.buttons) {
-		const buttonsMessage: proto.IButtonsMessage = {
-			buttons: message.buttons!.map((b) => ({ ...b, type: proto.Button.ButtonType.RESPONSE }))
+		const buttonsMessage: proto.Message.IButtonsMessage = {
+			buttons: message.buttons!.map((b) => ({ ...b, type: proto.Message.ButtonsMessage.Button.Type.RESPONSE }))
 		}
 		if ('text' in message) {
 			buttonsMessage.contentText = message.text
@@ -324,7 +359,7 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
 
 		m = { buttonsMessage }
 	} else if ('templateButtons' in message && !!message.templateButtons) {
-		const msg: proto.IHydratedFourRowTemplate = {
+		const msg: proto.Message.TemplateMessage.IHydratedFourRowTemplate = {
 			hydratedButtons: message.templateButtons
 		}
 
@@ -344,19 +379,20 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
 
 		m = {
 			templateMessage: {
+				fourRowTemplate: msg,
 				hydratedTemplate: msg
 			}
 		}
 	}
 
 	if ('sections' in message && !!message.sections) {
-		const listMessage: proto.IListMessage = {
+		const listMessage: proto.Message.IListMessage = {
 			sections: message.sections,
 			buttonText: message.buttonText,
 			title: message.title,
 			footerText: message.footer,
 			description: message.text,
-			listType: proto.ListMessage.ListMessageListType['SINGLE_SELECT']
+			listType: proto.Message.ListMessage.ListType.SINGLE_SELECT
 		}
 
 		m = { listMessage }
@@ -442,7 +478,7 @@ export const generateWAMessageFromContent = (jid: string, message: WAMessageCont
 		message: message,
 		messageTimestamp: timestamp,
 		messageStubParameters: [],
-		participant: jid.includes('@g.us') ? userJid : undefined,
+		participant: isJidGroup(jid) ? userJid : undefined,
 		status: WAMessageStatus.PENDING
 	}
 	return WAProto.WebMessageInfo.fromObject(messageJSON)
@@ -479,7 +515,7 @@ export const normalizeMessageContent = (content: WAMessageContent | null | undef
  * Eg. extracts the inner message from a disappearing message/view once message
  */
 export const extractMessageContent = (content: WAMessageContent | undefined | null): WAMessageContent | undefined => {
-	const extractFromTemplateMessage = (msg: proto.IHydratedFourRowTemplate | proto.IButtonsMessage) => {
+	const extractFromTemplateMessage = (msg: proto.Message.TemplateMessage.IHydratedFourRowTemplate | proto.Message.IButtonsMessage) => {
 		if (msg.imageMessage) {
 			return { imageMessage: msg.imageMessage }
 		} else if (msg.documentMessage) {
@@ -606,20 +642,32 @@ export const downloadMediaMessage = async (message: WAMessage, type: 'buffer' | 
 		}
 
 		const contentType = getContentType(mContent)
-		const mediaType = contentType?.replace('Message', '') as MediaType
+		let mediaType = contentType?.replace('Message', '') as MediaType
 		const media = mContent[contentType!]
-		if (!media || typeof media !== 'object' || !('url' in media)) {
+
+		if (!media || typeof media !== 'object' || (!('url' in media) && !('thumbnailDirectPath' in media))) {
 			throw new Boom(`"${contentType}" message is not a media message`)
 		}
 
-		const stream = await downloadContentFromMessage(media, mediaType, options)
+		let download: DownloadableMessage
+		if ('thumbnailDirectPath' in media && !('url' in media)) {
+			download = {
+				directPath: media.thumbnailDirectPath,
+				mediaKey: media.mediaKey
+			}
+			mediaType = 'thumbnail-link'
+		} else {
+			download = media
+		}
+
+		const stream = await downloadContentFromMessage(download, mediaType, options)
 		if (type === 'buffer') {
-			const buffer: Buffer[] = []
+			const bufferArray: Buffer[] = []
 			for await (const chunk of stream) {
-				buffer.push(chunk)
+				bufferArray.push(chunk)
 			}
 
-			return Buffer.concat(buffer)
+			return Buffer.concat(bufferArray)
 		}
 
 		return stream
@@ -650,7 +698,11 @@ const generateContextInfo = () => {
  * Don't know how it works, but it does for now
  */
 export const patchMessageForMdIfRequired = (message: proto.IMessage) => {
-	const requiresPatch = !!(message.buttonsMessage || message.templateMessage || message.listMessage)
+	const requiresPatch = !!(
+		message.buttonsMessage ||
+		// || message.templateMessage
+		message.listMessage
+	)
 	if (requiresPatch) {
 		message = {
 			viewOnceMessage: {

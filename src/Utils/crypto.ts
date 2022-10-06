@@ -5,11 +5,7 @@ import { KEY_BUNDLE_TYPE } from '../Defaults'
 import { KeyPair } from '../Types'
 
 /** prefix version byte to the pub keys, required for some curve crypto functions */
-export const generateSignalPubKey = (pubKey: Uint8Array | Buffer) => (
-	pubKey.length === 33
-		? pubKey
-		: Buffer.concat([ KEY_BUNDLE_TYPE, pubKey ])
-)
+export const generateSignalPubKey = (pubKey: Uint8Array | Buffer) => (pubKey.length === 33 ? pubKey : Buffer.concat([KEY_BUNDLE_TYPE, pubKey]))
 
 export const Curve = {
 	generateKeyPair: (): KeyPair => {
@@ -24,14 +20,12 @@ export const Curve = {
 		const shared = libsignal.curve.calculateAgreement(generateSignalPubKey(publicKey), privateKey)
 		return Buffer.from(shared)
 	},
-	sign: (privateKey: Uint8Array, buf: Uint8Array) => (
-		libsignal.curve.calculateSignature(privateKey, buf)
-	),
+	sign: (privateKey: Uint8Array, buf: Uint8Array) => libsignal.curve.calculateSignature(privateKey, buf),
 	verify: (pubKey: Uint8Array, message: Uint8Array, signature: Uint8Array) => {
 		try {
 			libsignal.curve.verifySignature(generateSignalPubKey(pubKey), message, signature)
 			return true
-		} catch(error) {
+		} catch (error) {
 			return false
 		}
 	}
@@ -71,7 +65,7 @@ export function aesDecryptGCM(ciphertext: Uint8Array, key: Uint8Array, iv: Uint8
 	decipher.setAAD(additionalData)
 	decipher.setAuthTag(tag)
 
-	return Buffer.concat([ decipher.update(enc), decipher.final() ])
+	return Buffer.concat([decipher.update(enc), decipher.final()])
 }
 
 /** decrypt AES 256 CBC; where the IV is prefixed to the buffer */
@@ -108,6 +102,6 @@ export function sha256(buffer: Buffer) {
 }
 
 // HKDF key expansion
-export function hkdf(buffer: Uint8Array | Buffer, expandedLength: number, info: { salt?: Buffer, info?: string }) {
+export function hkdf(buffer: Uint8Array | Buffer, expandedLength: number, info: { salt?: Buffer; info?: string }) {
 	return HKDF(!Buffer.isBuffer(buffer) ? Buffer.from(buffer) : buffer, expandedLength, info)
 }
