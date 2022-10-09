@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Boom } from '@hapi/boom'
 import axios from 'axios'
 import { promises as fs } from 'fs'
