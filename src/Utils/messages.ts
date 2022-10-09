@@ -699,7 +699,7 @@ const generateContextInfo = () => {
  */
 export const patchMessageForMdIfRequired = (message: proto.IMessage) => {
 	const requiresPatch = !!(
-		message.buttonsMessage ||
+		message.buttonsMessage
 		|| message.templateMessage
 		message.listMessage
 	)
