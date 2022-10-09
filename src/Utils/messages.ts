@@ -698,11 +698,7 @@ const generateContextInfo = () => {
  * Don't know how it works, but it does for now
  */
 export const patchMessageForMdIfRequired = (message: proto.IMessage) => {
-	const requiresPatch = !!(
-		message.buttonsMessage ||
-		// || message.templateMessage
-		message.listMessage
-	)
+	const requiresPatch = !!(message.buttonsMessage || message.templateMessage || message.listMessage)
 	if (requiresPatch) {
 		message = {
 			viewOnceMessage: {
