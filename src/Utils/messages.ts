@@ -419,8 +419,11 @@ export const generateWAMessageFromContent = (jid: string, message: WAMessageCont
 
 	const key = Object.keys(message)[0]
 	const timestamp = unixTimestampSeconds(options.timestamp)
-	const { quoted, userJid } = options
+	const { quoted, userJid, contextInfo } = options
 
+	if (contextInfo) {
+		message[key].contextInfo = contextInfo
+	}
 	if (quoted) {
 		const participant = quoted.key.fromMe ? userJid : quoted.participant || quoted.key.participant || quoted.key.remoteJid
 

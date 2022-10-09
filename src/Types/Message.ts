@@ -1,3 +1,4 @@
+/* eslint-disable */
 import type NodeCache from 'node-cache'
 import type { Logger } from 'pino'
 import type { Readable } from 'stream'
@@ -200,6 +201,8 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
 	ephemeralExpiration?: number | string
 	/** timeout for media upload to WA server */
 	mediaUploadTimeoutMs?: number
+	/** context info of the messages */
+	contextInfo?: WAContextInfo
 }
 export type MessageGenerationOptionsFromContent = MiscMessageGenerationOptions & {
 	userJid: string
