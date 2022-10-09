@@ -701,7 +701,7 @@ export const patchMessageForMdIfRequired = (message: proto.IMessage) => {
 	const requiresPatch = !!(
 		message.buttonsMessage
 		|| message.templateMessage
-		message.listMessage
+		|| message.listMessage
 	)
 	if (requiresPatch) {
 		message = {
