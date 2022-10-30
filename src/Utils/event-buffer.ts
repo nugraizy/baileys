@@ -482,7 +482,7 @@ function append<E extends BufferableEvent>(data: BufferedEventData, historyCache
 		// if the message has already been marked read by us
 		const chatId = message.key.remoteJid!
 		const chat = data.chatUpdates[chatId] || data.chatUpserts[chatId]
-		if (isRealMessage(message) && shouldIncrementChatUnread(message) && typeof chat?.unreadCount === 'number' && chat.unreadCount > 0) {
+		if (isRealMessage(message, '') && shouldIncrementChatUnread(message) && typeof chat?.unreadCount === 'number' && chat.unreadCount > 0) {
 			logger.debug({ chatId: chat.id }, 'decrementing chat counter')
 			chat.unreadCount -= 1
 			if (chat.unreadCount === 0) {
