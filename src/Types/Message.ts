@@ -114,6 +114,7 @@ export type AnyMediaMessageContent = (
 			document: WAMediaUpload
 			mimetype: string
 			fileName?: string
+			caption?: string
 	  } & Buttonable &
 			Templatable)
 ) & { mimetype?: string }

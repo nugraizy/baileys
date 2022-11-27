@@ -405,7 +405,14 @@ export const makeSocket = ({ waWebSocketUrl, connectTimeoutMs, logger, agent, ke
 	}
 
 	ws.on('message', onMessageRecieved)
-	ws.on('open', validateConnection)
+	ws.on('open', async () => {
+		try {
+			await validateConnection()
+		} catch (err) {
+			logger.error({ err }, 'error in validating connection')
+			end(err)
+		}
+	})
 	ws.on('error', (error) => end(new Boom(`WebSocket Error (${error.message})`, { statusCode: getCodeFromWSError(error), data: error })))
 	ws.on('close', () => end(new Boom('Connection Terminated', { statusCode: DisconnectReason.connectionClosed })))
 	// the server terminated the connection
@@ -498,8 +505,11 @@ export const makeSocket = ({ waWebSocketUrl, connectTimeoutMs, logger, agent, ke
 	})
 
 	process.nextTick(() => {
-		// start buffering important events
-		ev.buffer()
+		if (creds.me?.id) {
+			// start buffering important events
+			// if we're logged in
+			ev.buffer()
+		}
 		ev.emit('connection.update', { connection: 'connecting', receivedPendingNotifications: false, qr: undefined })
 	})
 	// update credentials when required
