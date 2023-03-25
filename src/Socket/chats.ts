@@ -16,6 +16,8 @@ export const makeChatsSocket = (config: SocketConfig) => {
 	const { ev, ws, authState, generateMessageTag, sendNode, query, onUnexpectedError, logout } = sock
 
 	let privacySettings: { [_: string]: string } | undefined
+	let needToFlushWithAppStateSync = false
+	let pendingAppStateSync = false
 	/** this mutex ensures that the notifications (receipts, messages etc.) are processed in order */
 	const processingMutex = makeMutex()
 
@@ -226,8 +228,10 @@ export const makeChatsSocket = (config: SocketConfig) => {
 			const website = getBinaryNodeChild(profiles, 'website')
 			const email = getBinaryNodeChild(profiles, 'email')
 			const category = getBinaryNodeChild(getBinaryNodeChild(profiles, 'categories'), 'category')
-			const business_hours = getBinaryNodeChild(profiles, 'business_hours')
-			const business_hours_config = business_hours && getBinaryNodeChildren(business_hours, 'business_hours_config')
+			const businessHours = getBinaryNodeChild(profiles, 'business_hours')
+			const businessHoursConfig = businessHours
+				? getBinaryNodeChildren(businessHours, 'business_hours_config')
+				: undefined
 			const websiteStr = website?.content?.toString()
 			return {
 				wid: profiles.attrs?.jid,
@@ -236,9 +240,9 @@ export const makeChatsSocket = (config: SocketConfig) => {
 				website: websiteStr ? [websiteStr] : [],
 				email: email?.content?.toString(),
 				category: category?.content?.toString(),
-				business_hours: {
-					timezone: business_hours?.attrs?.timezone,
-					business_config: business_hours_config?.map(({ attrs }) => attrs as unknown as WABusinessHoursConfig)
+				'business_hours': {
+					timezone: businessHours?.attrs?.timezone,
+					'business_config': businessHoursConfig?.map(({ attrs }) => attrs as unknown as WABusinessHoursConfig)
 				}
 			}
 		}
@@ -442,14 +446,23 @@ export const makeChatsSocket = (config: SocketConfig) => {
 		}
 	}
 
-	const presenceSubscribe = (toJid: string) =>
+	const presenceSubscribe = (toJid: string, tcToken?: Buffer) =>
 		sendNode({
 			tag: 'presence',
 			attrs: {
 				to: toJid,
 				id: generateMessageTag(),
 				type: 'subscribe'
-			}
+			},
+			content: tcToken
+				? [
+					{
+						tag: 'tctoken',
+						attrs: { },
+						content: tcToken
+					}
+				]
+				: undefined
 		})
 
 	const handlePresenceUpdate = ({ tag, attrs, content }: BinaryNode) => {
@@ -633,33 +646,57 @@ export const makeChatsSocket = (config: SocketConfig) => {
 		const historyMsg = getHistoryMsg(msg.message!)
 		const shouldProcessHistoryMsg = historyMsg ? shouldSyncHistoryMessage(historyMsg) && PROCESSABLE_HISTORY_TYPES.includes(historyMsg.syncType!) : false
 		// we should have app state keys before we process any history
-		if (shouldProcessHistoryMsg) {
-			if (!authState.creds.myAppStateKeyId) {
-				logger.warn('myAppStateKeyId not synced, bad link')
-				await logout('Incomplete app state key sync')
-				return
-			}
+		if(historyMsg && !authState.creds.myAppStateKeyId) {
+			logger.warn('skipping app state sync, as myAppStateKeyId is not set')
+			pendingAppStateSync = true
 		}
 
 		await Promise.all([
-			(async () => {
-				if (shouldProcessHistoryMsg && !authState.creds.accountSyncCounter) {
-					logger.info('doing initial app state sync')
-					await resyncAppState(ALL_WA_PATCH_NAMES, true)
-
-					const accountSyncCounter = (authState.creds.accountSyncCounter || 0) + 1
-					ev.emit('creds.update', { accountSyncCounter })
+			(async() => {
+				if(
+					historyMsg
+					&& authState.creds.myAppStateKeyId
+				) {
+					pendingAppStateSync = false
+					await doAppStateSync()
 				}
 			})(),
-			processMessage(msg, {
-				shouldProcessHistoryMsg,
-				ev,
-				creds: authState.creds,
-				keyStore: authState.keys,
-				logger,
-				options: config.options
-			})
+			processMessage(
+				msg,
+				{
+					shouldProcessHistoryMsg,
+					ev,
+					creds: authState.creds,
+					keyStore: authState.keys,
+					logger,
+					options: config.options,
+					getMessage: config.getMessage,
+				}
+			)
 		])
+
+		if(
+			msg.message?.protocolMessage?.appStateSyncKeyShare
+			&& pendingAppStateSync
+		) {
+			await doAppStateSync()
+			pendingAppStateSync = false
+		}
+
+		async function doAppStateSync() {
+			if(!authState.creds.accountSyncCounter) {
+				logger.info('doing initial app state sync')
+				await resyncAppState(ALL_WA_PATCH_NAMES, true)
+
+				const accountSyncCounter = (authState.creds.accountSyncCounter || 0) + 1
+				ev.emit('creds.update', { accountSyncCounter })
+
+				if(needToFlushWithAppStateSync) {
+					logger.debug('flushing with app state sync')
+					ev.flush()
+				}
+			}
+		}
 	})
 
 	ws.on('CB:presence', handlePresenceUpdate)
@@ -687,13 +724,29 @@ export const makeChatsSocket = (config: SocketConfig) => {
 		}
 	})
 
-	ev.on('connection.update', ({ connection }) => {
-		if (connection === 'open') {
-			if (fireInitQueries) {
-				executeInitQueries().catch((error) => onUnexpectedError(error, 'init queries'))
+	ev.on('connection.update', ({ connection,receivedPendingNotifications }) => {
+		if(connection === 'open') {
+			if(fireInitQueries) {
+				executeInitQueries()
+					.catch(
+						error => onUnexpectedError(error, 'init queries')
+					)
 			}
 
-			sendPresenceUpdate(markOnlineOnConnect ? 'available' : 'unavailable').catch((error) => onUnexpectedError(error, 'presence update requests'))
+			sendPresenceUpdate(markOnlineOnConnect ? 'available' : 'unavailable')
+				.catch(
+					error => onUnexpectedError(error, 'presence update requests')
+				)
+		}
+
+		if(receivedPendingNotifications) {
+			// if we don't have the app state key
+			// we keep buffering events until we finally have
+			// the key and can sync the messages
+			if(!authState.creds?.myAppStateKeyId) {
+				ev.buffer()
+				needToFlushWithAppStateSync = true
+			}
 		}
 	})
 

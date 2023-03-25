@@ -504,13 +504,28 @@ export const makeSocket = ({ waWebSocketUrl, connectTimeoutMs, logger, agent, ke
 		end(new Boom('Multi-device beta not joined', { statusCode: DisconnectReason.multideviceMismatch }))
 	})
 
+	let didStartBuffer = false
 	process.nextTick(() => {
-		if (creds.me?.id) {
+		if(creds.me?.id) {
 			// start buffering important events
 			// if we're logged in
 			ev.buffer()
+			didStartBuffer = true
 		}
 		ev.emit('connection.update', { connection: 'connecting', receivedPendingNotifications: false, qr: undefined })
+	})
+
+	ws.on('CB:ib,,offline', (node: BinaryNode) => {
+		const child = getBinaryNodeChild(node, 'offline')
+		const offlineNotifs = +(child?.attrs.count || 0)
+
+		logger.info(`handled ${offlineNotifs} offline messages/notifications`)
+		if(didStartBuffer) {
+			ev.flush()
+			logger.trace('flushed events for initial buffer')
+		}
+
+		ev.emit('connection.update', { receivedPendingNotifications: true })
 	})
 	// update credentials when required
 	ev.on('creds.update', (update) => {

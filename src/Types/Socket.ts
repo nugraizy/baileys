@@ -10,6 +10,18 @@ import { MediaConnInfo } from './Message'
 export type WAVersion = [number, number, number]
 export type WABrowserDescription = [string, string, string]
 
+export type CacheStore = {
+    /** get a cached key and change the stats */
+    get<T>(key: string): T | undefined
+    /** set a key in the cache */
+    set<T>(key: string, value: T): void
+    /** delete a key from the cache */
+    del(key: string): void
+    /** flush all data */
+    flushAll(): void
+}
+
+
 export type MessageRetryMap = { [msgId: string]: number }
 
 export type SocketConfig = {

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Boom } from '@hapi/boom'
 import axios from 'axios'
+import { randomBytes } from 'crypto'
 import { promises as fs } from 'fs'
 import { Logger } from 'pino'
 import { proto } from '../../WAProto'
@@ -19,13 +20,13 @@ import {
   WAMediaUpload,
   WAMessage,
   WAMessageContent,
-  WAMessageKey,
   WAMessageStatus,
   WAProto,
   WATextMessage
 } from '../Types'
 import { isJidGroup, jidNormalizedUser } from '../WABinary'
-import { generateMessageID, unixTimestampSeconds } from './generics'
+import { sha256 } from './crypto'
+import { generateMessageID, getKeyAuthor, unixTimestampSeconds } from './generics'
 import { downloadContentFromMessage, encryptedStream, generateThumbnail, getAudioDuration, MediaDownloadOptions } from './messages-media'
 
 type MediaUploadData = {
@@ -146,7 +147,7 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
     (async () => {
       try {
         if (requiresThumbnailComputation) {
-          const { thumbnail, originalImageDimensions } = await generateThumbnail(bodyPath!, mediaType as any, options)
+          const { thumbnail, originalImageDimensions } = await generateThumbnail(bodyPath!, mediaType as 'image' | 'video', options)
           uploadData.jpegThumbnail = thumbnail
           if (!uploadData.width && originalImageDimensions) {
             uploadData.width = originalImageDimensions.width
@@ -333,9 +334,41 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
         productImage: imageMessage
       }
     })
-  } else {
-    m = await prepareWAMessageMedia(message, options)
-  }
+  } else if('listReply' in message) {
+		m.listResponseMessage = { ...message.listReply }
+	} else if('poll' in message) {
+		message.poll.selectableCount ||= 0
+
+		if(!Array.isArray(message.poll.values)) {
+			throw new Boom('Invalid poll values', { statusCode: 400 })
+		}
+
+		if(
+			message.poll.selectableCount < 0
+			|| message.poll.selectableCount > message.poll.values.length
+		) {
+			throw new Boom(
+				`poll.selectableCount in poll should be >= 0 and <= ${message.poll.values.length}`,
+				{ statusCode: 400 }
+			)
+		}
+
+		m.messageContextInfo = {
+			// encKey
+			messageSecret: message.poll.messageSecret || randomBytes(32),
+		}
+
+		m.pollCreationMessage = {
+			name: message.poll.name,
+			selectableOptionsCount: message.poll.selectableCount,
+			options: message.poll.values.map(optionName => ({ optionName })),
+		}
+	} else {
+		m = await prepareWAMessageMedia(
+			message,
+			options
+		)
+	}
 
   if ('buttons' in message && !!message.buttons) {
     const buttonsMessage: proto.Message.IButtonsMessage = {
@@ -574,8 +607,6 @@ export const updateMessageWithReceipt = (msg: Pick<WAMessage, 'userReceipt'>, re
   }
 }
 
-const getKeyAuthor = (key: WAMessageKey | undefined | null) => (key?.fromMe ? 'me' : key?.participant || key?.remoteJid) || ''
-
 /** Update the message with a new reaction */
 export const updateMessageWithReaction = (msg: Pick<WAMessage, 'reactions'>, reaction: proto.IReaction) => {
   const authorID = getKeyAuthor(reaction.key)
@@ -587,6 +618,74 @@ export const updateMessageWithReaction = (msg: Pick<WAMessage, 'reactions'>, rea
 
   msg.reactions = reactions
 }
+
+/** Update the message with a new poll update */
+export const updateMessageWithPollUpdate = (
+	msg: Pick<WAMessage, 'pollUpdates'>,
+	update: proto.IPollUpdate
+) => {
+	const authorID = getKeyAuthor(update.pollUpdateMessageKey)
+
+	const reactions = (msg.pollUpdates || [])
+		.filter(r => getKeyAuthor(r.pollUpdateMessageKey) !== authorID)
+	if(update.vote?.selectedOptions?.length) {
+		reactions.push(update)
+	}
+
+	msg.pollUpdates = reactions
+}
+
+type VoteAggregation = {
+	name: string
+	voters: string[]
+}
+
+/**
+ * Aggregates all poll updates in a poll.
+ * @param msg the poll creation message
+ * @param meId your jid
+ * @returns A list of options & their voters
+ */
+export function getAggregateVotesInPollMessage(
+	{ message, pollUpdates }: Pick<WAMessage, 'pollUpdates' | 'message'>,
+	meId?: string
+) {
+	const opts = message?.pollCreationMessage?.options || []
+	const voteHashMap = opts.reduce((acc, opt) => {
+		const hash = sha256(Buffer.from(opt.optionName || '')).toString()
+		acc[hash] = {
+			name: opt.optionName || '',
+			voters: []
+		}
+		return acc
+	}, {} as { [_: string]: VoteAggregation })
+
+	for(const update of pollUpdates || []) {
+		const { vote } = update
+		if(!vote) {
+			continue
+		}
+
+		for(const option of vote.selectedOptions || []) {
+			const hash = option.toString()
+			let data = voteHashMap[hash]
+			if(!data) {
+				voteHashMap[hash] = {
+					name: 'Unknown',
+					voters: []
+				}
+				data = voteHashMap[hash]
+			}
+
+			voteHashMap[hash].voters.push(
+				getKeyAuthor(update.pollUpdateMessageKey, meId)
+			)
+		}
+	}
+
+	return Object.values(voteHashMap)
+}
+
 
 /** Given a list of message keys, aggregates them by chat & sender. Useful for sending read receipts in bulk */
 export const aggregateMessageKeysNotFromMe = (keys: proto.IMessageKey[]) => {

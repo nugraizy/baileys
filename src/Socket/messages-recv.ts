@@ -255,6 +255,21 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		const from = jidNormalizedUser(node.attrs.from)
 
 		switch (nodeType) {
+			case 'privacy_token':
+			const tokenList = getBinaryNodeChildren(child, 'token')
+			for(const { attrs, content } of tokenList) {
+				const jid = attrs.jid
+				ev.emit('chats.update', [
+					{
+						id: jid,
+						tcToken: content as Buffer
+					}
+				])
+
+				logger.debug({ jid }, 'got privacy token update')
+			}
+
+			break
 			case 'w:gp2':
 				handleGroupNotification(node.attrs.participant, child, result)
 				break
@@ -574,11 +589,14 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		}
 	}
 
-	const flushBufferIfLastOfflineNode = (node: BinaryNode, identifier: string, exec: (node: BinaryNode) => Promise<any>) => {
-		const task = exec(node).catch((err) => onUnexpectedError(err, identifier))
-		const offline = node.attrs.offline
-		if (offline) {
-			ev.processInBuffer(task)
+	const flushBufferIfLastOfflineNode = async (node: BinaryNode, identifier: string, exec: (node: BinaryNode) => Promise<any>) => {
+		ev.buffer()
+		await execTask()
+		ev.flush()
+
+		function execTask() {
+			return exec(node)
+				.catch(err => onUnexpectedError(err, identifier))
 		}
 	}
 
