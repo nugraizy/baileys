@@ -68,7 +68,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 	const attrs: BinaryNode['attrs'] = {}
 	const content: BinaryNode[] = []
 
-	if (typeof productId !== 'undefined') {
+	if(typeof productId !== 'undefined') {
 		content.push({
 			tag: 'id',
 			attrs: {},
@@ -76,7 +76,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (typeof product.name !== 'undefined') {
+	if(typeof product.name !== 'undefined') {
 		content.push({
 			tag: 'name',
 			attrs: {},
@@ -84,7 +84,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (typeof product.description !== 'undefined') {
+	if(typeof product.description !== 'undefined') {
 		content.push({
 			tag: 'description',
 			attrs: {},
@@ -92,7 +92,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (typeof product.retailerId !== 'undefined') {
+	if(typeof product.retailerId !== 'undefined') {
 		content.push({
 			tag: 'retailer_id',
 			attrs: {},
@@ -100,12 +100,12 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (product.images.length) {
+	if(product.images.length) {
 		content.push({
 			tag: 'media',
 			attrs: {},
 			content: product.images.map((img) => {
-				if (!('url' in img)) {
+				if(!('url' in img)) {
 					throw new Boom('Expected img for product to already be uploaded', { statusCode: 400 })
 				}
 
@@ -124,7 +124,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (typeof product.price !== 'undefined') {
+	if(typeof product.price !== 'undefined') {
 		content.push({
 			tag: 'price',
 			attrs: {},
@@ -132,7 +132,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if (typeof product.currency !== 'undefined') {
+	if(typeof product.currency !== 'undefined') {
 		content.push({
 			tag: 'currency',
 			attrs: {},
@@ -140,8 +140,8 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		})
 	}
 
-	if ('originCountryCode' in product) {
-		if (typeof product.originCountryCode === 'undefined') {
+	if('originCountryCode' in product) {
+		if(typeof product.originCountryCode === 'undefined') {
 			attrs.compliance_category = 'COUNTRY_ORIGIN_EXEMPT'
 		} else {
 			content.push({
@@ -158,7 +158,7 @@ export const toProductNode = (productId: string | undefined, product: ProductCre
 		}
 	}
 
-	if (typeof product.isHidden !== 'undefined') {
+	if(typeof product.isHidden !== 'undefined') {
 		attrs.is_hidden = product.isHidden.toString()
 	}
 
@@ -210,12 +210,12 @@ export async function uploadingNecessaryImagesOfProduct<T extends ProductUpdate 
 /**
  * Uploads images not already uploaded to WA's servers
  */
-export const uploadingNecessaryImages = async (images: WAMediaUpload[], waUploadToServer: WAMediaUploadFunction, timeoutMs = 30_000) => {
+export const uploadingNecessaryImages = async(images: WAMediaUpload[], waUploadToServer: WAMediaUploadFunction, timeoutMs = 30_000) => {
 	const results = await Promise.all(
-		images.map<Promise<{ url: string }>>(async (img) => {
-			if ('url' in img) {
+		images.map<Promise<{ url: string }>>(async(img) => {
+			if('url' in img) {
 				const url = img.url.toString()
-				if (url.includes('.whatsapp.net')) {
+				if(url.includes('.whatsapp.net')) {
 					return { url }
 				}
 			}

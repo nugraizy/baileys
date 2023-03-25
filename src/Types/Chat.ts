@@ -66,11 +66,11 @@ export type ChatModification =
 			mute: number | null
 	  }
 	| {
-			clear: 'all' | { messages: { id: string; fromMe?: boolean; timestamp: number }[] }
+			clear: 'all' | { messages: { id: string, fromMe?: boolean, timestamp: number }[] }
 	  }
 	| {
 			star: {
-				messages: { id: string; fromMe?: boolean }[]
+				messages: { id: string, fromMe?: boolean }[]
 				star: boolean
 			}
 	  }
@@ -78,7 +78,7 @@ export type ChatModification =
 			markRead: boolean
 			lastMessages: LastMessageList
 	  }
-	| { delete: true; lastMessages: LastMessageList }
+	| { delete: true, lastMessages: LastMessageList }
 
 export type InitialReceivedChatsState = {
 	[jid: string]: {

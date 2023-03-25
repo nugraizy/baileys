@@ -25,14 +25,14 @@ export const Browsers = {
 
 export const BufferJSON = {
 	replacer: (k, value: any) => {
-		if (Buffer.isBuffer(value) || value instanceof Uint8Array || value?.type === 'Buffer') {
+		if(Buffer.isBuffer(value) || value instanceof Uint8Array || value?.type === 'Buffer') {
 			return { type: 'Buffer', data: Buffer.from(value?.data || value).toString('base64') }
 		}
 
 		return value
 	},
 	reviver: (_, value: any) => {
-		if (typeof value === 'object' && !!value && (value.buffer === true || value.type === 'Buffer')) {
+		if(typeof value === 'object' && !!value && (value.buffer === true || value.type === 'Buffer')) {
 			const val = value.data || value.value
 			return typeof val === 'string' ? Buffer.from(val, 'base64') : Buffer.from(val || [])
 		}
@@ -51,7 +51,7 @@ export const getKeyAuthor = (
 export const writeRandomPadMax16 = (msg: Uint8Array) => {
 	const pad = randomBytes(1)
 	pad[0] &= 0xf
-	if (!pad[0]) {
+	if(!pad[0]) {
 		pad[0] = 0xf
 	}
 
@@ -60,12 +60,12 @@ export const writeRandomPadMax16 = (msg: Uint8Array) => {
 
 export const unpadRandomMax16 = (e: Uint8Array | Buffer) => {
 	const t = new Uint8Array(e)
-	if (0 === t.length) {
+	if(0 === t.length) {
 		throw new Error('unpadPkcs7 given empty bytes')
 	}
 
 	var r = t[t.length - 1]
-	if (r > t.length) {
+	if(r > t.length) {
 		throw new Error(`unpad given ${t.length} bytes, but pad is ${r}`)
 	}
 
@@ -81,7 +81,7 @@ export const generateRegistrationId = (): number => {
 export const encodeBigEndian = (e: number, t = 4) => {
 	let r = e
 	const a = new Uint8Array(t)
-	for (let i = t - 1; i >= 0; i--) {
+	for(let i = t - 1; i >= 0; i--) {
 		a[i] = 255 & r
 		r >>>= 8
 	}
@@ -140,7 +140,7 @@ export const delayCancellable = (ms: number) => {
 }
 
 export async function promiseTimeout<T>(ms: number | undefined, promise: (resolve: (v?: T) => void, reject: (error) => void) => void) {
-	if (!ms) {
+	if(!ms) {
 		return new Promise(promise)
 	}
 
@@ -149,15 +149,14 @@ export async function promiseTimeout<T>(ms: number | undefined, promise: (resolv
 	const { delay, cancel } = delayCancellable(ms)
 	const p = new Promise((resolve, reject) => {
 		delay
-			.then(() =>
-				reject(
-					new Boom('Timed Out', {
-						statusCode: DisconnectReason.timedOut,
-						data: {
-							stack
-						}
-					})
-				)
+			.then(() => reject(
+				new Boom('Timed Out', {
+					statusCode: DisconnectReason.timedOut,
+					data: {
+						stack
+					}
+				})
+			)
 			)
 			.catch((err) => reject(err))
 
@@ -170,19 +169,19 @@ export async function promiseTimeout<T>(ms: number | undefined, promise: (resolv
 export const generateMessageID = () => 'BAE5' + randomBytes(6).toString('hex').toUpperCase()
 
 export function bindWaitForEvent<T extends keyof BaileysEventMap>(ev: BaileysEventEmitter, event: T) {
-	return async (check: (u: BaileysEventMap[T]) => boolean | undefined, timeoutMs?: number) => {
+	return async(check: (u: BaileysEventMap[T]) => boolean | undefined, timeoutMs?: number) => {
 		let listener: (item: BaileysEventMap[T]) => void
 		let closeListener: any
 		await promiseTimeout(timeoutMs, (resolve, reject) => {
 			closeListener = ({ connection, lastDisconnect }) => {
-				if (connection === 'close') {
+				if(connection === 'close') {
 					reject(lastDisconnect?.error || new Boom('Connection Closed', { statusCode: DisconnectReason.connectionClosed }))
 				}
 			}
 
 			ev.on('connection.update', closeListener)
 			listener = (update) => {
-				if (check(update)) {
+				if(check(update)) {
 					resolve()
 				}
 			}
@@ -198,8 +197,8 @@ export function bindWaitForEvent<T extends keyof BaileysEventMap>(ev: BaileysEve
 export const bindWaitForConnectionUpdate = (ev: BaileysEventEmitter) => bindWaitForEvent(ev, 'connection.update')
 
 export const printQRIfNecessaryListener = (ev: BaileysEventEmitter, logger: Logger) => {
-	ev.on('connection.update', async ({ qr }) => {
-		if (qr) {
+	ev.on('connection.update', async({ qr }) => {
+		if(qr) {
 			const QR = await import('qrcode-terminal').catch(() => {
 				logger.error('QR code terminal not added as dependency')
 			})
@@ -212,7 +211,7 @@ export const printQRIfNecessaryListener = (ev: BaileysEventEmitter, logger: Logg
  * utility that fetches latest baileys version from the master branch.
  * Use to ensure your WA connection is always on the latest version
  */
-export const fetchLatestBaileysVersion = async (options: AxiosRequestConfig<any> = {}) => {
+export const fetchLatestBaileysVersion = async(options: AxiosRequestConfig<any> = {}) => {
 	const URL = 'https://raw.githubusercontent.com/adiwajshing/Baileys/master/src/Defaults/baileys-version.json'
 	try {
 		const result = await axios.get<{ version: WAVersion }>(URL, {
@@ -223,7 +222,7 @@ export const fetchLatestBaileysVersion = async (options: AxiosRequestConfig<any>
 			version: result.data.version,
 			isLatest: true
 		}
-	} catch (error) {
+	} catch(error) {
 		return {
 			version: baileysVersion as WAVersion,
 			isLatest: false,
@@ -236,7 +235,7 @@ export const fetchLatestBaileysVersion = async (options: AxiosRequestConfig<any>
  * A utility that fetches the latest web version of whatsapp.
  * Use to ensure your WA connection is always on the latest version
  */
-export const fetchLatestWaWebVersion = async (options: AxiosRequestConfig<any>) => {
+export const fetchLatestWaWebVersion = async(options: AxiosRequestConfig<any>) => {
 	try {
 		const result = await axios.get('https://web.whatsapp.com/check-update?version=1&platform=web', {
 			...options,
@@ -247,7 +246,7 @@ export const fetchLatestWaWebVersion = async (options: AxiosRequestConfig<any>) 
 			version: [+version[0], +version[1], +version[2]] as WAVersion,
 			isLatest: true
 		}
-	} catch (error) {
+	} catch(error) {
 		return {
 			version: baileysVersion as WAVersion,
 			isLatest: false,
@@ -273,7 +272,7 @@ const STATUS_MAP: { [_: string]: proto.WebMessageInfo.Status } = {
  */
 export const getStatusFromReceiptType = (type: string | undefined) => {
 	const status = STATUS_MAP[type!]
-	if (typeof type === 'undefined') {
+	if(typeof type === 'undefined') {
 		return proto.WebMessageInfo.Status.DELIVERY_ACK
 	}
 
@@ -293,7 +292,7 @@ export const getErrorCodeFromStreamError = (node: BinaryNode) => {
 	let reason = reasonNode?.tag || 'unknown'
 	const statusCode = +(node.attrs.code || CODE_MAP[reason] || DisconnectReason.badSession)
 
-	if (statusCode === DisconnectReason.restartRequired) {
+	if(statusCode === DisconnectReason.restartRequired) {
 		reason = 'restart required'
 	}
 
@@ -306,27 +305,27 @@ export const getErrorCodeFromStreamError = (node: BinaryNode) => {
 export const getCallStatusFromNode = ({ tag, attrs }: BinaryNode) => {
 	let status: WACallUpdateType
 	switch (tag) {
-		case 'offer':
-		case 'offer_notice':
-			status = 'offer'
-			break
-		case 'terminate':
-			if (attrs.reason === 'timeout') {
-				status = 'timeout'
-			} else {
-				status = 'reject'
-			}
-
-			break
-		case 'reject':
+	case 'offer':
+	case 'offer_notice':
+		status = 'offer'
+		break
+	case 'terminate':
+		if(attrs.reason === 'timeout') {
+			status = 'timeout'
+		} else {
 			status = 'reject'
-			break
-		case 'accept':
-			status = 'accept'
-			break
-		default:
-			status = 'ringing'
-			break
+		}
+
+		break
+	case 'reject':
+		status = 'reject'
+		break
+	case 'accept':
+		status = 'accept'
+		break
+	default:
+		status = 'ringing'
+		break
 	}
 
 	return status
@@ -336,12 +335,12 @@ const UNEXPECTED_SERVER_CODE_TEXT = 'Unexpected server response: '
 
 export const getCodeFromWSError = (error: Error) => {
 	let statusCode = 500
-	if (error.message.includes(UNEXPECTED_SERVER_CODE_TEXT)) {
+	if(error.message.includes(UNEXPECTED_SERVER_CODE_TEXT)) {
 		const code = +error.message.slice(UNEXPECTED_SERVER_CODE_TEXT.length)
-		if (!Number.isNaN(code) && code >= 400) {
+		if(!Number.isNaN(code) && code >= 400) {
 			statusCode = code
 		}
-	} else if ((error as any).code?.startsWith('E')) {
+	} else if((error as any).code?.startsWith('E')) {
 		// handle ETIMEOUT, ENOTFOUND etc
 		statusCode = 408
 	}
@@ -358,8 +357,8 @@ export const isWABusinessPlatform = (platform: string) => {
 }
 
 export function trimUndefineds(obj: any) {
-	for (const key in obj) {
-		if (typeof obj[key] === 'undefined') {
+	for(const key in obj) {
+		if(typeof obj[key] === 'undefined') {
 			delete obj[key]
 		}
 	}

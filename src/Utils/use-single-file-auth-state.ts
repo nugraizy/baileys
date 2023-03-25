@@ -20,7 +20,7 @@ const KEY_MAP: { [T in keyof SignalDataTypeMap]: string } = {
  *
  * DO NOT USE IN A PROD ENVIRONMENT, only meant to serve as an example
  * */
-export const useSingleFileAuthState = (filename: string, logger?: Logger): { state: AuthenticationState; saveState: () => void } => {
+export const useSingleFileAuthState = (filename: string, logger?: Logger): { state: AuthenticationState, saveState: () => void } => {
 	// require fs here so that in case "fs" is not available -- the app does not crash
 	const { readFileSync, writeFileSync, existsSync } = require('fs')
 	let creds: AuthenticationCreds
@@ -36,7 +36,7 @@ export const useSingleFileAuthState = (filename: string, logger?: Logger): { sta
 		)
 	}
 
-	if (existsSync(filename)) {
+	if(existsSync(filename)) {
 		const result = JSON.parse(readFileSync(filename, { encoding: 'utf-8' }), BufferJSON.reviver)
 		creds = result.creds
 		keys = result.keys
@@ -53,8 +53,8 @@ export const useSingleFileAuthState = (filename: string, logger?: Logger): { sta
 					const key = KEY_MAP[type]
 					return ids.reduce((dict, id) => {
 						let value = keys[key]?.[id]
-						if (value) {
-							if (type === 'app-state-sync-key') {
+						if(value) {
+							if(type === 'app-state-sync-key') {
 								value = proto.Message.AppStateSyncKeyData.fromObject(value)
 							}
 
@@ -65,7 +65,7 @@ export const useSingleFileAuthState = (filename: string, logger?: Logger): { sta
 					}, {})
 				},
 				set: (data) => {
-					for (const _key in data) {
+					for(const _key in data) {
 						const key = KEY_MAP[_key as keyof SignalDataTypeMap]
 						keys[key] = keys[key] || {}
 						Object.assign(keys[key], data[_key])

@@ -26,21 +26,21 @@ export function makeCacheableSignalKeyStore(store: SignalKeyStore, logger: Logge
 		async get(type, ids) {
 			const data: { [_: string]: SignalDataTypeMap[typeof type] } = {}
 			const idsToFetch: string[] = []
-			for (const id of ids) {
+			for(const id of ids) {
 				const item = cache.get<SignalDataTypeMap[typeof type]>(getUniqueId(type, id))
-				if (typeof item !== 'undefined') {
+				if(typeof item !== 'undefined') {
 					data[id] = item
 				} else {
 					idsToFetch.push(id)
 				}
 			}
 
-			if (idsToFetch.length) {
+			if(idsToFetch.length) {
 				logger.trace({ items: idsToFetch.length }, 'loading from store')
 				const fetched = await store.get(type, idsToFetch)
-				for (const id of idsToFetch) {
+				for(const id of idsToFetch) {
 					const item = fetched[id]
-					if (item) {
+					if(item) {
 						data[id] = item
 						cache.set(getUniqueId(type, id), item)
 					}
@@ -51,8 +51,8 @@ export function makeCacheableSignalKeyStore(store: SignalKeyStore, logger: Logge
 		},
 		async set(data) {
 			let keys = 0
-			for (const type in data) {
-				for (const id in data[type]) {
+			for(const type in data) {
+				for(const id in data[type]) {
 					cache.set(getUniqueId(type, id), data[type][id])
 					keys += 1
 				}
@@ -88,15 +88,15 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 	 * prefetches some data and stores in memory,
 	 * useful if these data points will be used together often
 	 * */
-	const prefetch = async (type: keyof SignalDataTypeMap, ids: string[]) => {
-		if (!inTransaction) {
+	const prefetch = async(type: keyof SignalDataTypeMap, ids: string[]) => {
+		if(!inTransaction) {
 			throw new Boom('Cannot prefetch without transaction')
 		}
 
 		const dict = transactionCache[type]
 		const idsRequiringFetch = dict ? ids.filter((item) => !(item in dict)) : ids
 		// only fetch if there are any items to fetch
-		if (idsRequiringFetch.length) {
+		if(idsRequiringFetch.length) {
 			dbQueriesInTransaction += 1
 			const result = await state.get(type, idsRequiringFetch)
 
@@ -105,12 +105,12 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 	}
 
 	return {
-		get: async (type, ids) => {
-			if (inTransaction) {
+		get: async(type, ids) => {
+			if(inTransaction) {
 				await prefetch(type, ids)
 				return ids.reduce((dict, id) => {
 					const value = transactionCache[type]?.[id]
-					if (value) {
+					if(value) {
 						dict[id] = value
 					}
 
@@ -121,9 +121,9 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 			}
 		},
 		set: (data) => {
-			if (inTransaction) {
+			if(inTransaction) {
 				logger.trace({ types: Object.keys(data) }, 'caching in transaction')
-				for (const key in data) {
+				for(const key in data) {
 					transactionCache[key] = transactionCache[key] || {}
 					Object.assign(transactionCache[key], data[key])
 
@@ -139,28 +139,28 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 			logger.trace({ type, ids }, 'prefetching')
 			return prefetch(type, ids)
 		},
-		transaction: async (work) => {
+		transaction: async(work) => {
 			// if we're already in a transaction,
 			// just execute what needs to be executed -- no commit required
-			if (inTransaction) {
+			if(inTransaction) {
 				await work()
 			} else {
 				logger.trace('entering transaction')
 				inTransaction = true
 				try {
 					await work()
-					if (Object.keys(mutations).length) {
+					if(Object.keys(mutations).length) {
 						logger.trace('committing transaction')
 						// retry mechanism to ensure we've some recovery
 						// in case a transaction fails in the first attempt
 						let tries = maxCommitRetries
-						while (tries) {
+						while(tries) {
 							tries -= 1
 							try {
 								await state.set(mutations)
 								logger.trace({ dbQueriesInTransaction }, 'committed transaction')
 								break
-							} catch (error) {
+							} catch(error) {
 								logger.warn(`failed to commit ${Object.keys(mutations).length} mutations, tries left=${tries}`)
 								await delay(delayBetweenTriesMs)
 							}

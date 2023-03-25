@@ -25,7 +25,7 @@ export const Curve = {
 		try {
 			libsignal.curve.verifySignature(generateSignalPubKey(pubKey), message, signature)
 			return true
-		} catch (error) {
+		} catch(error) {
 			return false
 		}
 	}
@@ -102,6 +102,6 @@ export function sha256(buffer: Buffer) {
 }
 
 // HKDF key expansion
-export function hkdf(buffer: Uint8Array | Buffer, expandedLength: number, info: { salt?: Buffer; info?: string }) {
+export function hkdf(buffer: Uint8Array | Buffer, expandedLength: number, info: { salt?: Buffer, info?: string }) {
 	return HKDF(!Buffer.isBuffer(buffer) ? Buffer.from(buffer) : buffer, expandedLength, info)
 }

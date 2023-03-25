@@ -53,7 +53,7 @@ export const DEFAULT_CONNECTION_CONFIG: SocketConfig = {
 	transactionOpts: { maxCommitRetries: 10, delayBetweenTriesMs: 3000 },
 	generateHighQualityLinkPreview: false,
 	options: {},
-	getMessage: async () => undefined
+	getMessage: async() => undefined
 }
 
 export const MEDIA_PATH_MAP: { [T in MediaType]?: string } = {

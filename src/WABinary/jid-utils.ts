@@ -22,7 +22,7 @@ export const jidEncode = (user: string | number | null, server: JidServer, devic
 
 export const jidDecode = (jid: string | undefined): FullJid | undefined => {
 	const sepIdx = typeof jid === 'string' ? jid.indexOf('@') : -1
-	if (sepIdx < 0) {
+	if(sepIdx < 0) {
 		return undefined
 	}
 
@@ -53,7 +53,7 @@ export const isJidStatusBroadcast = (jid: string) => jid === 'status@broadcast'
 
 export const jidNormalizedUser = (jid: string | undefined) => {
 	const result = jidDecode(jid)
-	if (!result) {
+	if(!result) {
 		return ''
 	}
 

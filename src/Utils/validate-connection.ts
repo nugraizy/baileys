@@ -38,7 +38,7 @@ const PLATFORM_MAP = {
 
 const getWebInfo = (config: ClientPayloadConfig): proto.ClientPayload.IWebInfo => {
 	let webSubPlatform = proto.ClientPayload.WebInfo.WebSubPlatform.WEB_BROWSER
-	if (config.syncFullHistory && PLATFORM_MAP[config.browser[0]]) {
+	if(config.syncFullHistory && PLATFORM_MAP[config.browser[0]]) {
 		webSubPlatform = PLATFORM_MAP[config.browser[0]]
 	}
 
@@ -114,7 +114,7 @@ export const configureSuccessfulPairing = (stanza: BinaryNode, { advSecretKey, s
 	const deviceNode = getBinaryNodeChild(pairSuccessNode, 'device')
 	const businessNode = getBinaryNodeChild(pairSuccessNode, 'biz')
 
-	if (!deviceIdentityNode || !deviceNode) {
+	if(!deviceIdentityNode || !deviceNode) {
 		throw new Boom('Missing device-identity or device in pair success node', { data: stanza })
 	}
 
@@ -124,7 +124,7 @@ export const configureSuccessfulPairing = (stanza: BinaryNode, { advSecretKey, s
 	const { details, hmac } = proto.ADVSignedDeviceIdentityHMAC.decode(deviceIdentityNode.content as Buffer)
 	// check HMAC matches
 	const advSign = hmacSign(details, Buffer.from(advSecretKey, 'base64'))
-	if (Buffer.compare(hmac, advSign) !== 0) {
+	if(Buffer.compare(hmac, advSign) !== 0) {
 		throw new Boom('Invalid account signature')
 	}
 
@@ -132,7 +132,7 @@ export const configureSuccessfulPairing = (stanza: BinaryNode, { advSecretKey, s
 	const { accountSignatureKey, accountSignature, details: deviceDetails } = account
 	// verify the device signature matches
 	const accountMsg = Buffer.concat([Buffer.from([6, 0]), deviceDetails, signedIdentityKey.public])
-	if (!Curve.verify(accountSignatureKey, accountMsg, accountSignature)) {
+	if(!Curve.verify(accountSignatureKey, accountMsg, accountSignature)) {
 		throw new Boom('Failed to verify account signature')
 	}
 
@@ -184,7 +184,7 @@ export const encodeSignedDeviceIdentity = (account: proto.IADVSignedDeviceIdenti
 	account = { ...account }
 	// set to null if we are not to include the signature key
 	// or if we are including the signature key but it is empty
-	if (!includeSignatureKey || !account.accountSignatureKey?.length) {
+	if(!includeSignatureKey || !account.accountSignatureKey?.length) {
 		account.accountSignatureKey = null
 	}
 

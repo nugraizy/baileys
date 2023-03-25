@@ -9,9 +9,9 @@ export const makeMutex = () => {
 
 	return {
 		mutex<T>(code: () => Promise<T> | T): Promise<T> {
-			task = (async () => {
+			task = (async() => {
 				const stack = new Error('mutex start').stack
-				let waitOver = false
+				const waitOver = false
 				taskTimeout = setTimeout(() => {
 					logger.warn({ stack, waitOver }, 'possible mutex deadlock')
 				}, MUTEX_TIMEOUT_MS)
@@ -19,7 +19,7 @@ export const makeMutex = () => {
 				// if there is an error, we swallow so as to not block the queue
 				try {
 					await task
-				} catch {}
+				} catch{}
 
 				// execute the current task
 				return code()
@@ -38,7 +38,7 @@ export const makeKeyedMutex = () => {
 
 	return {
 		mutex<T>(key: string, task: () => Promise<T> | T): Promise<T> {
-			if (!map[key]) {
+			if(!map[key]) {
 				map[key] = makeMutex()
 			}
 

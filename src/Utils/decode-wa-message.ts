@@ -21,9 +21,9 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 
 	const isMe = (jid: string) => areJidsSameUser(jid, auth.creds.me!.id)
 
-	if (isJidUser(from)) {
-		if (recipient) {
-			if (!isMe(from)) {
+	if(isJidUser(from)) {
+		if(recipient) {
+			if(!isMe(from)) {
 				throw new Boom('receipient present, but msg not from me', { data: stanza })
 			}
 
@@ -34,21 +34,21 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 
 		msgType = 'chat'
 		author = from
-	} else if (isJidGroup(from)) {
-		if (!participant) {
+	} else if(isJidGroup(from)) {
+		if(!participant) {
 			throw new Boom('No participant in group message')
 		}
 
 		msgType = 'group'
 		author = participant
 		chatId = from
-	} else if (isJidBroadcast(from)) {
-		if (!participant) {
+	} else if(isJidBroadcast(from)) {
+		if(!participant) {
 			throw new Boom('No participant in group message')
 		}
 
 		const isParticipantMe = isMe(participant)
-		if (isJidStatusBroadcast(from)) {
+		if(isJidStatusBroadcast(from)) {
 			msgType = isParticipantMe ? 'direct_peer_status' : 'other_status'
 		} else {
 			msgType = isParticipantMe ? 'peer_broadcast' : 'other_broadcast'
@@ -78,7 +78,7 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 		pushName: pushname
 	}
 
-	if (key.fromMe) {
+	if(key.fromMe) {
 		fullMessage.status = proto.WebMessageInfo.Status.SERVER_ACK
 	}
 
@@ -86,21 +86,21 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 		fullMessage,
 		category: stanza.attrs.category,
 		author,
-		decryptionTask: (async () => {
+		decryptionTask: (async() => {
 			let decryptables = 0
-			if (Array.isArray(stanza.content)) {
-				for (const { tag, attrs, content } of stanza.content) {
-					if (tag === 'verified_name' && content instanceof Uint8Array) {
+			if(Array.isArray(stanza.content)) {
+				for(const { tag, attrs, content } of stanza.content) {
+					if(tag === 'verified_name' && content instanceof Uint8Array) {
 						const cert = proto.VerifiedNameCertificate.decode(content)
 						const details = proto.VerifiedNameCertificate.Details.decode(cert.details)
 						fullMessage.verifiedBizName = details.verifiedName
 					}
 
-					if (tag !== 'enc') {
+					if(tag !== 'enc') {
 						continue
 					}
 
-					if (!(content instanceof Uint8Array)) {
+					if(!(content instanceof Uint8Array)) {
 						continue
 					}
 
@@ -111,30 +111,30 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 					try {
 						const e2eType = attrs.type
 						switch (e2eType) {
-							case 'skmsg':
-								msgBuffer = await decryptGroupSignalProto(sender, author, content, auth)
-								break
-							case 'pkmsg':
-							case 'msg':
-								const user = isJidUser(sender) ? sender : author
-								msgBuffer = await decryptSignalProto(user, e2eType, content as Buffer, auth)
-								break
-							default:
-								throw new Error(`Unknown e2e type: ${e2eType}`)
+						case 'skmsg':
+							msgBuffer = await decryptGroupSignalProto(sender, author, content, auth)
+							break
+						case 'pkmsg':
+						case 'msg':
+							const user = isJidUser(sender) ? sender : author
+							msgBuffer = await decryptSignalProto(user, e2eType, content as Buffer, auth)
+							break
+						default:
+							throw new Error(`Unknown e2e type: ${e2eType}`)
 						}
 
 						let msg: proto.IMessage = proto.Message.decode(unpadRandomMax16(msgBuffer))
 						msg = msg.deviceSentMessage?.message || msg
-						if (msg.senderKeyDistributionMessage) {
+						if(msg.senderKeyDistributionMessage) {
 							await processSenderKeyMessage(author, msg.senderKeyDistributionMessage, auth)
 						}
 
-						if (fullMessage.message) {
+						if(fullMessage.message) {
 							Object.assign(fullMessage.message, msg)
 						} else {
 							fullMessage.message = msg
 						}
-					} catch (error) {
+					} catch(error) {
 						fullMessage.messageStubType = proto.WebMessageInfo.StubType.CIPHERTEXT
 						fullMessage.messageStubParameters = [error.message]
 					}
@@ -142,7 +142,7 @@ export const decodeMessageStanza = (stanza: BinaryNode, auth: AuthenticationStat
 			}
 
 			// if nothing was found to decrypt
-			if (!decryptables) {
+			if(!decryptables) {
 				fullMessage.messageStubType = proto.WebMessageInfo.StubType.CIPHERTEXT
 				fullMessage.messageStubParameters = [NO_MESSAGE_FOUND_ERROR_TEXT]
 			}

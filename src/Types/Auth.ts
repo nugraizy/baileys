@@ -2,8 +2,8 @@ import type { proto } from '../../WAProto'
 import type { Contact } from './Contact'
 import type { MinimalMessage } from './Message'
 
-export type KeyPair = { public: Uint8Array; private: Uint8Array }
-export type SignedKeyPair = { keyPair: KeyPair; signature: Uint8Array; keyId: number }
+export type KeyPair = { public: Uint8Array, private: Uint8Array }
+export type SignedKeyPair = { keyPair: KeyPair, signature: Uint8Array, keyId: number }
 
 export type ProtocolAddress = {
 	name: string // jid

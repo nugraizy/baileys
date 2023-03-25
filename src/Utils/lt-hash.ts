@@ -16,7 +16,7 @@ class d {
 	}
 	add(e, t) {
 		var r = this
-		for (const item of t) {
+		for(const item of t) {
 			e = r._addSingle(e, item)
 		}
 
@@ -24,7 +24,7 @@ class d {
 	}
 	subtract(e, t) {
 		var r = this
-		for (const item of t) {
+		for(const item of t) {
 			e = r._subtractSingle(e, item)
 		}
 
@@ -50,7 +50,7 @@ class d {
 			i = new DataView(t),
 			a = new ArrayBuffer(n.byteLength),
 			s = new DataView(a)
-		for (let e = 0; e < n.byteLength; e += 2) {
+		for(let e = 0; e < n.byteLength; e += 2) {
 			s.setUint16(e, r(n.getUint16(e, !0), i.getUint16(e, !0)), !0)
 		}
 

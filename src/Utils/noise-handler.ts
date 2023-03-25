@@ -17,7 +17,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 	logger = logger.child({ class: 'ns' })
 
 	const authenticate = (data: Uint8Array) => {
-		if (!isFinished) {
+		if(!isFinished) {
 			hash = sha256(Buffer.concat([hash, data]))
 		}
 	}
@@ -37,7 +37,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 		const iv = generateIV(isFinished ? readCounter : writeCounter)
 		const result = aesDecryptGCM(ciphertext, decKey, iv, hash)
 
-		if (isFinished) {
+		if(isFinished) {
 			readCounter += 1
 		} else {
 			writeCounter += 1
@@ -104,7 +104,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 
 			const { issuerSerial } = proto.CertChain.NoiseCertificate.Details.decode(certIntermediate!.details!)
 
-			if (issuerSerial !== WA_CERT_DETAILS.SERIAL) {
+			if(issuerSerial !== WA_CERT_DETAILS.SERIAL) {
 				throw new Boom('certification match failed', { statusCode: 400 })
 			}
 
@@ -114,14 +114,14 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 			return keyEnc
 		},
 		encodeFrame: (data: Buffer | Uint8Array) => {
-			if (isFinished) {
+			if(isFinished) {
 				data = encrypt(data)
 			}
 
 			const introSize = sentIntro ? 0 : NOISE_WA_HEADER.length
 			const frame = Buffer.alloc(introSize + 3 + data.byteLength)
 
-			if (!sentIntro) {
+			if(!sentIntro) {
 				frame.set(NOISE_WA_HEADER)
 				sentIntro = true
 			}
@@ -137,7 +137,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 			// on top of the WS frames
 			// so we get this data and separate out the frames
 			const getBytesSize = () => {
-				if (inBytes.length >= 3) {
+				if(inBytes.length >= 3) {
 					return (inBytes.readUInt8() << 16) | inBytes.readUInt16BE(1)
 				}
 			}
@@ -147,11 +147,11 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 			logger.trace(`recv ${newData.length} bytes, total recv ${inBytes.length} bytes`)
 
 			let size = getBytesSize()
-			while (size && inBytes.length >= size + 3) {
+			while(size && inBytes.length >= size + 3) {
 				let frame: Uint8Array | BinaryNode = inBytes.slice(3, size + 3)
 				inBytes = inBytes.slice(size + 3)
 
-				if (isFinished) {
+				if(isFinished) {
 					const result = decrypt(frame as Uint8Array)
 					frame = decodeBinaryNode(result)
 				}
