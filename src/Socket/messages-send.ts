@@ -563,7 +563,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 			return message
 		},
-		sendMessage: async(jid: string, content: AnyMessageContent, options: MiscMessageGenerationOptions = {}) => {
+		sendMessage: async(jid: string, content: AnyMessageContent, options: MiscMessageGenerationOptions) => {
 			const userJid = authState.creds.me!.id
 			if(typeof content === 'object' && 'disappearingMessagesInChat' in content && typeof content['disappearingMessagesInChat'] !== 'undefined' && isJidGroup(jid)) {
 				const { disappearingMessagesInChat } = content
