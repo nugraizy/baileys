@@ -599,7 +599,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				}
 
 				fullMsg.message = patchMessageForMdIfRequired(fullMsg.message!)
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalAttributes })
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options?.cachedGroupMetadata, additionalAttributes })
 				if(config.emitOwnEvents) {
 					process.nextTick(() => {
 						upsertMessage(fullMsg, 'append')
