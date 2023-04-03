@@ -10,7 +10,7 @@ export const makeMutex = () => {
 		mutex<T>(code: () => Promise<T> | T): Promise<T> {
 			task = (async() => {
 				taskTimeout = setTimeout(() => {
-					
+
 				}, MUTEX_TIMEOUT_MS)
 				// wait for the previous task to complete
 				// if there is an error, we swallow so as to not block the queue

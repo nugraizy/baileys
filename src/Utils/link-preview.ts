@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios'
 import { Logger } from 'pino'
 import { WAMediaUploadFunction, WAUrlInfo } from '../Types'
 import { prepareWAMessageMedia } from './messages'
@@ -6,16 +7,25 @@ import { extractImageThumb, getHttpStream } from './messages-media'
 const THUMBNAIL_WIDTH_PX = 192
 
 /** Fetches an image and generates a thumbnail for it */
-const getCompressedJpegThumbnail = async(url: string, { thumbnailWidth, timeoutMs }: URLGenerationOptions) => {
-	const stream = await getHttpStream(url, { timeout: timeoutMs })
+const getCompressedJpegThumbnail = async(
+	url: string,
+	{ thumbnailWidth, fetchOpts }: URLGenerationOptions
+) => {
+	const stream = await getHttpStream(url, fetchOpts)
 	const result = await extractImageThumb(stream, thumbnailWidth)
 	return result
 }
 
 export type URLGenerationOptions = {
-  thumbnailWidth: number
-  timeoutMs: number
-  uploadImage?: WAMediaUploadFunction
+	thumbnailWidth: number
+	fetchOpts: {
+		/** Timeout in ms */
+		timeout: number
+		proxyUrl?: string
+		headers?: AxiosRequestConfig<{}>['headers']
+	}
+	uploadImage?: WAMediaUploadFunction
+	logger?: Logger
 }
 
 /**
@@ -24,7 +34,13 @@ export type URLGenerationOptions = {
  * @param text first matched URL in text
  * @returns the URL info required to generate link preview
  */
-export const getUrlInfo = async(text: string, opts: URLGenerationOptions = { thumbnailWidth: THUMBNAIL_WIDTH_PX, timeoutMs: 3000 }, logger?: Logger): Promise<WAUrlInfo | undefined> => {
+export const getUrlInfo = async(
+	text: string,
+	opts: URLGenerationOptions = {
+		thumbnailWidth: THUMBNAIL_WIDTH_PX,
+		fetchOpts: { timeout: 3000 }
+	},
+): Promise<WAUrlInfo | undefined> => {
 	try {
 		const { getLinkPreview } = await import('link-preview-js')
 		let previewLink = text
@@ -32,31 +48,46 @@ export const getUrlInfo = async(text: string, opts: URLGenerationOptions = { thu
 			previewLink = 'https://' + previewLink
 		}
 
-		const info = await getLinkPreview(previewLink, { timeout: opts.timeoutMs })
-		if(info && 'title' in info) {
+		const info = await getLinkPreview(previewLink, {
+			...opts.fetchOpts,
+			headers: opts.fetchOpts as {}
+		})
+		if(info && 'title' in info && info.title) {
 			const [image] = info.images
 
 			const urlInfo: WAUrlInfo = {
 				'canonical-url': info.url,
-				'matched-text': info.url,
+				'matched-text': text,
 				title: info.title,
 				description: info.description,
 				originalThumbnailUrl: image
 			}
 
 			if(opts.uploadImage) {
-				const { imageMessage } = await prepareWAMessageMedia({ image: { url: image } }, { upload: opts.uploadImage, mediaTypeOverride: 'thumbnail-link' })
-				urlInfo.jpegThumbnail = imageMessage?.jpegThumbnail ? Buffer.from(imageMessage.jpegThumbnail) : undefined
+				const { imageMessage } = await prepareWAMessageMedia(
+					{ image: { url: image } },
+					{
+						upload: opts.uploadImage,
+						mediaTypeOverride: 'thumbnail-link',
+						options: opts.fetchOpts
+					}
+				)
+				urlInfo.jpegThumbnail = imageMessage?.jpegThumbnail
+					? Buffer.from(imageMessage.jpegThumbnail)
+					: undefined
 				urlInfo.highQualityThumbnail = imageMessage || undefined
 			} else {
 				try {
-					urlInfo.jpegThumbnail = image ? (await getCompressedJpegThumbnail(image, opts)).buffer : undefined
+					urlInfo.jpegThumbnail = image
+						? (await getCompressedJpegThumbnail(image, opts)).buffer
+						: undefined
 				} catch(error) {
-					logger?.debug({ err: error.stack, url: previewLink }, 'error in generating thumbnail')
+					opts.logger?.debug(
+						{ err: error.stack, url: previewLink },
+						'error in generating thumbnail'
+					)
 				}
 			}
-
-			console.log(urlInfo)
 
 			return urlInfo
 		}

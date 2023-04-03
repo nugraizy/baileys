@@ -1,5 +1,6 @@
 import { proto } from '../../WAProto'
-import type { MediaType, SocketConfig } from '../Types'
+import { makeLibSignalRepository } from '../Signal/libsignal'
+import type { AuthenticationState, MediaType, SocketConfig, WAVersion } from '../Types'
 import { Browsers } from '../Utils'
 import logger from '../Utils/logger'
 import { version } from './baileys-version.json'
@@ -16,13 +17,15 @@ export const WA_DEFAULT_EPHEMERAL = 7 * 24 * 60 * 60
 export const NOISE_MODE = 'Noise_XX_25519_AESGCM_SHA256\0\0\0\0'
 export const DICT_VERSION = 2
 export const KEY_BUNDLE_TYPE = Buffer.from([5])
-export const NOISE_WA_HEADER = Buffer.from([87, 65, 6, DICT_VERSION]) // last is "DICT_VERSION"
+export const NOISE_WA_HEADER = Buffer.from(
+	[ 87, 65, 6, DICT_VERSION ]
+) // last is "DICT_VERSION"
 /** from: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url */
 export const URL_REGEX = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 export const URL_EXCLUDE_REGEX = /.*@.*/
 
 export const WA_CERT_DETAILS = {
-	SERIAL: 0
+	SERIAL: 0,
 }
 
 export const PROCESSABLE_HISTORY_TYPES = [
@@ -33,7 +36,7 @@ export const PROCESSABLE_HISTORY_TYPES = [
 ]
 
 export const DEFAULT_CONNECTION_CONFIG: SocketConfig = {
-	version: version as any,
+	version: version as WAVersion,
 	browser: Browsers.baileys('Chrome'),
 	waWebSocketUrl: 'wss://web.whatsapp.com/ws/chat',
 	connectTimeoutMs: 20_000,
@@ -45,15 +48,22 @@ export const DEFAULT_CONNECTION_CONFIG: SocketConfig = {
 	customUploadHosts: [],
 	retryRequestDelayMs: 250,
 	fireInitQueries: true,
-	auth: undefined as any,
+	auth: undefined as unknown as AuthenticationState,
 	markOnlineOnConnect: true,
 	syncFullHistory: false,
+	patchMessageBeforeSending: msg => msg,
 	shouldSyncHistoryMessage: () => true,
+	shouldIgnoreJid: () => false,
 	linkPreviewImageThumbnailWidth: 192,
 	transactionOpts: { maxCommitRetries: 10, delayBetweenTriesMs: 3000 },
 	generateHighQualityLinkPreview: false,
-	options: {},
-	getMessage: async() => undefined
+	options: { },
+	appStateMacVerification: {
+		patch: false,
+		snapshot: false,
+	},
+	getMessage: async() => undefined,
+	makeSignalRepository: makeLibSignalRepository
 }
 
 export const MEDIA_PATH_MAP: { [T in MediaType]?: string } = {
@@ -68,15 +78,15 @@ export const MEDIA_PATH_MAP: { [T in MediaType]?: string } = {
 }
 
 export const MEDIA_HKDF_KEY_MAPPING = {
-	audio: 'Audio',
-	document: 'Document',
-	gif: 'Video',
-	image: 'Image',
-	ppic: '',
-	product: 'Image',
-	ptt: 'Audio',
-	sticker: 'Image',
-	video: 'Video',
+	'audio': 'Audio',
+	'document': 'Document',
+	'gif': 'Video',
+	'image': 'Image',
+	'ppic': '',
+	'product': 'Image',
+	'ptt': 'Audio',
+	'sticker': 'Image',
+	'video': 'Video',
 	'thumbnail-document': 'Document Thumbnail',
 	'thumbnail-image': 'Image Thumbnail',
 	'thumbnail-video': 'Video Thumbnail',
@@ -84,7 +94,7 @@ export const MEDIA_HKDF_KEY_MAPPING = {
 	'md-msg-hist': 'History',
 	'md-app-state': 'App State',
 	'product-catalog-image': '',
-	'payment-bg-image': 'Payment Background'
+	'payment-bg-image': 'Payment Background',
 }
 
 export const MEDIA_KEYS = Object.keys(MEDIA_PATH_MAP) as MediaType[]
@@ -92,3 +102,10 @@ export const MEDIA_KEYS = Object.keys(MEDIA_PATH_MAP) as MediaType[]
 export const MIN_PREKEY_COUNT = 5
 
 export const INITIAL_PREKEY_COUNT = 30
+
+export const DEFAULT_CACHE_TTLS = {
+	SIGNAL_STORE: 5 * 60, // 5 minutes
+	MSG_RETRY: 60 * 60, // 1 hour
+	CALL_OFFER: 5 * 60, // 5 minutes
+	USER_DEVICES: 5 * 60, // 5 minutes
+}

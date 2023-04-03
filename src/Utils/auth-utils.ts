@@ -1,8 +1,8 @@
-import { Boom } from '@hapi/boom'
 import { randomBytes } from 'crypto'
 import NodeCache from 'node-cache'
 import type { Logger } from 'pino'
-import type { AuthenticationCreds, SignalDataSet, SignalDataTypeMap, SignalKeyStore, SignalKeyStoreWithTransaction, TransactionCapabilityOptions } from '../Types'
+import { DEFAULT_CACHE_TTLS } from '../Defaults'
+import type { AuthenticationCreds, CacheStore, SignalDataSet, SignalDataTypeMap, SignalKeyStore, SignalKeyStoreWithTransaction, TransactionCapabilityOptions } from '../Types'
 import { Curve, signedKeyPair } from './crypto'
 import { delay, generateRegistrationId } from './generics'
 
@@ -10,12 +10,17 @@ import { delay, generateRegistrationId } from './generics'
  * Adds caching capability to a SignalKeyStore
  * @param store the store to add caching to
  * @param logger to log trace events
- * @param opts NodeCache options
+ * @param _cache cache store to use
  */
-export function makeCacheableSignalKeyStore(store: SignalKeyStore, logger: Logger, opts?: NodeCache.Options): SignalKeyStore {
-	const cache = new NodeCache({
-		...(opts || {}),
-		useClones: false
+export function makeCacheableSignalKeyStore(
+	store: SignalKeyStore,
+	logger: Logger,
+	_cache?: CacheStore
+): SignalKeyStore {
+	const cache = _cache || new NodeCache({
+		stdTTL: DEFAULT_CACHE_TTLS.SIGNAL_STORE, // 5 minutes
+		useClones: false,
+		deleteOnExpire: true,
 	})
 
 	function getUniqueId(type: string, id: string) {
@@ -24,7 +29,7 @@ export function makeCacheableSignalKeyStore(store: SignalKeyStore, logger: Logge
 
 	return {
 		async get(type, ids) {
-			const data: { [_: string]: SignalDataTypeMap[typeof type] } = {}
+			const data: { [_: string]: SignalDataTypeMap[typeof type] } = { }
 			const idsToFetch: string[] = []
 			for(const id of ids) {
 				const item = cache.get<SignalDataTypeMap[typeof type]>(getUniqueId(type, id))
@@ -76,31 +81,37 @@ export function makeCacheableSignalKeyStore(store: SignalKeyStore, logger: Logge
  * @param logger logger to log events
  * @returns SignalKeyStore with transaction capability
  */
-export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, { maxCommitRetries, delayBetweenTriesMs }: TransactionCapabilityOptions): SignalKeyStoreWithTransaction => {
+export const addTransactionCapability = (
+	state: SignalKeyStore,
+	logger: Logger,
+	{ maxCommitRetries, delayBetweenTriesMs }: TransactionCapabilityOptions
+): SignalKeyStoreWithTransaction => {
 	let inTransaction = false
 	// number of queries made to the DB during the transaction
 	// only there for logging purposes
 	let dbQueriesInTransaction = 0
-	let transactionCache: SignalDataSet = {}
-	let mutations: SignalDataSet = {}
+	let transactionCache: SignalDataSet = { }
+	let mutations: SignalDataSet = { }
 
 	/**
 	 * prefetches some data and stores in memory,
 	 * useful if these data points will be used together often
 	 * */
-	const prefetch = async(type: keyof SignalDataTypeMap, ids: string[]) => {
-		if(!inTransaction) {
-			throw new Boom('Cannot prefetch without transaction')
-		}
-
+	const prefetch = async<T extends keyof SignalDataTypeMap>(type: T, ids: string[]) => {
 		const dict = transactionCache[type]
-		const idsRequiringFetch = dict ? ids.filter((item) => !(item in dict)) : ids
+		const idsRequiringFetch = dict
+			? ids.filter(item => typeof dict[item] !== 'undefined')
+			: ids
 		// only fetch if there are any items to fetch
 		if(idsRequiringFetch.length) {
 			dbQueriesInTransaction += 1
 			const result = await state.get(type, idsRequiringFetch)
 
-			transactionCache[type] = Object.assign(transactionCache[type] || {}, result)
+			transactionCache[type] ||= {}
+			transactionCache[type] = Object.assign(
+				transactionCache[type]!,
+				result
+			)
 		}
 	}
 
@@ -108,26 +119,28 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 		get: async(type, ids) => {
 			if(inTransaction) {
 				await prefetch(type, ids)
-				return ids.reduce((dict, id) => {
-					const value = transactionCache[type]?.[id]
-					if(value) {
-						dict[id] = value
-					}
+				return ids.reduce(
+					(dict, id) => {
+						const value = transactionCache[type]?.[id]
+						if(value) {
+							dict[id] = value
+						}
 
-					return dict
-				}, {})
+						return dict
+					}, { }
+				)
 			} else {
 				return state.get(type, ids)
 			}
 		},
-		set: (data) => {
+		set: data => {
 			if(inTransaction) {
 				logger.trace({ types: Object.keys(data) }, 'caching in transaction')
 				for(const key in data) {
-					transactionCache[key] = transactionCache[key] || {}
+					transactionCache[key] = transactionCache[key] || { }
 					Object.assign(transactionCache[key], data[key])
 
-					mutations[key] = mutations[key] || {}
+					mutations[key] = mutations[key] || { }
 					Object.assign(mutations[key], data[key])
 				}
 			} else {
@@ -135,10 +148,6 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 			}
 		},
 		isInTransaction: () => inTransaction,
-		prefetch: (type, ids) => {
-			logger.trace({ type, ids }, 'prefetching')
-			return prefetch(type, ids)
-		},
 		transaction: async(work) => {
 			// if we're already in a transaction,
 			// just execute what needs to be executed -- no commit required
@@ -170,8 +179,8 @@ export const addTransactionCapability = (state: SignalKeyStore, logger: Logger, 
 					}
 				} finally {
 					inTransaction = false
-					transactionCache = {}
-					mutations = {}
+					transactionCache = { }
+					mutations = { }
 					dbQueriesInTransaction = 0
 				}
 			}

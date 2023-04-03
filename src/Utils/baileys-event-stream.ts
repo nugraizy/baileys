@@ -4,8 +4,8 @@ import { writeFile } from 'fs/promises'
 import { createInterface } from 'readline'
 import type { BaileysEventEmitter } from '../Types'
 import { delay } from './generics'
-import { makeMutex } from './make-mutex'
 import logger from './logger'
+import { makeMutex } from './make-mutex'
 
 /**
  * Captures events from a baileys event emitter & stores them in a file
