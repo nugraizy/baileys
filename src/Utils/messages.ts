@@ -334,41 +334,32 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
         productImage: imageMessage
       }
     })
-  } else if('listReply' in message) {
-		m.listResponseMessage = { ...message.listReply }
-	} else if('poll' in message) {
-		message.poll.selectableCount ||= 0
+  } else if ('listReply' in message) {
+    m.listResponseMessage = { ...message.listReply }
+  } else if ('poll' in message) {
+    message.poll.selectableCount ||= 0
 
-		if(!Array.isArray(message.poll.values)) {
-			throw new Boom('Invalid poll values', { statusCode: 400 })
-		}
+    if (!Array.isArray(message.poll.values)) {
+      throw new Boom('Invalid poll values', { statusCode: 400 })
+    }
 
-		if(
-			message.poll.selectableCount < 0
-			|| message.poll.selectableCount > message.poll.values.length
-		) {
-			throw new Boom(
-				`poll.selectableCount in poll should be >= 0 and <= ${message.poll.values.length}`,
-				{ statusCode: 400 }
-			)
-		}
+    if (message.poll.selectableCount < 0 || message.poll.selectableCount > message.poll.values.length) {
+      throw new Boom(`poll.selectableCount in poll should be >= 0 and <= ${message.poll.values.length}`, { statusCode: 400 })
+    }
 
-		m.messageContextInfo = {
-			// encKey
-			messageSecret: message.poll.messageSecret || randomBytes(32),
-		}
+    m.messageContextInfo = {
+      // encKey
+      messageSecret: message.poll.messageSecret || randomBytes(32)
+    }
 
-		m.pollCreationMessage = {
-			name: message.poll.name,
-			selectableOptionsCount: message.poll.selectableCount,
-			options: message.poll.values.map(optionName => ({ optionName })),
-		}
-	} else {
-		m = await prepareWAMessageMedia(
-			message,
-			options
-		)
-	}
+    m[message.poll.isPickOneOnly ? 'pollCreationMessageV3' : 'pollCreationMessage'] = {
+      name: message.poll.name,
+      selectableOptionsCount: message.poll.isPickOneOnly ? 1 : message.poll.selectableCount,
+      options: message.poll.values.map((optionName) => ({ optionName }))
+    }
+  } else {
+    m = await prepareWAMessageMedia(message, options)
+  }
 
   if ('buttons' in message && !!message.buttons) {
     const buttonsMessage: proto.Message.IButtonsMessage = {
@@ -620,24 +611,20 @@ export const updateMessageWithReaction = (msg: Pick<WAMessage, 'reactions'>, rea
 }
 
 /** Update the message with a new poll update */
-export const updateMessageWithPollUpdate = (
-	msg: Pick<WAMessage, 'pollUpdates'>,
-	update: proto.IPollUpdate
-) => {
-	const authorID = getKeyAuthor(update.pollUpdateMessageKey)
+export const updateMessageWithPollUpdate = (msg: Pick<WAMessage, 'pollUpdates'>, update: proto.IPollUpdate) => {
+  const authorID = getKeyAuthor(update.pollUpdateMessageKey)
 
-	const reactions = (msg.pollUpdates || [])
-		.filter(r => getKeyAuthor(r.pollUpdateMessageKey) !== authorID)
-	if(update.vote?.selectedOptions?.length) {
-		reactions.push(update)
-	}
+  const reactions = (msg.pollUpdates || []).filter((r) => getKeyAuthor(r.pollUpdateMessageKey) !== authorID)
+  if (update.vote?.selectedOptions?.length) {
+    reactions.push(update)
+  }
 
-	msg.pollUpdates = reactions
+  msg.pollUpdates = reactions
 }
 
 type VoteAggregation = {
-	name: string
-	voters: string[]
+  name: string
+  voters: string[]
 }
 
 /**
@@ -646,46 +633,40 @@ type VoteAggregation = {
  * @param meId your jid
  * @returns A list of options & their voters
  */
-export function getAggregateVotesInPollMessage(
-	{ message, pollUpdates }: Pick<WAMessage, 'pollUpdates' | 'message'>,
-	meId?: string
-) {
-	const opts = message?.pollCreationMessage?.options || []
-	const voteHashMap = opts.reduce((acc, opt) => {
-		const hash = sha256(Buffer.from(opt.optionName || '')).toString()
-		acc[hash] = {
-			name: opt.optionName || '',
-			voters: []
-		}
-		return acc
-	}, {} as { [_: string]: VoteAggregation })
+export function getAggregateVotesInPollMessage({ message, pollUpdates }: Pick<WAMessage, 'pollUpdates' | 'message'>, meId?: string) {
+  const opts = message?.pollCreationMessage?.options || []
+  const voteHashMap = opts.reduce((acc, opt) => {
+    const hash = sha256(Buffer.from(opt.optionName || '')).toString()
+    acc[hash] = {
+      name: opt.optionName || '',
+      voters: []
+    }
+    return acc
+  }, {} as { [_: string]: VoteAggregation })
 
-	for(const update of pollUpdates || []) {
-		const { vote } = update
-		if(!vote) {
-			continue
-		}
+  for (const update of pollUpdates || []) {
+    const { vote } = update
+    if (!vote) {
+      continue
+    }
 
-		for(const option of vote.selectedOptions || []) {
-			const hash = option.toString()
-			let data = voteHashMap[hash]
-			if(!data) {
-				voteHashMap[hash] = {
-					name: 'Unknown',
-					voters: []
-				}
-				data = voteHashMap[hash]
-			}
+    for (const option of vote.selectedOptions || []) {
+      const hash = option.toString()
+      let data = voteHashMap[hash]
+      if (!data) {
+        voteHashMap[hash] = {
+          name: 'Unknown',
+          voters: []
+        }
+        data = voteHashMap[hash]
+      }
 
-			voteHashMap[hash].voters.push(
-				getKeyAuthor(update.pollUpdateMessageKey, meId)
-			)
-		}
-	}
+      voteHashMap[hash].voters.push(getKeyAuthor(update.pollUpdateMessageKey, meId))
+    }
+  }
 
-	return Object.values(voteHashMap)
+  return Object.values(voteHashMap)
 }
-
 
 /** Given a list of message keys, aggregates them by chat & sender. Useful for sending read receipts in bulk */
 export const aggregateMessageKeysNotFromMe = (keys: proto.IMessageKey[]) => {
