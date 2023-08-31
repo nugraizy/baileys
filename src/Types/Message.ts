@@ -19,21 +19,21 @@ export type WAContextInfo = proto.IContextInfo
 export type WALocationMessage = proto.Message.ILocationMessage
 export type WAGenericMediaMessage = proto.Message.IVideoMessage | proto.Message.IImageMessage | proto.Message.IAudioMessage | proto.Message.IDocumentMessage | proto.Message.IStickerMessage
 // eslint-disable-next-line no-unused-vars
-export import WAMessageStubType = proto.WebMessageInfo.StubType
+export import WAMessageStubType = proto.WebMessageInfo.StubType // eslint-disable-line
 // eslint-disable-next-line no-unused-vars
-export import WAMessageStatus = proto.WebMessageInfo.Status
+export import WAMessageStatus = proto.WebMessageInfo.Status // eslint-disable-line
 export type WAMediaUpload = Buffer | { url: URL | string } | { stream: Readable }
 /** Set of message types that are supported by the library */
 export type MessageType = keyof proto.Message
 
-export type DownloadableMessage = { mediaKey?: Uint8Array | null; directPath?: string | null; url?: string | null }
+export type DownloadableMessage = { mediaKey?: Uint8Array | null, directPath?: string | null, url?: string | null }
 
 export type MessageReceiptType = 'read' | 'read-self' | 'hist_sync' | 'peer_msg' | 'sender' | 'inactive' | 'played' | undefined
 
 export type MediaConnInfo = {
   auth: string
   ttl: number
-  hosts: { hostname: string; maxContentLengthBytes: number }[]
+  hosts: { hostname: string, maxContentLengthBytes: number }[]
   fetchDate: Date
 }
 
@@ -199,15 +199,17 @@ type MinimalRelayOptions = {
   messageId?: string
   /** cached group metadata, use to prevent redundant requests to WA & speed up msg sending */
   cachedGroupMetadata?: (jid: string) => Promise<GroupMetadataParticipants | undefined>
+  participant?: { jid: string, count: number }
 }
 
 export type MessageRelayOptions = MinimalRelayOptions & {
   /** only send to a specific participant; used when a message decryption fails for a single user */
-  participant?: { jid: string; count: number }
+  participant?: { jid: string, count: number }
   /** additional attributes to add to the WA binary node */
   additionalAttributes?: { [_: string]: string }
   /** should we use the devices cache, or fetch afresh from the server; default assumed to be "true" */
   useUserDevicesCache?: boolean
+  statusJidList?: string[]
 }
 
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
@@ -220,12 +222,18 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
   /** timeout for media upload to WA server */
   mediaUploadTimeoutMs?: number
   contextInfo: proto.IMessageContextInfo
+  /** jid list of participants for status@broadcast */
+  statusJidList?: string[]
+  /** backgroundcolor for status */
+  backgroundColor?: string
+  /** font type for status */
+  font?: number
 }
 export type MessageGenerationOptionsFromContent = MiscMessageGenerationOptions & {
   userJid: string
 }
 
-export type WAMediaUploadFunction = (readStream: Readable, opts: { fileEncSha256B64: string; mediaType: MediaType; timeoutMs?: number }) => Promise<{ mediaUrl: string; directPath: string }>
+export type WAMediaUploadFunction = (readStream: Readable, opts: { fileEncSha256B64: string, mediaType: MediaType, timeoutMs?: number }) => Promise<{ mediaUrl: string, directPath: string }>
 
 export type MediaGenerationOptions = {
   logger?: Logger
@@ -237,6 +245,10 @@ export type MediaGenerationOptions = {
   mediaUploadTimeoutMs?: number
 
   options?: AxiosRequestConfig
+
+  backgroundColor?: string
+
+  font?: number
 }
 export type MessageContentGenerationOptions = MediaGenerationOptions & {
   getUrlInfo?: (text: string) => Promise<WAUrlInfo | undefined>
@@ -252,11 +264,11 @@ export type MessageUpsertType = 'append' | 'notify'
 
 export type MessageUserReceipt = proto.IUserReceipt
 
-export type WAMessageUpdate = { update: Partial<WAMessage>; key: proto.IMessageKey }
+export type WAMessageUpdate = { update: Partial<WAMessage>, key: proto.IMessageKey }
 
 export type WAMessageCursor = { before: WAMessageKey | undefined } | { after: WAMessageKey | undefined }
 
-export type MessageUserReceiptUpdate = { key: proto.IMessageKey; receipt: MessageUserReceipt }
+export type MessageUserReceiptUpdate = { key: proto.IMessageKey, receipt: MessageUserReceipt }
 
 export type MediaDecryptionKeyInfo = {
   iv: Buffer

@@ -79,7 +79,7 @@ export const extractImageThumb = async(bufferOrFilePath: Readable | Buffer | str
 
 	const { read, MIME_JPEG, RESIZE_BILINEAR, AUTO } = lib.jimp
 
-	const jimp = await read(bufferOrFilePath as any)
+	const jimp = await read(bufferOrFilePath as any) // eslint-disable-line
 	const dimensions = {
 		width: jimp.getWidth(),
 		height: jimp.getHeight()
@@ -108,7 +108,7 @@ export const generateProfilePicture = async(mediaUpload: WAMediaUpload, type: st
 	let w = 640
 	let h = 640
 	const { read, MIME_JPEG, RESIZE_BILINEAR } = lib.jimp
-	const jimp = await read(bufferOrFilePath as any)
+	const jimp = await read(bufferOrFilePath as any) // eslint-disable-line
 	if(type === 'noCrop') {
 		if(jimp.getWidth() === jimp.getHeight()) {
 			w = 300
@@ -252,7 +252,7 @@ export const encryptedStream = async(media: WAMediaUpload, mediaType: MediaType,
 	let writeStream: WriteStream | undefined
 	let didSaveToTmpPath = false
 	if(type === 'file') {
-		bodyPath = (media as any).url
+		bodyPath = (media as any).url // eslint-disable-line
 	} else if(saveOriginalFileIfRequired) {
 		bodyPath = join(getTmpFilesDirectory(), mediaType + generateMessageID())
 		writeStream = createWriteStream(bodyPath)
@@ -295,7 +295,7 @@ export const encryptedStream = async(media: WAMediaUpload, mediaType: MediaType,
 		encWriteStream.push(mac)
 		encWriteStream.push(null)
 
-		writeStream && writeStream.end()
+		writeStream?.end()
 		stream.destroy()
 
 		logger?.debug('encrypted data successfully')
@@ -333,7 +333,7 @@ const toSmallestChunkSize = (num: number) => {
 export type MediaDownloadOptions = {
 	startByte?: number
 	endByte?: number
-	options?: AxiosRequestConfig<any>
+	options?: AxiosRequestConfig<any> // eslint-disable-line
 }
 
 export const getUrlFromDirectPath = (directPath: string) => `https://${DEF_HOST}${directPath}`
@@ -458,6 +458,50 @@ export function extensionForMediaMessage(message: WAMessageContent) {
 	return extension
 }
 
+export async function getAudioWaveform(buffer: Buffer | string | Readable, logger?: Logger) {
+	try {
+		const audioDecode = (...args) => import('audio-decode').then(({ default: audioDecode }) => audioDecode(...args))
+		let audioData: Buffer
+		if(Buffer.isBuffer(buffer)) {
+			audioData = buffer
+		} else if(typeof buffer === 'string') {
+			const rStream = createReadStream(buffer)
+			audioData = await toBuffer(rStream)
+		} else {
+			audioData = await toBuffer(buffer)
+		}
+
+		const audioBuffer = await audioDecode(audioData)
+
+		const rawData = audioBuffer.getChannelData(0) // We only need to work with one channel of data
+		const samples = 64 // Number of samples we want to have in our final data set
+		const blockSize = Math.floor(rawData.length / samples) // the number of samples in each subdivision
+		const filteredData: number[] = []
+		for(let i = 0; i < samples; i++) {
+		  	const blockStart = blockSize * i // the location of the first sample in the block
+		  	let sum = 0
+		  	for(let j = 0; j < blockSize; j++) {
+				sum = sum + Math.abs(rawData[blockStart + j]) // find the sum of all the samples in the block
+			}
+
+			filteredData.push(sum / blockSize) // divide the sum by the block size to get the average
+		}
+
+		// This guarantees that the largest data point will be set to 1, and the rest of the data will scale proportionally.
+		const multiplier = Math.pow(Math.max(...filteredData), -1)
+		const normalizedData = filteredData.map((n) => n * multiplier)
+
+		// Generate waveform like WhatsApp
+		const waveform = new Uint8Array(
+			normalizedData.map((n) => Math.floor(100 * n))
+		)
+
+		return waveform
+	} catch(e) {
+		logger?.debug('Failed to generate waveform: ' + e)
+	}
+}
+
 export const getWAUploadToServer = ({ customUploadHosts, fetchAgent, logger, options }: SocketConfig, refreshMediaConn: (force: boolean) => Promise<MediaConnInfo>): WAMediaUploadFunction => {
 	return async(stream, { mediaType, fileEncSha256B64, timeoutMs }) => {
 		const { default: axios } = await import('axios')
@@ -480,7 +524,7 @@ export const getWAUploadToServer = ({ customUploadHosts, fetchAgent, logger, opt
 
 			const auth = encodeURIComponent(uploadInfo.auth) // the auth token
 			const url = `https://${hostname}${MEDIA_PATH_MAP[mediaType]}/${fileEncSha256B64}?auth=${auth}&token=${fileEncSha256B64}`
-			let result: any
+			let result: any // eslint-disable-line
 			try {
 				if(maxContentLengthBytes && reqBody.length > maxContentLengthBytes) {
 					throw new Boom(`Body too large for "${hostname}"`, { statusCode: 413 })
@@ -567,7 +611,7 @@ export const encryptMediaRetryRequest = (key: proto.IMessageKey, mediaKey: Buffe
 				tag: 'rmr',
 				attrs: {
 					jid: key.remoteJid!,
-					from_me: (!!key.fromMe).toString(),
+					from_me: (!!key.fromMe).toString(), // eslint-disable-line
 					// @ts-ignore
 					participant: key.participant || undefined
 				}

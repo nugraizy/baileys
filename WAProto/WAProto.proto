@@ -2397,6 +2397,7 @@ message WebMessageInfo {
     optional KeepInChat keepInChat = 50;
     optional string originalSelfAuthorUserJidString = 51;
     optional uint64 revokeMessageTimestamp = 52;
+    optional Hello = 53;
     enum BizPrivacyStatus {
         E2EE = 0;
         FB = 2;

@@ -302,19 +302,20 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 	const relayMessage = async(
 		jid: string,
 		message: proto.IMessage,
-		{ messageId: msgId, participant, additionalAttributes, useUserDevicesCache, cachedGroupMetadata }: MessageRelayOptions
+		{ messageId: msgId, participant, additionalAttributes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: MessageRelayOptions
 	) => {
 		const meId = authState.creds.me!.id
-
+		const statusJid = 'status@broadcast'
 		let shouldIncludeDeviceIdentity = false
 
 		const { user, server } = jidDecode(jid)!
 		const isGroup = server === 'g.us'
+		const isStatus = jid === statusJid
 		msgId = msgId || generateMessageID()
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []
-		const destinationJid = jidEncode(user, isGroup ? 'g.us' : 's.whatsapp.net')
+		const destinationJid = (!isStatus) ? jidEncode(user, isGroup ? 'g.us' : 's.whatsapp.net') : statusJid
 		const binaryNodeContent: BinaryNode[] = []
 		const devices: JidWithDevice[] = []
 
@@ -329,7 +330,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			// when the retry request is not for a group
 			// only send to the specific device that asked for a retry
 			// otherwise the message is sent out to every device that should be a recipient
-			if(!isGroup) {
+			if(!isGroup && !isStatus) {
 				additionalAttributes = { ...additionalAttributes, 'device_fanout': 'false' }
 			}
 
@@ -340,7 +341,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		await authState.keys.transaction(
 			async() => {
 				const mediaType = getMediaType(message)
-				if(isGroup) {
+				if(isGroup || isStatus) {
 					const [groupData, senderKeyMap] = await Promise.all([
 						(async() => {
 							let groupData = cachedGroupMetadata ? await cachedGroupMetadata(jid) : undefined
@@ -348,14 +349,14 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 								logger.trace({ jid, participants: groupData.participants.length }, 'using cached group metadata')
 							}
 
-							if(!groupData) {
+							if(!groupData && !isStatus) {
 								groupData = await groupMetadata(jid)
 							}
 
 							return groupData
 						})(),
 						(async() => {
-							if(!participant) {
+							if(!participant && !isStatus) {
 								const result = await authState.keys.get('sender-key-memory', [jid])
 								return result[jid] || { }
 							}
@@ -365,7 +366,11 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					])
 
 					if(!participant) {
-						const participantsList = groupData.participants.map(p => p.id)
+						const participantsList = (groupData && !isStatus) ? groupData.participants.map(p => p.id) : []
+						if(isStatus && statusJidList) {
+							participantsList.push(...statusJidList)
+						}
+
 						const additionalDevices = await getUSyncDevices(participantsList, !!useUserDevicesCache, false)
 						devices.push(...additionalDevices)
 					}
@@ -743,7 +748,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					}
 				}
 
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options?.cachedGroupMetadata, additionalAttributes })
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options?.cachedGroupMetadata, additionalAttributes, participant: options?.participant, statusJidList: options.statusJidList })
 				if(config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => (

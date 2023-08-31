@@ -24,15 +24,15 @@ import {
   WAProto,
   WATextMessage
 } from '../Types'
-import { isJidGroup, jidNormalizedUser } from '../WABinary'
+import { isJidGroup, isJidStatusBroadcast, jidNormalizedUser } from '../WABinary'
 import { sha256 } from './crypto'
 import { generateMessageID, getKeyAuthor, unixTimestampSeconds } from './generics'
-import { downloadContentFromMessage, encryptedStream, generateThumbnail, getAudioDuration, MediaDownloadOptions } from './messages-media'
+import { downloadContentFromMessage, encryptedStream, generateThumbnail, getAudioDuration, getAudioWaveform, MediaDownloadOptions } from './messages-media'
 
 type MediaUploadData = {
   media: WAMediaUpload
   caption?: string
-  ptt?: boolean
+  ptt?: boolean | string
   seconds?: number
   gifPlayback?: boolean
   fileName?: string
@@ -40,6 +40,8 @@ type MediaUploadData = {
   mimetype?: string
   width?: number
   height?: number
+  waveform?: Uint8Array
+  backgroundArgb?: number
 }
 
 const MIMETYPE_MAP: { [T in MediaType]?: string } = {
@@ -79,6 +81,21 @@ export const generateLinkPreviewIfRequired = async (text: string, getUrlInfo: Me
       logger?.warn({ trace: error.stack }, 'url generation failed')
     }
   }
+}
+
+const assertColor = async(color) => {
+	let assertedColor
+	if(typeof color === 'number') {
+		assertedColor = color > 0 ? color : 0xffffffff + Number(color) + 1
+	} else {
+		let hex = color.trim().replace('#', '')
+		if(hex.length <= 6) {
+			hex = 'FF' + hex.padStart(6, '0')
+		}
+
+		assertedColor = parseInt(hex, 16)
+		return assertedColor
+	}
 }
 
 export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, options: MediaGenerationOptions) => {
@@ -134,6 +151,8 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
 
   const requiresDurationComputation = mediaType === 'audio' && typeof uploadData.seconds === 'undefined'
   const requiresThumbnailComputation = (mediaType === 'image' || mediaType === 'video') && typeof uploadData['jpegThumbnail'] === 'undefined'
+  const requiresWaveformProcessing = mediaType === 'audio' && uploadData.ptt === 'true' || true
+	const requiresAudioBackground = options.backgroundColor && mediaType === 'audio' && uploadData.ptt === 'true' || true
   const requiresOriginalForSomeProcessing = requiresDurationComputation || requiresThumbnailComputation
   const { mediaKey, encWriteStream, bodyPath, fileEncSha256, fileSha256, fileLength, didSaveToTmpPath } = await encryptedStream(uploadData.media, options.mediaTypeOverride || mediaType, requiresOriginalForSomeProcessing)
   // url safe Base64 encode the SHA256 hash of the body
@@ -162,6 +181,16 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
           uploadData.seconds = await getAudioDuration(bodyPath!)
           logger?.debug('computed audio duration')
         }
+
+        if(requiresWaveformProcessing) {
+					uploadData.waveform = await getAudioWaveform(bodyPath!, logger)
+					logger?.debug('processed waveform')
+				}
+
+				if(requiresAudioBackground) {
+					uploadData.backgroundArgb = await assertColor(options.backgroundColor)
+					logger?.debug('computed backgroundColor audio status')
+				}
       } catch (error) {
         logger?.warn({ trace: error.stack }, 'failed to obtain extra info')
       }
@@ -279,6 +308,14 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
     }
 
     m.extendedTextMessage = extContent
+
+    if(options.backgroundColor) {
+			extContent.backgroundArgb = await assertColor(options.backgroundColor)
+		}
+
+		if(options.font) {
+			extContent.font = options.font
+		}
   } else if ('contacts' in message) {
     const contactLen = message.contacts.contacts.length
     if (!contactLen) {
@@ -507,7 +544,7 @@ export const generateWAMessageFromContent = (jid: string, message: WAMessageCont
     message: message,
     messageTimestamp: timestamp,
     messageStubParameters: [],
-    participant: isJidGroup(jid) ? userJid : undefined,
+    participant: isJidGroup(jid) || isJidStatusBroadcast(jid) ? userJid : undefined,
     status: WAMessageStatus.PENDING
   }
   return WAProto.WebMessageInfo.fromObject(messageJSON)
