@@ -18,17 +18,14 @@
 	],
 	"scripts": {
 		"test": "jest",
-		"prepare": "tsc",
 		"postinstall": "tsc",
 		"build:all": "tsc && typedoc",
 		"build:docs": "typedoc",
 		"build:tsc": "tsc",
 		"example": "node --inspect -r ts-node/register Example/example.ts",
-		"example:legacy": "node --inspect -r ts-node/register Example/example-legacy.ts",
-		"gen-protobuf": "sh WAProto/GenerateStatics.sh",
-		"browser-decode": "yarn ts-node src/BrowserMessageDecoding.ts",
-		"lint": "eslint ./src --ext .js,.ts,.jsx,.tsx",
-		"lint:fix": "eslint ./src --fix --ext .js,.ts,.jsx,.tsx"
+		"gen:protobuf": "sh WAProto/GenerateStatics.sh",
+		"lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+		"lint:fix": "eslint . --fix --ext .js,.ts,.jsx,.tsx"
 	},
 	"author": "Adhiraj Singh",
 	"license": "MIT",
@@ -82,6 +79,7 @@
 		"jest": "^27.0.6",
 		"jimp": "^0.16.1",
 		"link-preview-js": "^2.1.13",
+		"prettier": "^3.0.3",
 		"qrcode-terminal": "^0.12.0",
 		"ts-jest": "^27.0.3",
 		"ts-node": "^10.8.1",
