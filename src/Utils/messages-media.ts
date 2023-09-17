@@ -19,6 +19,8 @@ import { generateMessageID } from './generics'
 
 const getTmpFilesDirectory = () => tmpdir()
 
+let lib: any 
+
 const getImageProcessingLibrary = async() => {
 	const [jimp] = await Promise.all([
 		(async() => {
@@ -33,6 +35,12 @@ const getImageProcessingLibrary = async() => {
 
 	throw new Boom('No image processing library available')
 }
+
+
+(async () => {
+	lib = await getImageProcessingLibrary()
+})();
+
 
 export const hkdfInfoKey = (type: MediaType) => {
 	const hkdfInfo = MEDIA_HKDF_KEY_MAPPING[type]
@@ -71,11 +79,13 @@ const extractVideoThumb = async(path: string, destPath: string, time: string, si
 }) as Promise<void>
 
 export const extractImageThumb = async(bufferOrFilePath: Readable | Buffer | string, width = 32) => {
+	if (!lib.jimp) {
+		throw new Boom('No image processing library available')
+	}
+
 	if(bufferOrFilePath instanceof Readable) {
 		bufferOrFilePath = await toBuffer(bufferOrFilePath)
 	}
-
-	const lib = await getImageProcessingLibrary()
 
 	const { read, MIME_JPEG, RESIZE_BILINEAR, AUTO } = lib.jimp
 
@@ -95,6 +105,10 @@ export const encodeBase64EncodedStringForUpload = (b64: string) => encodeURIComp
 
 export const generateProfilePicture = async(mediaUpload: WAMediaUpload, type: string | undefined) => {
 	let bufferOrFilePath: Buffer | string
+	if (!lib.jimp) {
+		throw new Boom('No image processing library available')
+	}
+
 	if(Buffer.isBuffer(mediaUpload)) {
 		bufferOrFilePath = mediaUpload
 	} else if('url' in mediaUpload) {
@@ -103,17 +117,15 @@ export const generateProfilePicture = async(mediaUpload: WAMediaUpload, type: st
 		bufferOrFilePath = await toBuffer(mediaUpload.stream)
 	}
 
-	const lib = await getImageProcessingLibrary()
+	
 	let img: Promise<Buffer>
 	let w = 640
 	let h = 640
+
 	const { read, MIME_JPEG, RESIZE_BILINEAR } = lib.jimp
 	const jimp = await read(bufferOrFilePath as any) // eslint-disable-line
 	if(type === 'noCrop') {
-		if(jimp.getWidth() === jimp.getHeight()) {
-			w = 300
-			h = 700
-		} else if(jimp.getWidth() > jimp.getHeight()) {
+		if(jimp.getWidth() > jimp.getHeight()) {
 			w = 300
 			h = jimp.getHeight() / (jimp.getWidth() / 300)
 		} else if(jimp.getWidth() < jimp.getHeight()) {

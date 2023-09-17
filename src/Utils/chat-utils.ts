@@ -749,6 +749,6 @@ export const processSyncAction = (
 	function isValidPatchBasedOnMessageRange(chat: Chat, msgRange: proto.SyncActionValue.ISyncActionMessageRange | null | undefined) {
 		const lastMsgTimestamp = msgRange?.lastMessageTimestamp || msgRange?.lastSystemMessageTimestamp || 0
 		const chatLastMsgTimestamp = chat?.lastMessageRecvTimestamp || 0
-		return lastMsgTimestamp >= chatLastMsgTimestamp
+		return Number(lastMsgTimestamp) >= chatLastMsgTimestamp
 	}
 }
