@@ -13,6 +13,12 @@ export namespace proto {
 
         /** ADVDeviceIdentity keyIndex */
         keyIndex?: (number|null);
+
+        /** ADVDeviceIdentity accountType */
+        accountType?: (proto.ADVEncryptionType|null);
+
+        /** ADVDeviceIdentity deviceType */
+        deviceType?: (proto.ADVEncryptionType|null);
     }
 
     /** Represents a ADVDeviceIdentity. */
@@ -32,6 +38,12 @@ export namespace proto {
 
         /** ADVDeviceIdentity keyIndex. */
         public keyIndex: number;
+
+        /** ADVDeviceIdentity accountType. */
+        public accountType: proto.ADVEncryptionType;
+
+        /** ADVDeviceIdentity deviceType. */
+        public deviceType: proto.ADVEncryptionType;
 
         /**
          * Creates a new ADVDeviceIdentity instance using the specified properties.
@@ -104,6 +116,12 @@ export namespace proto {
         public toJSON(): { [k: string]: any };
     }
 
+    /** ADVEncryptionType enum. */
+    enum ADVEncryptionType {
+        E2EE = 0,
+        HOSTED = 1
+    }
+
     /** Properties of a ADVKeyIndexList. */
     interface IADVKeyIndexList {
 
@@ -118,6 +136,9 @@ export namespace proto {
 
         /** ADVKeyIndexList validIndexes */
         validIndexes?: (number[]|null);
+
+        /** ADVKeyIndexList accountType */
+        accountType?: (proto.ADVEncryptionType|null);
     }
 
     /** Represents a ADVKeyIndexList. */
@@ -140,6 +161,9 @@ export namespace proto {
 
         /** ADVKeyIndexList validIndexes. */
         public validIndexes: number[];
+
+        /** ADVKeyIndexList accountType. */
+        public accountType: proto.ADVEncryptionType;
 
         /**
          * Creates a new ADVKeyIndexList instance using the specified properties.
@@ -328,6 +352,9 @@ export namespace proto {
 
         /** ADVSignedDeviceIdentityHMAC hmac */
         hmac?: (Uint8Array|null);
+
+        /** ADVSignedDeviceIdentityHMAC accountType */
+        accountType?: (proto.ADVEncryptionType|null);
     }
 
     /** Represents a ADVSignedDeviceIdentityHMAC. */
@@ -344,6 +371,9 @@ export namespace proto {
 
         /** ADVSignedDeviceIdentityHMAC hmac. */
         public hmac: Uint8Array;
+
+        /** ADVSignedDeviceIdentityHMAC accountType. */
+        public accountType: proto.ADVEncryptionType;
 
         /**
          * Creates a new ADVSignedDeviceIdentityHMAC instance using the specified properties.
@@ -1190,6 +1220,647 @@ export namespace proto {
         }
     }
 
+    /** Properties of a BotAvatarMetadata. */
+    interface IBotAvatarMetadata {
+
+        /** BotAvatarMetadata sentiment */
+        sentiment?: (number|null);
+
+        /** BotAvatarMetadata behaviorGraph */
+        behaviorGraph?: (string|null);
+
+        /** BotAvatarMetadata action */
+        action?: (number|null);
+
+        /** BotAvatarMetadata intensity */
+        intensity?: (number|null);
+
+        /** BotAvatarMetadata wordCount */
+        wordCount?: (number|null);
+    }
+
+    /** Represents a BotAvatarMetadata. */
+    class BotAvatarMetadata implements IBotAvatarMetadata {
+
+        /**
+         * Constructs a new BotAvatarMetadata.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IBotAvatarMetadata);
+
+        /** BotAvatarMetadata sentiment. */
+        public sentiment: number;
+
+        /** BotAvatarMetadata behaviorGraph. */
+        public behaviorGraph: string;
+
+        /** BotAvatarMetadata action. */
+        public action: number;
+
+        /** BotAvatarMetadata intensity. */
+        public intensity: number;
+
+        /** BotAvatarMetadata wordCount. */
+        public wordCount: number;
+
+        /**
+         * Creates a new BotAvatarMetadata instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BotAvatarMetadata instance
+         */
+        public static create(properties?: proto.IBotAvatarMetadata): proto.BotAvatarMetadata;
+
+        /**
+         * Encodes the specified BotAvatarMetadata message. Does not implicitly {@link proto.BotAvatarMetadata.verify|verify} messages.
+         * @param message BotAvatarMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IBotAvatarMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BotAvatarMetadata message, length delimited. Does not implicitly {@link proto.BotAvatarMetadata.verify|verify} messages.
+         * @param message BotAvatarMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IBotAvatarMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BotAvatarMetadata message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BotAvatarMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.BotAvatarMetadata;
+
+        /**
+         * Decodes a BotAvatarMetadata message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BotAvatarMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.BotAvatarMetadata;
+
+        /**
+         * Verifies a BotAvatarMetadata message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BotAvatarMetadata message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BotAvatarMetadata
+         */
+        public static fromObject(object: { [k: string]: any }): proto.BotAvatarMetadata;
+
+        /**
+         * Creates a plain object from a BotAvatarMetadata message. Also converts values to other types if specified.
+         * @param message BotAvatarMetadata
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.BotAvatarMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BotAvatarMetadata to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a BotMetadata. */
+    interface IBotMetadata {
+
+        /** BotMetadata avatarMetadata */
+        avatarMetadata?: (proto.IBotAvatarMetadata|null);
+
+        /** BotMetadata personaId */
+        personaId?: (string|null);
+
+        /** BotMetadata pluginMetadata */
+        pluginMetadata?: (proto.IBotPluginMetadata|null);
+    }
+
+    /** Represents a BotMetadata. */
+    class BotMetadata implements IBotMetadata {
+
+        /**
+         * Constructs a new BotMetadata.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IBotMetadata);
+
+        /** BotMetadata avatarMetadata. */
+        public avatarMetadata?: (proto.IBotAvatarMetadata|null);
+
+        /** BotMetadata personaId. */
+        public personaId: string;
+
+        /** BotMetadata pluginMetadata. */
+        public pluginMetadata?: (proto.IBotPluginMetadata|null);
+
+        /**
+         * Creates a new BotMetadata instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BotMetadata instance
+         */
+        public static create(properties?: proto.IBotMetadata): proto.BotMetadata;
+
+        /**
+         * Encodes the specified BotMetadata message. Does not implicitly {@link proto.BotMetadata.verify|verify} messages.
+         * @param message BotMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IBotMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BotMetadata message, length delimited. Does not implicitly {@link proto.BotMetadata.verify|verify} messages.
+         * @param message BotMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IBotMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BotMetadata message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BotMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.BotMetadata;
+
+        /**
+         * Decodes a BotMetadata message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BotMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.BotMetadata;
+
+        /**
+         * Verifies a BotMetadata message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BotMetadata message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BotMetadata
+         */
+        public static fromObject(object: { [k: string]: any }): proto.BotMetadata;
+
+        /**
+         * Creates a plain object from a BotMetadata message. Also converts values to other types if specified.
+         * @param message BotMetadata
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.BotMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BotMetadata to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a BotPluginMetadata. */
+    interface IBotPluginMetadata {
+
+        /** BotPluginMetadata provider */
+        provider?: (proto.BotPluginMetadata.SearchProvider|null);
+
+        /** BotPluginMetadata pluginType */
+        pluginType?: (proto.BotPluginMetadata.PluginType|null);
+
+        /** BotPluginMetadata thumbnailCdnUrl */
+        thumbnailCdnUrl?: (string|null);
+
+        /** BotPluginMetadata profilePhotoCdnUrl */
+        profilePhotoCdnUrl?: (string|null);
+
+        /** BotPluginMetadata searchProviderUrl */
+        searchProviderUrl?: (string|null);
+
+        /** BotPluginMetadata referenceIndex */
+        referenceIndex?: (number|null);
+    }
+
+    /** Represents a BotPluginMetadata. */
+    class BotPluginMetadata implements IBotPluginMetadata {
+
+        /**
+         * Constructs a new BotPluginMetadata.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IBotPluginMetadata);
+
+        /** BotPluginMetadata provider. */
+        public provider: proto.BotPluginMetadata.SearchProvider;
+
+        /** BotPluginMetadata pluginType. */
+        public pluginType: proto.BotPluginMetadata.PluginType;
+
+        /** BotPluginMetadata thumbnailCdnUrl. */
+        public thumbnailCdnUrl: string;
+
+        /** BotPluginMetadata profilePhotoCdnUrl. */
+        public profilePhotoCdnUrl: string;
+
+        /** BotPluginMetadata searchProviderUrl. */
+        public searchProviderUrl: string;
+
+        /** BotPluginMetadata referenceIndex. */
+        public referenceIndex: number;
+
+        /**
+         * Creates a new BotPluginMetadata instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BotPluginMetadata instance
+         */
+        public static create(properties?: proto.IBotPluginMetadata): proto.BotPluginMetadata;
+
+        /**
+         * Encodes the specified BotPluginMetadata message. Does not implicitly {@link proto.BotPluginMetadata.verify|verify} messages.
+         * @param message BotPluginMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IBotPluginMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BotPluginMetadata message, length delimited. Does not implicitly {@link proto.BotPluginMetadata.verify|verify} messages.
+         * @param message BotPluginMetadata message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IBotPluginMetadata, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BotPluginMetadata message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BotPluginMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.BotPluginMetadata;
+
+        /**
+         * Decodes a BotPluginMetadata message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BotPluginMetadata
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.BotPluginMetadata;
+
+        /**
+         * Verifies a BotPluginMetadata message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BotPluginMetadata message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BotPluginMetadata
+         */
+        public static fromObject(object: { [k: string]: any }): proto.BotPluginMetadata;
+
+        /**
+         * Creates a plain object from a BotPluginMetadata message. Also converts values to other types if specified.
+         * @param message BotPluginMetadata
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.BotPluginMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BotPluginMetadata to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace BotPluginMetadata {
+
+        /** PluginType enum. */
+        enum PluginType {
+            REELS = 1,
+            SEARCH = 2
+        }
+
+        /** SearchProvider enum. */
+        enum SearchProvider {
+            BING = 1,
+            GOOGLE = 2
+        }
+    }
+
+    /** Properties of a CallLogRecord. */
+    interface ICallLogRecord {
+
+        /** CallLogRecord callResult */
+        callResult?: (proto.CallLogRecord.CallResult|null);
+
+        /** CallLogRecord isDndMode */
+        isDndMode?: (boolean|null);
+
+        /** CallLogRecord silenceReason */
+        silenceReason?: (proto.CallLogRecord.SilenceReason|null);
+
+        /** CallLogRecord duration */
+        duration?: (number|Long|null);
+
+        /** CallLogRecord startTime */
+        startTime?: (number|Long|null);
+
+        /** CallLogRecord isIncoming */
+        isIncoming?: (boolean|null);
+
+        /** CallLogRecord isVideo */
+        isVideo?: (boolean|null);
+
+        /** CallLogRecord isCallLink */
+        isCallLink?: (boolean|null);
+
+        /** CallLogRecord callLinkToken */
+        callLinkToken?: (string|null);
+
+        /** CallLogRecord scheduledCallId */
+        scheduledCallId?: (string|null);
+
+        /** CallLogRecord callId */
+        callId?: (string|null);
+
+        /** CallLogRecord callCreatorJid */
+        callCreatorJid?: (string|null);
+
+        /** CallLogRecord groupJid */
+        groupJid?: (string|null);
+
+        /** CallLogRecord participants */
+        participants?: (proto.CallLogRecord.IParticipantInfo[]|null);
+    }
+
+    /** Represents a CallLogRecord. */
+    class CallLogRecord implements ICallLogRecord {
+
+        /**
+         * Constructs a new CallLogRecord.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.ICallLogRecord);
+
+        /** CallLogRecord callResult. */
+        public callResult: proto.CallLogRecord.CallResult;
+
+        /** CallLogRecord isDndMode. */
+        public isDndMode: boolean;
+
+        /** CallLogRecord silenceReason. */
+        public silenceReason: proto.CallLogRecord.SilenceReason;
+
+        /** CallLogRecord duration. */
+        public duration: (number|Long);
+
+        /** CallLogRecord startTime. */
+        public startTime: (number|Long);
+
+        /** CallLogRecord isIncoming. */
+        public isIncoming: boolean;
+
+        /** CallLogRecord isVideo. */
+        public isVideo: boolean;
+
+        /** CallLogRecord isCallLink. */
+        public isCallLink: boolean;
+
+        /** CallLogRecord callLinkToken. */
+        public callLinkToken: string;
+
+        /** CallLogRecord scheduledCallId. */
+        public scheduledCallId: string;
+
+        /** CallLogRecord callId. */
+        public callId: string;
+
+        /** CallLogRecord callCreatorJid. */
+        public callCreatorJid: string;
+
+        /** CallLogRecord groupJid. */
+        public groupJid: string;
+
+        /** CallLogRecord participants. */
+        public participants: proto.CallLogRecord.IParticipantInfo[];
+
+        /**
+         * Creates a new CallLogRecord instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CallLogRecord instance
+         */
+        public static create(properties?: proto.ICallLogRecord): proto.CallLogRecord;
+
+        /**
+         * Encodes the specified CallLogRecord message. Does not implicitly {@link proto.CallLogRecord.verify|verify} messages.
+         * @param message CallLogRecord message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.ICallLogRecord, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified CallLogRecord message, length delimited. Does not implicitly {@link proto.CallLogRecord.verify|verify} messages.
+         * @param message CallLogRecord message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.ICallLogRecord, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a CallLogRecord message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CallLogRecord
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.CallLogRecord;
+
+        /**
+         * Decodes a CallLogRecord message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CallLogRecord
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.CallLogRecord;
+
+        /**
+         * Verifies a CallLogRecord message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CallLogRecord message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CallLogRecord
+         */
+        public static fromObject(object: { [k: string]: any }): proto.CallLogRecord;
+
+        /**
+         * Creates a plain object from a CallLogRecord message. Also converts values to other types if specified.
+         * @param message CallLogRecord
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.CallLogRecord, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CallLogRecord to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace CallLogRecord {
+
+        /** CallResult enum. */
+        enum CallResult {
+            CONNECTED = 0,
+            REJECTED = 1,
+            CANCELLED = 2,
+            ACCEPTEDELSEWHERE = 3,
+            MISSED = 4,
+            INVALID = 5,
+            UNAVAILABLE = 6,
+            UPCOMING = 7,
+            FAILED = 8,
+            ABANDONED = 9,
+            ONGOING = 10
+        }
+
+        /** Properties of a ParticipantInfo. */
+        interface IParticipantInfo {
+
+            /** ParticipantInfo userJid */
+            userJid?: (string|null);
+
+            /** ParticipantInfo callResult */
+            callResult?: (proto.CallLogRecord.CallResult|null);
+        }
+
+        /** Represents a ParticipantInfo. */
+        class ParticipantInfo implements IParticipantInfo {
+
+            /**
+             * Constructs a new ParticipantInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.CallLogRecord.IParticipantInfo);
+
+            /** ParticipantInfo userJid. */
+            public userJid: string;
+
+            /** ParticipantInfo callResult. */
+            public callResult: proto.CallLogRecord.CallResult;
+
+            /**
+             * Creates a new ParticipantInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ParticipantInfo instance
+             */
+            public static create(properties?: proto.CallLogRecord.IParticipantInfo): proto.CallLogRecord.ParticipantInfo;
+
+            /**
+             * Encodes the specified ParticipantInfo message. Does not implicitly {@link proto.CallLogRecord.ParticipantInfo.verify|verify} messages.
+             * @param message ParticipantInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.CallLogRecord.IParticipantInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ParticipantInfo message, length delimited. Does not implicitly {@link proto.CallLogRecord.ParticipantInfo.verify|verify} messages.
+             * @param message ParticipantInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.CallLogRecord.IParticipantInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ParticipantInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ParticipantInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.CallLogRecord.ParticipantInfo;
+
+            /**
+             * Decodes a ParticipantInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ParticipantInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.CallLogRecord.ParticipantInfo;
+
+            /**
+             * Verifies a ParticipantInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ParticipantInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ParticipantInfo
+             */
+            public static fromObject(object: { [k: string]: any }): proto.CallLogRecord.ParticipantInfo;
+
+            /**
+             * Creates a plain object from a ParticipantInfo message. Also converts values to other types if specified.
+             * @param message ParticipantInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.CallLogRecord.ParticipantInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ParticipantInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** SilenceReason enum. */
+        enum SilenceReason {
+            NONE = 0,
+            SCHEDULED = 1,
+            PRIVACY = 2,
+            LIGHTWEIGHT = 3
+        }
+    }
+
     /** Properties of a CertChain. */
     interface ICertChain {
 
@@ -1502,6 +2173,490 @@ export namespace proto {
         }
     }
 
+    /** Properties of a ChatRowOpaqueData. */
+    interface IChatRowOpaqueData {
+
+        /** ChatRowOpaqueData draftMessage */
+        draftMessage?: (proto.ChatRowOpaqueData.IDraftMessage|null);
+    }
+
+    /** Represents a ChatRowOpaqueData. */
+    class ChatRowOpaqueData implements IChatRowOpaqueData {
+
+        /**
+         * Constructs a new ChatRowOpaqueData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IChatRowOpaqueData);
+
+        /** ChatRowOpaqueData draftMessage. */
+        public draftMessage?: (proto.ChatRowOpaqueData.IDraftMessage|null);
+
+        /**
+         * Creates a new ChatRowOpaqueData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChatRowOpaqueData instance
+         */
+        public static create(properties?: proto.IChatRowOpaqueData): proto.ChatRowOpaqueData;
+
+        /**
+         * Encodes the specified ChatRowOpaqueData message. Does not implicitly {@link proto.ChatRowOpaqueData.verify|verify} messages.
+         * @param message ChatRowOpaqueData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IChatRowOpaqueData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ChatRowOpaqueData message, length delimited. Does not implicitly {@link proto.ChatRowOpaqueData.verify|verify} messages.
+         * @param message ChatRowOpaqueData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IChatRowOpaqueData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ChatRowOpaqueData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ChatRowOpaqueData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ChatRowOpaqueData;
+
+        /**
+         * Decodes a ChatRowOpaqueData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ChatRowOpaqueData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ChatRowOpaqueData;
+
+        /**
+         * Verifies a ChatRowOpaqueData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChatRowOpaqueData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChatRowOpaqueData
+         */
+        public static fromObject(object: { [k: string]: any }): proto.ChatRowOpaqueData;
+
+        /**
+         * Creates a plain object from a ChatRowOpaqueData message. Also converts values to other types if specified.
+         * @param message ChatRowOpaqueData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.ChatRowOpaqueData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChatRowOpaqueData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace ChatRowOpaqueData {
+
+        /** Properties of a DraftMessage. */
+        interface IDraftMessage {
+
+            /** DraftMessage text */
+            text?: (string|null);
+
+            /** DraftMessage omittedUrl */
+            omittedUrl?: (string|null);
+
+            /** DraftMessage ctwaContextLinkData */
+            ctwaContextLinkData?: (proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData|null);
+
+            /** DraftMessage ctwaContext */
+            ctwaContext?: (proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData|null);
+
+            /** DraftMessage timestamp */
+            timestamp?: (number|Long|null);
+        }
+
+        /** Represents a DraftMessage. */
+        class DraftMessage implements IDraftMessage {
+
+            /**
+             * Constructs a new DraftMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.ChatRowOpaqueData.IDraftMessage);
+
+            /** DraftMessage text. */
+            public text: string;
+
+            /** DraftMessage omittedUrl. */
+            public omittedUrl: string;
+
+            /** DraftMessage ctwaContextLinkData. */
+            public ctwaContextLinkData?: (proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData|null);
+
+            /** DraftMessage ctwaContext. */
+            public ctwaContext?: (proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData|null);
+
+            /** DraftMessage timestamp. */
+            public timestamp: (number|Long);
+
+            /**
+             * Creates a new DraftMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DraftMessage instance
+             */
+            public static create(properties?: proto.ChatRowOpaqueData.IDraftMessage): proto.ChatRowOpaqueData.DraftMessage;
+
+            /**
+             * Encodes the specified DraftMessage message. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.verify|verify} messages.
+             * @param message DraftMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.ChatRowOpaqueData.IDraftMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified DraftMessage message, length delimited. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.verify|verify} messages.
+             * @param message DraftMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.ChatRowOpaqueData.IDraftMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a DraftMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DraftMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ChatRowOpaqueData.DraftMessage;
+
+            /**
+             * Decodes a DraftMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DraftMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ChatRowOpaqueData.DraftMessage;
+
+            /**
+             * Verifies a DraftMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DraftMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DraftMessage
+             */
+            public static fromObject(object: { [k: string]: any }): proto.ChatRowOpaqueData.DraftMessage;
+
+            /**
+             * Creates a plain object from a DraftMessage message. Also converts values to other types if specified.
+             * @param message DraftMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.ChatRowOpaqueData.DraftMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DraftMessage to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace DraftMessage {
+
+            /** Properties of a CtwaContextData. */
+            interface ICtwaContextData {
+
+                /** CtwaContextData conversionSource */
+                conversionSource?: (string|null);
+
+                /** CtwaContextData conversionData */
+                conversionData?: (Uint8Array|null);
+
+                /** CtwaContextData sourceUrl */
+                sourceUrl?: (string|null);
+
+                /** CtwaContextData sourceId */
+                sourceId?: (string|null);
+
+                /** CtwaContextData sourceType */
+                sourceType?: (string|null);
+
+                /** CtwaContextData title */
+                title?: (string|null);
+
+                /** CtwaContextData description */
+                description?: (string|null);
+
+                /** CtwaContextData thumbnail */
+                thumbnail?: (string|null);
+
+                /** CtwaContextData thumbnailUrl */
+                thumbnailUrl?: (string|null);
+
+                /** CtwaContextData mediaType */
+                mediaType?: (proto.ChatRowOpaqueData.DraftMessage.CtwaContextData.ContextInfoExternalAdReplyInfoMediaType|null);
+
+                /** CtwaContextData mediaUrl */
+                mediaUrl?: (string|null);
+
+                /** CtwaContextData isSuspiciousLink */
+                isSuspiciousLink?: (boolean|null);
+            }
+
+            /** Represents a CtwaContextData. */
+            class CtwaContextData implements ICtwaContextData {
+
+                /**
+                 * Constructs a new CtwaContextData.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData);
+
+                /** CtwaContextData conversionSource. */
+                public conversionSource: string;
+
+                /** CtwaContextData conversionData. */
+                public conversionData: Uint8Array;
+
+                /** CtwaContextData sourceUrl. */
+                public sourceUrl: string;
+
+                /** CtwaContextData sourceId. */
+                public sourceId: string;
+
+                /** CtwaContextData sourceType. */
+                public sourceType: string;
+
+                /** CtwaContextData title. */
+                public title: string;
+
+                /** CtwaContextData description. */
+                public description: string;
+
+                /** CtwaContextData thumbnail. */
+                public thumbnail: string;
+
+                /** CtwaContextData thumbnailUrl. */
+                public thumbnailUrl: string;
+
+                /** CtwaContextData mediaType. */
+                public mediaType: proto.ChatRowOpaqueData.DraftMessage.CtwaContextData.ContextInfoExternalAdReplyInfoMediaType;
+
+                /** CtwaContextData mediaUrl. */
+                public mediaUrl: string;
+
+                /** CtwaContextData isSuspiciousLink. */
+                public isSuspiciousLink: boolean;
+
+                /**
+                 * Creates a new CtwaContextData instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CtwaContextData instance
+                 */
+                public static create(properties?: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData): proto.ChatRowOpaqueData.DraftMessage.CtwaContextData;
+
+                /**
+                 * Encodes the specified CtwaContextData message. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.CtwaContextData.verify|verify} messages.
+                 * @param message CtwaContextData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CtwaContextData message, length delimited. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.CtwaContextData.verify|verify} messages.
+                 * @param message CtwaContextData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CtwaContextData message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns CtwaContextData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ChatRowOpaqueData.DraftMessage.CtwaContextData;
+
+                /**
+                 * Decodes a CtwaContextData message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns CtwaContextData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ChatRowOpaqueData.DraftMessage.CtwaContextData;
+
+                /**
+                 * Verifies a CtwaContextData message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CtwaContextData message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CtwaContextData
+                 */
+                public static fromObject(object: { [k: string]: any }): proto.ChatRowOpaqueData.DraftMessage.CtwaContextData;
+
+                /**
+                 * Creates a plain object from a CtwaContextData message. Also converts values to other types if specified.
+                 * @param message CtwaContextData
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: proto.ChatRowOpaqueData.DraftMessage.CtwaContextData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CtwaContextData to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace CtwaContextData {
+
+                /** ContextInfoExternalAdReplyInfoMediaType enum. */
+                enum ContextInfoExternalAdReplyInfoMediaType {
+                    NONE = 0,
+                    IMAGE = 1,
+                    VIDEO = 2
+                }
+            }
+
+            /** Properties of a CtwaContextLinkData. */
+            interface ICtwaContextLinkData {
+
+                /** CtwaContextLinkData context */
+                context?: (string|null);
+
+                /** CtwaContextLinkData sourceUrl */
+                sourceUrl?: (string|null);
+
+                /** CtwaContextLinkData icebreaker */
+                icebreaker?: (string|null);
+
+                /** CtwaContextLinkData phone */
+                phone?: (string|null);
+            }
+
+            /** Represents a CtwaContextLinkData. */
+            class CtwaContextLinkData implements ICtwaContextLinkData {
+
+                /**
+                 * Constructs a new CtwaContextLinkData.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData);
+
+                /** CtwaContextLinkData context. */
+                public context: string;
+
+                /** CtwaContextLinkData sourceUrl. */
+                public sourceUrl: string;
+
+                /** CtwaContextLinkData icebreaker. */
+                public icebreaker: string;
+
+                /** CtwaContextLinkData phone. */
+                public phone: string;
+
+                /**
+                 * Creates a new CtwaContextLinkData instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CtwaContextLinkData instance
+                 */
+                public static create(properties?: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData): proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData;
+
+                /**
+                 * Encodes the specified CtwaContextLinkData message. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData.verify|verify} messages.
+                 * @param message CtwaContextLinkData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CtwaContextLinkData message, length delimited. Does not implicitly {@link proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData.verify|verify} messages.
+                 * @param message CtwaContextLinkData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: proto.ChatRowOpaqueData.DraftMessage.ICtwaContextLinkData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CtwaContextLinkData message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns CtwaContextLinkData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData;
+
+                /**
+                 * Decodes a CtwaContextLinkData message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns CtwaContextLinkData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData;
+
+                /**
+                 * Verifies a CtwaContextLinkData message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CtwaContextLinkData message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CtwaContextLinkData
+                 */
+                public static fromObject(object: { [k: string]: any }): proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData;
+
+                /**
+                 * Creates a plain object from a CtwaContextLinkData message. Also converts values to other types if specified.
+                 * @param message CtwaContextLinkData
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: proto.ChatRowOpaqueData.DraftMessage.CtwaContextLinkData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CtwaContextLinkData to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Properties of a ClientPayload. */
     interface IClientPayload {
 
@@ -1582,6 +2737,9 @@ export namespace proto {
 
         /** ClientPayload memClass */
         memClass?: (number|null);
+
+        /** ClientPayload interopData */
+        interopData?: (proto.ClientPayload.IInteropData|null);
     }
 
     /** Represents a ClientPayload. */
@@ -1671,6 +2829,9 @@ export namespace proto {
         /** ClientPayload memClass. */
         public memClass: number;
 
+        /** ClientPayload interopData. */
+        public interopData?: (proto.ClientPayload.IInteropData|null);
+
         /**
          * Creates a new ClientPayload instance using the specified properties.
          * @param [properties] Properties to set
@@ -1751,7 +2912,8 @@ export namespace proto {
             SCHEDULED = 2,
             ERROR_RECONNECT = 3,
             NETWORK_SWITCH = 4,
-            PING_RECONNECT = 5
+            PING_RECONNECT = 5,
+            UNKNOWN = 6
         }
 
         /** ConnectType enum. */
@@ -2020,10 +3182,107 @@ export namespace proto {
             INTENTS_EXTENSION = 2
         }
 
+        /** Properties of an InteropData. */
+        interface IInteropData {
+
+            /** InteropData accountId */
+            accountId?: (number|Long|null);
+
+            /** InteropData token */
+            token?: (Uint8Array|null);
+        }
+
+        /** Represents an InteropData. */
+        class InteropData implements IInteropData {
+
+            /**
+             * Constructs a new InteropData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.ClientPayload.IInteropData);
+
+            /** InteropData accountId. */
+            public accountId: (number|Long);
+
+            /** InteropData token. */
+            public token: Uint8Array;
+
+            /**
+             * Creates a new InteropData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns InteropData instance
+             */
+            public static create(properties?: proto.ClientPayload.IInteropData): proto.ClientPayload.InteropData;
+
+            /**
+             * Encodes the specified InteropData message. Does not implicitly {@link proto.ClientPayload.InteropData.verify|verify} messages.
+             * @param message InteropData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.ClientPayload.IInteropData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified InteropData message, length delimited. Does not implicitly {@link proto.ClientPayload.InteropData.verify|verify} messages.
+             * @param message InteropData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.ClientPayload.IInteropData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an InteropData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns InteropData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ClientPayload.InteropData;
+
+            /**
+             * Decodes an InteropData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns InteropData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ClientPayload.InteropData;
+
+            /**
+             * Verifies an InteropData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an InteropData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns InteropData
+             */
+            public static fromObject(object: { [k: string]: any }): proto.ClientPayload.InteropData;
+
+            /**
+             * Creates a plain object from an InteropData message. Also converts values to other types if specified.
+             * @param message InteropData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.ClientPayload.InteropData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this InteropData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Product enum. */
         enum Product {
             WHATSAPP = 0,
-            MESSENGER = 1
+            MESSENGER = 1,
+            INTEROP = 2
         }
 
         /** Properties of a UserAgent. */
@@ -2067,6 +3326,12 @@ export namespace proto {
 
             /** UserAgent deviceBoard */
             deviceBoard?: (string|null);
+
+            /** UserAgent deviceExpId */
+            deviceExpId?: (string|null);
+
+            /** UserAgent deviceType */
+            deviceType?: (proto.ClientPayload.UserAgent.DeviceType|null);
         }
 
         /** Represents a UserAgent. */
@@ -2116,6 +3381,12 @@ export namespace proto {
 
             /** UserAgent deviceBoard. */
             public deviceBoard: string;
+
+            /** UserAgent deviceExpId. */
+            public deviceExpId: string;
+
+            /** UserAgent deviceType. */
+            public deviceType: proto.ClientPayload.UserAgent.DeviceType;
 
             /**
              * Creates a new UserAgent instance using the specified properties.
@@ -2304,6 +3575,15 @@ export namespace proto {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** DeviceType enum. */
+            enum DeviceType {
+                PHONE = 0,
+                TABLET = 1,
+                DESKTOP = 2,
+                WEARABLE = 3,
+                VR = 4
+            }
+
             /** Platform enum. */
             enum Platform {
                 ANDROID = 0,
@@ -2338,7 +3618,9 @@ export namespace proto {
                 WEAROS = 29,
                 ARDEVICE = 30,
                 VRDEVICE = 31,
-                BLUE_WEB = 32
+                BLUE_WEB = 32,
+                IPAD = 33,
+                TEST = 34
             }
 
             /** ReleaseChannel enum. */
@@ -2707,6 +3989,18 @@ export namespace proto {
 
         /** ContextInfo utm */
         utm?: (proto.ContextInfo.IUTMInfo|null);
+
+        /** ContextInfo forwardedNewsletterMessageInfo */
+        forwardedNewsletterMessageInfo?: (proto.ContextInfo.IForwardedNewsletterMessageInfo|null);
+
+        /** ContextInfo businessMessageForwardInfo */
+        businessMessageForwardInfo?: (proto.ContextInfo.IBusinessMessageForwardInfo|null);
+
+        /** ContextInfo smbClientCampaignId */
+        smbClientCampaignId?: (string|null);
+
+        /** ContextInfo smbServerCampaignId */
+        smbServerCampaignId?: (string|null);
     }
 
     /** Represents a ContextInfo. */
@@ -2801,6 +4095,18 @@ export namespace proto {
 
         /** ContextInfo utm. */
         public utm?: (proto.ContextInfo.IUTMInfo|null);
+
+        /** ContextInfo forwardedNewsletterMessageInfo. */
+        public forwardedNewsletterMessageInfo?: (proto.ContextInfo.IForwardedNewsletterMessageInfo|null);
+
+        /** ContextInfo businessMessageForwardInfo. */
+        public businessMessageForwardInfo?: (proto.ContextInfo.IBusinessMessageForwardInfo|null);
+
+        /** ContextInfo smbClientCampaignId. */
+        public smbClientCampaignId: string;
+
+        /** ContextInfo smbServerCampaignId. */
+        public smbServerCampaignId: string;
 
         /**
          * Creates a new ContextInfo instance using the specified properties.
@@ -2993,6 +4299,96 @@ export namespace proto {
             }
         }
 
+        /** Properties of a BusinessMessageForwardInfo. */
+        interface IBusinessMessageForwardInfo {
+
+            /** BusinessMessageForwardInfo businessOwnerJid */
+            businessOwnerJid?: (string|null);
+        }
+
+        /** Represents a BusinessMessageForwardInfo. */
+        class BusinessMessageForwardInfo implements IBusinessMessageForwardInfo {
+
+            /**
+             * Constructs a new BusinessMessageForwardInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.ContextInfo.IBusinessMessageForwardInfo);
+
+            /** BusinessMessageForwardInfo businessOwnerJid. */
+            public businessOwnerJid: string;
+
+            /**
+             * Creates a new BusinessMessageForwardInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BusinessMessageForwardInfo instance
+             */
+            public static create(properties?: proto.ContextInfo.IBusinessMessageForwardInfo): proto.ContextInfo.BusinessMessageForwardInfo;
+
+            /**
+             * Encodes the specified BusinessMessageForwardInfo message. Does not implicitly {@link proto.ContextInfo.BusinessMessageForwardInfo.verify|verify} messages.
+             * @param message BusinessMessageForwardInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.ContextInfo.IBusinessMessageForwardInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified BusinessMessageForwardInfo message, length delimited. Does not implicitly {@link proto.ContextInfo.BusinessMessageForwardInfo.verify|verify} messages.
+             * @param message BusinessMessageForwardInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.ContextInfo.IBusinessMessageForwardInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a BusinessMessageForwardInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BusinessMessageForwardInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ContextInfo.BusinessMessageForwardInfo;
+
+            /**
+             * Decodes a BusinessMessageForwardInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BusinessMessageForwardInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ContextInfo.BusinessMessageForwardInfo;
+
+            /**
+             * Verifies a BusinessMessageForwardInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BusinessMessageForwardInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BusinessMessageForwardInfo
+             */
+            public static fromObject(object: { [k: string]: any }): proto.ContextInfo.BusinessMessageForwardInfo;
+
+            /**
+             * Creates a plain object from a BusinessMessageForwardInfo message. Also converts values to other types if specified.
+             * @param message BusinessMessageForwardInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.ContextInfo.BusinessMessageForwardInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BusinessMessageForwardInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of an ExternalAdReplyInfo. */
         interface IExternalAdReplyInfo {
 
@@ -3034,6 +4430,9 @@ export namespace proto {
 
             /** ExternalAdReplyInfo ctwaClid */
             ctwaClid?: (string|null);
+
+            /** ExternalAdReplyInfo ref */
+            ref?: (string|null);
         }
 
         /** Represents an ExternalAdReplyInfo. */
@@ -3083,6 +4482,9 @@ export namespace proto {
 
             /** ExternalAdReplyInfo ctwaClid. */
             public ctwaClid: string;
+
+            /** ExternalAdReplyInfo ref. */
+            public ref: string;
 
             /**
              * Creates a new ExternalAdReplyInfo instance using the specified properties.
@@ -3163,6 +4565,108 @@ export namespace proto {
                 IMAGE = 1,
                 VIDEO = 2
             }
+        }
+
+        /** Properties of a ForwardedNewsletterMessageInfo. */
+        interface IForwardedNewsletterMessageInfo {
+
+            /** ForwardedNewsletterMessageInfo newsletterJid */
+            newsletterJid?: (string|null);
+
+            /** ForwardedNewsletterMessageInfo serverMessageId */
+            serverMessageId?: (number|null);
+
+            /** ForwardedNewsletterMessageInfo newsletterName */
+            newsletterName?: (string|null);
+        }
+
+        /** Represents a ForwardedNewsletterMessageInfo. */
+        class ForwardedNewsletterMessageInfo implements IForwardedNewsletterMessageInfo {
+
+            /**
+             * Constructs a new ForwardedNewsletterMessageInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.ContextInfo.IForwardedNewsletterMessageInfo);
+
+            /** ForwardedNewsletterMessageInfo newsletterJid. */
+            public newsletterJid: string;
+
+            /** ForwardedNewsletterMessageInfo serverMessageId. */
+            public serverMessageId: number;
+
+            /** ForwardedNewsletterMessageInfo newsletterName. */
+            public newsletterName: string;
+
+            /**
+             * Creates a new ForwardedNewsletterMessageInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ForwardedNewsletterMessageInfo instance
+             */
+            public static create(properties?: proto.ContextInfo.IForwardedNewsletterMessageInfo): proto.ContextInfo.ForwardedNewsletterMessageInfo;
+
+            /**
+             * Encodes the specified ForwardedNewsletterMessageInfo message. Does not implicitly {@link proto.ContextInfo.ForwardedNewsletterMessageInfo.verify|verify} messages.
+             * @param message ForwardedNewsletterMessageInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.ContextInfo.IForwardedNewsletterMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ForwardedNewsletterMessageInfo message, length delimited. Does not implicitly {@link proto.ContextInfo.ForwardedNewsletterMessageInfo.verify|verify} messages.
+             * @param message ForwardedNewsletterMessageInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.ContextInfo.IForwardedNewsletterMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ForwardedNewsletterMessageInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ForwardedNewsletterMessageInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.ContextInfo.ForwardedNewsletterMessageInfo;
+
+            /**
+             * Decodes a ForwardedNewsletterMessageInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ForwardedNewsletterMessageInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.ContextInfo.ForwardedNewsletterMessageInfo;
+
+            /**
+             * Verifies a ForwardedNewsletterMessageInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ForwardedNewsletterMessageInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ForwardedNewsletterMessageInfo
+             */
+            public static fromObject(object: { [k: string]: any }): proto.ContextInfo.ForwardedNewsletterMessageInfo;
+
+            /**
+             * Creates a plain object from a ForwardedNewsletterMessageInfo message. Also converts values to other types if specified.
+             * @param message ForwardedNewsletterMessageInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.ContextInfo.ForwardedNewsletterMessageInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ForwardedNewsletterMessageInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a UTMInfo. */
@@ -3390,6 +4894,9 @@ export namespace proto {
 
         /** Conversation lidJid */
         lidJid?: (string|null);
+
+        /** Conversation username */
+        username?: (string|null);
     }
 
     /** Represents a Conversation. */
@@ -3527,6 +5034,9 @@ export namespace proto {
         /** Conversation lidJid. */
         public lidJid: string;
 
+        /** Conversation username. */
+        public username: string;
+
         /**
          * Creates a new Conversation instance using the specified properties.
          * @param [properties] Properties to set
@@ -3603,8 +5113,105 @@ export namespace proto {
         /** EndOfHistoryTransferType enum. */
         enum EndOfHistoryTransferType {
             COMPLETE_BUT_MORE_MESSAGES_REMAIN_ON_PRIMARY = 0,
-            COMPLETE_AND_NO_MORE_MESSAGE_REMAIN_ON_PRIMARY = 1
+            COMPLETE_AND_NO_MORE_MESSAGE_REMAIN_ON_PRIMARY = 1,
+            COMPLETE_ON_DEMAND_SYNC_BUT_MORE_MSG_REMAIN_ON_PRIMARY = 2
         }
+    }
+
+    /** Properties of a DeviceConsistencyCodeMessage. */
+    interface IDeviceConsistencyCodeMessage {
+
+        /** DeviceConsistencyCodeMessage generation */
+        generation?: (number|null);
+
+        /** DeviceConsistencyCodeMessage signature */
+        signature?: (Uint8Array|null);
+    }
+
+    /** Represents a DeviceConsistencyCodeMessage. */
+    class DeviceConsistencyCodeMessage implements IDeviceConsistencyCodeMessage {
+
+        /**
+         * Constructs a new DeviceConsistencyCodeMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IDeviceConsistencyCodeMessage);
+
+        /** DeviceConsistencyCodeMessage generation. */
+        public generation: number;
+
+        /** DeviceConsistencyCodeMessage signature. */
+        public signature: Uint8Array;
+
+        /**
+         * Creates a new DeviceConsistencyCodeMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DeviceConsistencyCodeMessage instance
+         */
+        public static create(properties?: proto.IDeviceConsistencyCodeMessage): proto.DeviceConsistencyCodeMessage;
+
+        /**
+         * Encodes the specified DeviceConsistencyCodeMessage message. Does not implicitly {@link proto.DeviceConsistencyCodeMessage.verify|verify} messages.
+         * @param message DeviceConsistencyCodeMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IDeviceConsistencyCodeMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified DeviceConsistencyCodeMessage message, length delimited. Does not implicitly {@link proto.DeviceConsistencyCodeMessage.verify|verify} messages.
+         * @param message DeviceConsistencyCodeMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IDeviceConsistencyCodeMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a DeviceConsistencyCodeMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DeviceConsistencyCodeMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.DeviceConsistencyCodeMessage;
+
+        /**
+         * Decodes a DeviceConsistencyCodeMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DeviceConsistencyCodeMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.DeviceConsistencyCodeMessage;
+
+        /**
+         * Verifies a DeviceConsistencyCodeMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DeviceConsistencyCodeMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DeviceConsistencyCodeMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.DeviceConsistencyCodeMessage;
+
+        /**
+         * Creates a plain object from a DeviceConsistencyCodeMessage message. Also converts values to other types if specified.
+         * @param message DeviceConsistencyCodeMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.DeviceConsistencyCodeMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DeviceConsistencyCodeMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
     }
 
     /** Properties of a DeviceListMetadata. */
@@ -3968,6 +5575,18 @@ export namespace proto {
 
             /** HistorySyncConfig storageQuotaMb */
             storageQuotaMb?: (number|null);
+
+            /** HistorySyncConfig inlineInitialPayloadInE2EeMsg */
+            inlineInitialPayloadInE2EeMsg?: (boolean|null);
+
+            /** HistorySyncConfig recentSyncDaysLimit */
+            recentSyncDaysLimit?: (number|null);
+
+            /** HistorySyncConfig supportCallLogHistory */
+            supportCallLogHistory?: (boolean|null);
+
+            /** HistorySyncConfig supportBotUserAgentChatHistory */
+            supportBotUserAgentChatHistory?: (boolean|null);
         }
 
         /** Represents a HistorySyncConfig. */
@@ -3987,6 +5606,18 @@ export namespace proto {
 
             /** HistorySyncConfig storageQuotaMb. */
             public storageQuotaMb: number;
+
+            /** HistorySyncConfig inlineInitialPayloadInE2EeMsg. */
+            public inlineInitialPayloadInE2EeMsg: boolean;
+
+            /** HistorySyncConfig recentSyncDaysLimit. */
+            public recentSyncDaysLimit: number;
+
+            /** HistorySyncConfig supportCallLogHistory. */
+            public supportCallLogHistory: boolean;
+
+            /** HistorySyncConfig supportBotUserAgentChatHistory. */
+            public supportBotUserAgentChatHistory: boolean;
 
             /**
              * Creates a new HistorySyncConfig instance using the specified properties.
@@ -4078,7 +5709,12 @@ export namespace proto {
             IOS_PHONE = 14,
             IOS_CATALYST = 15,
             ANDROID_PHONE = 16,
-            ANDROID_AMBIGUOUS = 17
+            ANDROID_AMBIGUOUS = 17,
+            WEAR_OS = 18,
+            AR_WRIST = 19,
+            AR_DEVICE = 20,
+            UWP = 21,
+            VR = 22
         }
     }
 
@@ -4087,6 +5723,12 @@ export namespace proto {
 
         /** DisappearingMode initiator */
         initiator?: (proto.DisappearingMode.Initiator|null);
+
+        /** DisappearingMode trigger */
+        trigger?: (proto.DisappearingMode.Trigger|null);
+
+        /** DisappearingMode initiatedByMe */
+        initiatedByMe?: (boolean|null);
     }
 
     /** Represents a DisappearingMode. */
@@ -4100,6 +5742,12 @@ export namespace proto {
 
         /** DisappearingMode initiator. */
         public initiator: proto.DisappearingMode.Initiator;
+
+        /** DisappearingMode trigger. */
+        public trigger: proto.DisappearingMode.Trigger;
+
+        /** DisappearingMode initiatedByMe. */
+        public initiatedByMe: boolean;
 
         /**
          * Creates a new DisappearingMode instance using the specified properties.
@@ -4179,6 +5827,14 @@ export namespace proto {
             CHANGED_IN_CHAT = 0,
             INITIATED_BY_ME = 1,
             INITIATED_BY_OTHER = 2
+        }
+
+        /** Trigger enum. */
+        enum Trigger {
+            UNKNOWN = 0,
+            CHAT_SETTING = 1,
+            ACCOUNT_SETTING = 2,
+            BULK_CHANGE = 3
         }
     }
 
@@ -4529,6 +6185,27 @@ export namespace proto {
 
         /** GlobalSettings avatarUserSettings */
         avatarUserSettings?: (proto.IAvatarUserSettings|null);
+
+        /** GlobalSettings fontSize */
+        fontSize?: (number|null);
+
+        /** GlobalSettings securityNotifications */
+        securityNotifications?: (boolean|null);
+
+        /** GlobalSettings autoUnarchiveChats */
+        autoUnarchiveChats?: (boolean|null);
+
+        /** GlobalSettings videoQualityMode */
+        videoQualityMode?: (number|null);
+
+        /** GlobalSettings photoQualityMode */
+        photoQualityMode?: (number|null);
+
+        /** GlobalSettings individualNotificationSettings */
+        individualNotificationSettings?: (proto.INotificationSettings|null);
+
+        /** GlobalSettings groupNotificationSettings */
+        groupNotificationSettings?: (proto.INotificationSettings|null);
     }
 
     /** Represents a GlobalSettings. */
@@ -4572,6 +6249,27 @@ export namespace proto {
 
         /** GlobalSettings avatarUserSettings. */
         public avatarUserSettings?: (proto.IAvatarUserSettings|null);
+
+        /** GlobalSettings fontSize. */
+        public fontSize: number;
+
+        /** GlobalSettings securityNotifications. */
+        public securityNotifications: boolean;
+
+        /** GlobalSettings autoUnarchiveChats. */
+        public autoUnarchiveChats: boolean;
+
+        /** GlobalSettings videoQualityMode. */
+        public videoQualityMode: number;
+
+        /** GlobalSettings photoQualityMode. */
+        public photoQualityMode: number;
+
+        /** GlobalSettings individualNotificationSettings. */
+        public individualNotificationSettings?: (proto.INotificationSettings|null);
+
+        /** GlobalSettings groupNotificationSettings. */
+        public groupNotificationSettings?: (proto.INotificationSettings|null);
 
         /**
          * Creates a new GlobalSettings instance using the specified properties.
@@ -5286,6 +6984,12 @@ export namespace proto {
 
         /** HistorySync pastParticipants */
         pastParticipants?: (proto.IPastParticipants[]|null);
+
+        /** HistorySync callLogRecords */
+        callLogRecords?: (proto.ICallLogRecord[]|null);
+
+        /** HistorySync aiWaitListState */
+        aiWaitListState?: (proto.HistorySync.BotAIWaitListState|null);
     }
 
     /** Represents a HistorySync. */
@@ -5329,6 +7033,12 @@ export namespace proto {
 
         /** HistorySync pastParticipants. */
         public pastParticipants: proto.IPastParticipants[];
+
+        /** HistorySync callLogRecords. */
+        public callLogRecords: proto.ICallLogRecord[];
+
+        /** HistorySync aiWaitListState. */
+        public aiWaitListState: proto.HistorySync.BotAIWaitListState;
 
         /**
          * Creates a new HistorySync instance using the specified properties.
@@ -5402,6 +7112,12 @@ export namespace proto {
     }
 
     namespace HistorySync {
+
+        /** BotAIWaitListState enum. */
+        enum BotAIWaitListState {
+            IN_WAITLIST = 0,
+            AI_AVAILABLE = 1
+        }
 
         /** HistorySyncType enum. */
         enum HistorySyncType {
@@ -6235,6 +7951,120 @@ export namespace proto {
         UNDO_KEEP_FOR_ALL = 2
     }
 
+    /** Properties of a KeyExchangeMessage. */
+    interface IKeyExchangeMessage {
+
+        /** KeyExchangeMessage id */
+        id?: (number|null);
+
+        /** KeyExchangeMessage baseKey */
+        baseKey?: (Uint8Array|null);
+
+        /** KeyExchangeMessage ratchetKey */
+        ratchetKey?: (Uint8Array|null);
+
+        /** KeyExchangeMessage identityKey */
+        identityKey?: (Uint8Array|null);
+
+        /** KeyExchangeMessage baseKeySignature */
+        baseKeySignature?: (Uint8Array|null);
+    }
+
+    /** Represents a KeyExchangeMessage. */
+    class KeyExchangeMessage implements IKeyExchangeMessage {
+
+        /**
+         * Constructs a new KeyExchangeMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IKeyExchangeMessage);
+
+        /** KeyExchangeMessage id. */
+        public id: number;
+
+        /** KeyExchangeMessage baseKey. */
+        public baseKey: Uint8Array;
+
+        /** KeyExchangeMessage ratchetKey. */
+        public ratchetKey: Uint8Array;
+
+        /** KeyExchangeMessage identityKey. */
+        public identityKey: Uint8Array;
+
+        /** KeyExchangeMessage baseKeySignature. */
+        public baseKeySignature: Uint8Array;
+
+        /**
+         * Creates a new KeyExchangeMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns KeyExchangeMessage instance
+         */
+        public static create(properties?: proto.IKeyExchangeMessage): proto.KeyExchangeMessage;
+
+        /**
+         * Encodes the specified KeyExchangeMessage message. Does not implicitly {@link proto.KeyExchangeMessage.verify|verify} messages.
+         * @param message KeyExchangeMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IKeyExchangeMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified KeyExchangeMessage message, length delimited. Does not implicitly {@link proto.KeyExchangeMessage.verify|verify} messages.
+         * @param message KeyExchangeMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IKeyExchangeMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a KeyExchangeMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns KeyExchangeMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.KeyExchangeMessage;
+
+        /**
+         * Decodes a KeyExchangeMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns KeyExchangeMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.KeyExchangeMessage;
+
+        /**
+         * Verifies a KeyExchangeMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a KeyExchangeMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns KeyExchangeMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.KeyExchangeMessage;
+
+        /**
+         * Creates a plain object from a KeyExchangeMessage message. Also converts values to other types if specified.
+         * @param message KeyExchangeMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.KeyExchangeMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this KeyExchangeMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a KeyId. */
     interface IKeyId {
 
@@ -6898,8 +8728,8 @@ export namespace proto {
         /** Message groupMentionedMessage */
         groupMentionedMessage?: (proto.Message.IFutureProofMessage|null);
 
-        /** Message pinMessage */
-        pinMessage?: (proto.Message.IPinMessage|null);
+        /** Message pinInChatMessage */
+        pinInChatMessage?: (proto.Message.IPinInChatMessage|null);
 
         /** Message pollCreationMessageV3 */
         pollCreationMessageV3?: (proto.Message.IPollCreationMessage|null);
@@ -6909,6 +8739,21 @@ export namespace proto {
 
         /** Message ptvMessage */
         ptvMessage?: (proto.Message.IVideoMessage|null);
+
+        /** Message botInvokeMessage */
+        botInvokeMessage?: (proto.Message.IFutureProofMessage|null);
+
+        /** Message callLogMesssage */
+        callLogMesssage?: (proto.Message.ICallLogMessage|null);
+
+        /** Message messageHistoryBundle */
+        messageHistoryBundle?: (proto.Message.IMessageHistoryBundle|null);
+
+        /** Message encCommentMessage */
+        encCommentMessage?: (proto.Message.IEncCommentMessage|null);
+
+        /** Message bcallMessage */
+        bcallMessage?: (proto.Message.IBCallMessage|null);
     }
 
     /** Represents a Message. */
@@ -7076,8 +8921,8 @@ export namespace proto {
         /** Message groupMentionedMessage. */
         public groupMentionedMessage?: (proto.Message.IFutureProofMessage|null);
 
-        /** Message pinMessage. */
-        public pinMessage?: (proto.Message.IPinMessage|null);
+        /** Message pinInChatMessage. */
+        public pinInChatMessage?: (proto.Message.IPinInChatMessage|null);
 
         /** Message pollCreationMessageV3. */
         public pollCreationMessageV3?: (proto.Message.IPollCreationMessage|null);
@@ -7087,6 +8932,21 @@ export namespace proto {
 
         /** Message ptvMessage. */
         public ptvMessage?: (proto.Message.IVideoMessage|null);
+
+        /** Message botInvokeMessage. */
+        public botInvokeMessage?: (proto.Message.IFutureProofMessage|null);
+
+        /** Message callLogMesssage. */
+        public callLogMesssage?: (proto.Message.ICallLogMessage|null);
+
+        /** Message messageHistoryBundle. */
+        public messageHistoryBundle?: (proto.Message.IMessageHistoryBundle|null);
+
+        /** Message encCommentMessage. */
+        public encCommentMessage?: (proto.Message.IEncCommentMessage|null);
+
+        /** Message bcallMessage. */
+        public bcallMessage?: (proto.Message.IBCallMessage|null);
 
         /**
          * Creates a new Message instance using the specified properties.
@@ -8001,6 +9861,235 @@ export namespace proto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a BCallMessage. */
+        interface IBCallMessage {
+
+            /** BCallMessage sessionId */
+            sessionId?: (string|null);
+
+            /** BCallMessage mediaType */
+            mediaType?: (proto.Message.BCallMessage.MediaType|null);
+
+            /** BCallMessage masterKey */
+            masterKey?: (Uint8Array|null);
+        }
+
+        /** Represents a BCallMessage. */
+        class BCallMessage implements IBCallMessage {
+
+            /**
+             * Constructs a new BCallMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.Message.IBCallMessage);
+
+            /** BCallMessage sessionId. */
+            public sessionId: string;
+
+            /** BCallMessage mediaType. */
+            public mediaType: proto.Message.BCallMessage.MediaType;
+
+            /** BCallMessage masterKey. */
+            public masterKey: Uint8Array;
+
+            /**
+             * Creates a new BCallMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BCallMessage instance
+             */
+            public static create(properties?: proto.Message.IBCallMessage): proto.Message.BCallMessage;
+
+            /**
+             * Encodes the specified BCallMessage message. Does not implicitly {@link proto.Message.BCallMessage.verify|verify} messages.
+             * @param message BCallMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.Message.IBCallMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified BCallMessage message, length delimited. Does not implicitly {@link proto.Message.BCallMessage.verify|verify} messages.
+             * @param message BCallMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.Message.IBCallMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a BCallMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BCallMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.BCallMessage;
+
+            /**
+             * Decodes a BCallMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BCallMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.BCallMessage;
+
+            /**
+             * Verifies a BCallMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BCallMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BCallMessage
+             */
+            public static fromObject(object: { [k: string]: any }): proto.Message.BCallMessage;
+
+            /**
+             * Creates a plain object from a BCallMessage message. Also converts values to other types if specified.
+             * @param message BCallMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.Message.BCallMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BCallMessage to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace BCallMessage {
+
+            /** MediaType enum. */
+            enum MediaType {
+                UNKNOWN = 0,
+                AUDIO = 1,
+                VIDEO = 2
+            }
+        }
+
+        /** Properties of a BotFeedbackMessage. */
+        interface IBotFeedbackMessage {
+
+            /** BotFeedbackMessage messageKey */
+            messageKey?: (proto.IMessageKey|null);
+
+            /** BotFeedbackMessage kind */
+            kind?: (proto.Message.BotFeedbackMessage.BotFeedbackKind|null);
+
+            /** BotFeedbackMessage text */
+            text?: (string|null);
+        }
+
+        /** Represents a BotFeedbackMessage. */
+        class BotFeedbackMessage implements IBotFeedbackMessage {
+
+            /**
+             * Constructs a new BotFeedbackMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.Message.IBotFeedbackMessage);
+
+            /** BotFeedbackMessage messageKey. */
+            public messageKey?: (proto.IMessageKey|null);
+
+            /** BotFeedbackMessage kind. */
+            public kind: proto.Message.BotFeedbackMessage.BotFeedbackKind;
+
+            /** BotFeedbackMessage text. */
+            public text: string;
+
+            /**
+             * Creates a new BotFeedbackMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BotFeedbackMessage instance
+             */
+            public static create(properties?: proto.Message.IBotFeedbackMessage): proto.Message.BotFeedbackMessage;
+
+            /**
+             * Encodes the specified BotFeedbackMessage message. Does not implicitly {@link proto.Message.BotFeedbackMessage.verify|verify} messages.
+             * @param message BotFeedbackMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.Message.IBotFeedbackMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified BotFeedbackMessage message, length delimited. Does not implicitly {@link proto.Message.BotFeedbackMessage.verify|verify} messages.
+             * @param message BotFeedbackMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.Message.IBotFeedbackMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a BotFeedbackMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BotFeedbackMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.BotFeedbackMessage;
+
+            /**
+             * Decodes a BotFeedbackMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BotFeedbackMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.BotFeedbackMessage;
+
+            /**
+             * Verifies a BotFeedbackMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BotFeedbackMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BotFeedbackMessage
+             */
+            public static fromObject(object: { [k: string]: any }): proto.Message.BotFeedbackMessage;
+
+            /**
+             * Creates a plain object from a BotFeedbackMessage message. Also converts values to other types if specified.
+             * @param message BotFeedbackMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.Message.BotFeedbackMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BotFeedbackMessage to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace BotFeedbackMessage {
+
+            /** BotFeedbackKind enum. */
+            enum BotFeedbackKind {
+                BOT_FEEDBACK_POSITIVE = 0,
+                BOT_FEEDBACK_NEGATIVE_GENERIC = 1,
+                BOT_FEEDBACK_NEGATIVE_HELPFUL = 2,
+                BOT_FEEDBACK_NEGATIVE_INTERESTING = 3,
+                BOT_FEEDBACK_NEGATIVE_ACCURATE = 4,
+                BOT_FEEDBACK_NEGATIVE_SAFE = 5,
+                BOT_FEEDBACK_NEGATIVE_OTHER = 6,
+                BOT_FEEDBACK_NEGATIVE_REFUSED = 7
+            }
+        }
+
         /** Properties of a ButtonsMessage. */
         interface IButtonsMessage {
 
@@ -8692,6 +10781,238 @@ export namespace proto {
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a CallLogMessage. */
+        interface ICallLogMessage {
+
+            /** CallLogMessage isVideo */
+            isVideo?: (boolean|null);
+
+            /** CallLogMessage callOutcome */
+            callOutcome?: (proto.Message.CallLogMessage.CallOutcome|null);
+
+            /** CallLogMessage durationSecs */
+            durationSecs?: (number|Long|null);
+
+            /** CallLogMessage callType */
+            callType?: (proto.Message.CallLogMessage.CallType|null);
+
+            /** CallLogMessage participants */
+            participants?: (proto.Message.CallLogMessage.ICallParticipant[]|null);
+        }
+
+        /** Represents a CallLogMessage. */
+        class CallLogMessage implements ICallLogMessage {
+
+            /**
+             * Constructs a new CallLogMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.Message.ICallLogMessage);
+
+            /** CallLogMessage isVideo. */
+            public isVideo: boolean;
+
+            /** CallLogMessage callOutcome. */
+            public callOutcome: proto.Message.CallLogMessage.CallOutcome;
+
+            /** CallLogMessage durationSecs. */
+            public durationSecs: (number|Long);
+
+            /** CallLogMessage callType. */
+            public callType: proto.Message.CallLogMessage.CallType;
+
+            /** CallLogMessage participants. */
+            public participants: proto.Message.CallLogMessage.ICallParticipant[];
+
+            /**
+             * Creates a new CallLogMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CallLogMessage instance
+             */
+            public static create(properties?: proto.Message.ICallLogMessage): proto.Message.CallLogMessage;
+
+            /**
+             * Encodes the specified CallLogMessage message. Does not implicitly {@link proto.Message.CallLogMessage.verify|verify} messages.
+             * @param message CallLogMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.Message.ICallLogMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CallLogMessage message, length delimited. Does not implicitly {@link proto.Message.CallLogMessage.verify|verify} messages.
+             * @param message CallLogMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.Message.ICallLogMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CallLogMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CallLogMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.CallLogMessage;
+
+            /**
+             * Decodes a CallLogMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CallLogMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.CallLogMessage;
+
+            /**
+             * Verifies a CallLogMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CallLogMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CallLogMessage
+             */
+            public static fromObject(object: { [k: string]: any }): proto.Message.CallLogMessage;
+
+            /**
+             * Creates a plain object from a CallLogMessage message. Also converts values to other types if specified.
+             * @param message CallLogMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.Message.CallLogMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CallLogMessage to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace CallLogMessage {
+
+            /** CallOutcome enum. */
+            enum CallOutcome {
+                CONNECTED = 0,
+                MISSED = 1,
+                FAILED = 2,
+                REJECTED = 3,
+                ACCEPTED_ELSEWHERE = 4,
+                ONGOING = 5,
+                SILENCED_BY_DND = 6,
+                SILENCED_UNKNOWN_CALLER = 7
+            }
+
+            /** Properties of a CallParticipant. */
+            interface ICallParticipant {
+
+                /** CallParticipant jid */
+                jid?: (string|null);
+
+                /** CallParticipant callOutcome */
+                callOutcome?: (proto.Message.CallLogMessage.CallOutcome|null);
+            }
+
+            /** Represents a CallParticipant. */
+            class CallParticipant implements ICallParticipant {
+
+                /**
+                 * Constructs a new CallParticipant.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: proto.Message.CallLogMessage.ICallParticipant);
+
+                /** CallParticipant jid. */
+                public jid: string;
+
+                /** CallParticipant callOutcome. */
+                public callOutcome: proto.Message.CallLogMessage.CallOutcome;
+
+                /**
+                 * Creates a new CallParticipant instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CallParticipant instance
+                 */
+                public static create(properties?: proto.Message.CallLogMessage.ICallParticipant): proto.Message.CallLogMessage.CallParticipant;
+
+                /**
+                 * Encodes the specified CallParticipant message. Does not implicitly {@link proto.Message.CallLogMessage.CallParticipant.verify|verify} messages.
+                 * @param message CallParticipant message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: proto.Message.CallLogMessage.ICallParticipant, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CallParticipant message, length delimited. Does not implicitly {@link proto.Message.CallLogMessage.CallParticipant.verify|verify} messages.
+                 * @param message CallParticipant message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: proto.Message.CallLogMessage.ICallParticipant, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CallParticipant message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns CallParticipant
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.CallLogMessage.CallParticipant;
+
+                /**
+                 * Decodes a CallParticipant message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns CallParticipant
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.CallLogMessage.CallParticipant;
+
+                /**
+                 * Verifies a CallParticipant message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CallParticipant message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CallParticipant
+                 */
+                public static fromObject(object: { [k: string]: any }): proto.Message.CallLogMessage.CallParticipant;
+
+                /**
+                 * Creates a plain object from a CallParticipant message. Also converts values to other types if specified.
+                 * @param message CallParticipant
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: proto.Message.CallLogMessage.CallParticipant, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CallParticipant to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** CallType enum. */
+            enum CallType {
+                REGULAR = 0,
+                SCHEDULED_CALL = 1,
+                VOICE_CHAT = 2
+            }
         }
 
         /** Properties of a CancelPaymentRequestMessage. */
@@ -9480,6 +11801,108 @@ export namespace proto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of an EncCommentMessage. */
+        interface IEncCommentMessage {
+
+            /** EncCommentMessage targetMessageKey */
+            targetMessageKey?: (proto.IMessageKey|null);
+
+            /** EncCommentMessage encPayload */
+            encPayload?: (Uint8Array|null);
+
+            /** EncCommentMessage encIv */
+            encIv?: (Uint8Array|null);
+        }
+
+        /** Represents an EncCommentMessage. */
+        class EncCommentMessage implements IEncCommentMessage {
+
+            /**
+             * Constructs a new EncCommentMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.Message.IEncCommentMessage);
+
+            /** EncCommentMessage targetMessageKey. */
+            public targetMessageKey?: (proto.IMessageKey|null);
+
+            /** EncCommentMessage encPayload. */
+            public encPayload: Uint8Array;
+
+            /** EncCommentMessage encIv. */
+            public encIv: Uint8Array;
+
+            /**
+             * Creates a new EncCommentMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns EncCommentMessage instance
+             */
+            public static create(properties?: proto.Message.IEncCommentMessage): proto.Message.EncCommentMessage;
+
+            /**
+             * Encodes the specified EncCommentMessage message. Does not implicitly {@link proto.Message.EncCommentMessage.verify|verify} messages.
+             * @param message EncCommentMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.Message.IEncCommentMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified EncCommentMessage message, length delimited. Does not implicitly {@link proto.Message.EncCommentMessage.verify|verify} messages.
+             * @param message EncCommentMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.Message.IEncCommentMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an EncCommentMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns EncCommentMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.EncCommentMessage;
+
+            /**
+             * Decodes an EncCommentMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns EncCommentMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.EncCommentMessage;
+
+            /**
+             * Verifies an EncCommentMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an EncCommentMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns EncCommentMessage
+             */
+            public static fromObject(object: { [k: string]: any }): proto.Message.EncCommentMessage;
+
+            /**
+             * Creates a plain object from an EncCommentMessage message. Also converts values to other types if specified.
+             * @param message EncCommentMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.Message.EncCommentMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this EncCommentMessage to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of an EncReactionMessage. */
         interface IEncReactionMessage {
 
@@ -9814,13 +12237,10 @@ export namespace proto {
 
             /** FontType enum. */
             enum FontType {
-                SANS_SERIF = 0,
-                SERIF = 1,
-                NORICAN_REGULAR = 2,
-                BRYNDAN_WRITE = 3,
-                BEBASNEUE_REGULAR = 4,
-                OSWALD_HEAVY = 5,
-                DAMION_REGULAR = 6,
+                SYSTEM = 0,
+                SYSTEM_TEXT = 1,
+                FB_SCRIPT = 2,
+                SYSTEM_BOLD = 6,
                 MORNINGBREEZE_REGULAR = 7,
                 CALISTOGA_REGULAR = 8,
                 EXO2_EXTRABOLD = 9,
@@ -9838,7 +12258,9 @@ export namespace proto {
             /** PreviewType enum. */
             enum PreviewType {
                 NONE = 0,
-                VIDEO = 1
+                VIDEO = 1,
+                PLACEHOLDER = 4,
+                IMAGE = 5
             }
         }
 
@@ -10788,6 +13210,12 @@ export namespace proto {
 
             /** HistorySyncNotification oldestMsgInChunkTimestampSec */
             oldestMsgInChunkTimestampSec?: (number|Long|null);
+
+            /** HistorySyncNotification initialHistBootstrapInlinePayload */
+            initialHistBootstrapInlinePayload?: (Uint8Array|null);
+
+            /** HistorySyncNotification peerDataRequestSessionId */
+            peerDataRequestSessionId?: (string|null);
         }
 
         /** Represents a HistorySyncNotification. */
@@ -10828,6 +13256,12 @@ export namespace proto {
 
             /** HistorySyncNotification oldestMsgInChunkTimestampSec. */
             public oldestMsgInChunkTimestampSec: (number|Long);
+
+            /** HistorySyncNotification initialHistBootstrapInlinePayload. */
+            public initialHistBootstrapInlinePayload: Uint8Array;
+
+            /** HistorySyncNotification peerDataRequestSessionId. */
+            public peerDataRequestSessionId: string;
 
             /**
              * Creates a new HistorySyncNotification instance using the specified properties.
@@ -11267,6 +13701,9 @@ export namespace proto {
 
             /** InteractiveMessage nativeFlowMessage */
             nativeFlowMessage?: (proto.Message.InteractiveMessage.INativeFlowMessage|null);
+
+            /** InteractiveMessage carouselMessage */
+            carouselMessage?: (proto.Message.InteractiveMessage.ICarouselMessage|null);
         }
 
         /** Represents an InteractiveMessage. */
@@ -11299,8 +13736,11 @@ export namespace proto {
             /** InteractiveMessage nativeFlowMessage. */
             public nativeFlowMessage?: (proto.Message.InteractiveMessage.INativeFlowMessage|null);
 
+            /** InteractiveMessage carouselMessage. */
+            public carouselMessage?: (proto.Message.InteractiveMessage.ICarouselMessage|null);
+
             /** InteractiveMessage interactiveMessage. */
-            public interactiveMessage?: ("shopStorefrontMessage"|"collectionMessage"|"nativeFlowMessage");
+            public interactiveMessage?: ("shopStorefrontMessage"|"collectionMessage"|"nativeFlowMessage"|"carouselMessage");
 
             /**
              * Creates a new InteractiveMessage instance using the specified properties.
@@ -11460,6 +13900,102 @@ export namespace proto {
 
                 /**
                  * Converts this Body to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CarouselMessage. */
+            interface ICarouselMessage {
+
+                /** CarouselMessage cards */
+                cards?: (proto.Message.IInteractiveMessage[]|null);
+
+                /** CarouselMessage messageVersion */
+                messageVersion?: (number|null);
+            }
+
+            /** Represents a CarouselMessage. */
+            class CarouselMessage implements ICarouselMessage {
+
+                /**
+                 * Constructs a new CarouselMessage.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: proto.Message.InteractiveMessage.ICarouselMessage);
+
+                /** CarouselMessage cards. */
+                public cards: proto.Message.IInteractiveMessage[];
+
+                /** CarouselMessage messageVersion. */
+                public messageVersion: number;
+
+                /**
+                 * Creates a new CarouselMessage instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CarouselMessage instance
+                 */
+                public static create(properties?: proto.Message.InteractiveMessage.ICarouselMessage): proto.Message.InteractiveMessage.CarouselMessage;
+
+                /**
+                 * Encodes the specified CarouselMessage message. Does not implicitly {@link proto.Message.InteractiveMessage.CarouselMessage.verify|verify} messages.
+                 * @param message CarouselMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: proto.Message.InteractiveMessage.ICarouselMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CarouselMessage message, length delimited. Does not implicitly {@link proto.Message.InteractiveMessage.CarouselMessage.verify|verify} messages.
+                 * @param message CarouselMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: proto.Message.InteractiveMessage.ICarouselMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CarouselMessage message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns CarouselMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.InteractiveMessage.CarouselMessage;
+
+                /**
+                 * Decodes a CarouselMessage message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns CarouselMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.InteractiveMessage.CarouselMessage;
+
+                /**
+                 * Verifies a CarouselMessage message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CarouselMessage message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CarouselMessage
+                 */
+                public static fromObject(object: { [k: string]: any }): proto.Message.InteractiveMessage.CarouselMessage;
+
+                /**
+                 * Creates a plain object from a CarouselMessage message. Also converts values to other types if specified.
+                 * @param message CarouselMessage
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: proto.Message.InteractiveMessage.CarouselMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CarouselMessage to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -11680,6 +14216,9 @@ export namespace proto {
 
                 /** Header videoMessage */
                 videoMessage?: (proto.Message.IVideoMessage|null);
+
+                /** Header locationMessage */
+                locationMessage?: (proto.Message.ILocationMessage|null);
             }
 
             /** Represents a Header. */
@@ -11712,8 +14251,11 @@ export namespace proto {
                 /** Header videoMessage. */
                 public videoMessage?: (proto.Message.IVideoMessage|null);
 
+                /** Header locationMessage. */
+                public locationMessage?: (proto.Message.ILocationMessage|null);
+
                 /** Header media. */
-                public media?: ("documentMessage"|"imageMessage"|"jpegThumbnail"|"videoMessage");
+                public media?: ("documentMessage"|"imageMessage"|"jpegThumbnail"|"videoMessage"|"locationMessage");
 
                 /**
                  * Creates a new Header instance using the specified properties.
@@ -12213,6 +14755,9 @@ export namespace proto {
 
                 /** Body text */
                 text?: (string|null);
+
+                /** Body format */
+                format?: (proto.Message.InteractiveResponseMessage.Body.Format|null);
             }
 
             /** Represents a Body. */
@@ -12226,6 +14771,9 @@ export namespace proto {
 
                 /** Body text. */
                 public text: string;
+
+                /** Body format. */
+                public format: proto.Message.InteractiveResponseMessage.Body.Format;
 
                 /**
                  * Creates a new Body instance using the specified properties.
@@ -12296,6 +14844,15 @@ export namespace proto {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Body {
+
+                /** Format enum. */
+                enum Format {
+                    DEFAULT = 0,
+                    EXTENSIONS_1 = 1
+                }
             }
 
             /** Properties of a NativeFlowResponseMessage. */
@@ -13893,6 +16450,138 @@ export namespace proto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a MessageHistoryBundle. */
+        interface IMessageHistoryBundle {
+
+            /** MessageHistoryBundle url */
+            url?: (string|null);
+
+            /** MessageHistoryBundle mimetype */
+            mimetype?: (string|null);
+
+            /** MessageHistoryBundle fileSha256 */
+            fileSha256?: (Uint8Array|null);
+
+            /** MessageHistoryBundle mediaKey */
+            mediaKey?: (Uint8Array|null);
+
+            /** MessageHistoryBundle fileEncSha256 */
+            fileEncSha256?: (Uint8Array|null);
+
+            /** MessageHistoryBundle directPath */
+            directPath?: (string|null);
+
+            /** MessageHistoryBundle mediaKeyTimestamp */
+            mediaKeyTimestamp?: (number|Long|null);
+
+            /** MessageHistoryBundle contextInfo */
+            contextInfo?: (proto.IContextInfo|null);
+        }
+
+        /** Represents a MessageHistoryBundle. */
+        class MessageHistoryBundle implements IMessageHistoryBundle {
+
+            /**
+             * Constructs a new MessageHistoryBundle.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.Message.IMessageHistoryBundle);
+
+            /** MessageHistoryBundle url. */
+            public url: string;
+
+            /** MessageHistoryBundle mimetype. */
+            public mimetype: string;
+
+            /** MessageHistoryBundle fileSha256. */
+            public fileSha256: Uint8Array;
+
+            /** MessageHistoryBundle mediaKey. */
+            public mediaKey: Uint8Array;
+
+            /** MessageHistoryBundle fileEncSha256. */
+            public fileEncSha256: Uint8Array;
+
+            /** MessageHistoryBundle directPath. */
+            public directPath: string;
+
+            /** MessageHistoryBundle mediaKeyTimestamp. */
+            public mediaKeyTimestamp: (number|Long);
+
+            /** MessageHistoryBundle contextInfo. */
+            public contextInfo?: (proto.IContextInfo|null);
+
+            /**
+             * Creates a new MessageHistoryBundle instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MessageHistoryBundle instance
+             */
+            public static create(properties?: proto.Message.IMessageHistoryBundle): proto.Message.MessageHistoryBundle;
+
+            /**
+             * Encodes the specified MessageHistoryBundle message. Does not implicitly {@link proto.Message.MessageHistoryBundle.verify|verify} messages.
+             * @param message MessageHistoryBundle message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.Message.IMessageHistoryBundle, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified MessageHistoryBundle message, length delimited. Does not implicitly {@link proto.Message.MessageHistoryBundle.verify|verify} messages.
+             * @param message MessageHistoryBundle message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.Message.IMessageHistoryBundle, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a MessageHistoryBundle message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MessageHistoryBundle
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.MessageHistoryBundle;
+
+            /**
+             * Decodes a MessageHistoryBundle message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MessageHistoryBundle
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.MessageHistoryBundle;
+
+            /**
+             * Verifies a MessageHistoryBundle message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MessageHistoryBundle message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MessageHistoryBundle
+             */
+            public static fromObject(object: { [k: string]: any }): proto.Message.MessageHistoryBundle;
+
+            /**
+             * Creates a plain object from a MessageHistoryBundle message. Also converts values to other types if specified.
+             * @param message MessageHistoryBundle
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.Message.MessageHistoryBundle, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MessageHistoryBundle to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of an OrderMessage. */
         interface IOrderMessage {
 
@@ -13931,6 +16620,9 @@ export namespace proto {
 
             /** OrderMessage contextInfo */
             contextInfo?: (proto.IContextInfo|null);
+
+            /** OrderMessage messageVersion */
+            messageVersion?: (number|null);
         }
 
         /** Represents an OrderMessage. */
@@ -13977,6 +16669,9 @@ export namespace proto {
 
             /** OrderMessage contextInfo. */
             public contextInfo?: (proto.IContextInfo|null);
+
+            /** OrderMessage messageVersion. */
+            public messageVersion: number;
 
             /**
              * Creates a new OrderMessage instance using the specified properties.
@@ -14053,7 +16748,9 @@ export namespace proto {
 
             /** OrderStatus enum. */
             enum OrderStatus {
-                INQUIRY = 1
+                INQUIRY = 1,
+                ACCEPTED = 2,
+                DECLINED = 3
             }
 
             /** OrderSurface enum. */
@@ -14183,6 +16880,9 @@ export namespace proto {
 
             /** PeerDataOperationRequestMessage historySyncOnDemandRequest */
             historySyncOnDemandRequest?: (proto.Message.PeerDataOperationRequestMessage.IHistorySyncOnDemandRequest|null);
+
+            /** PeerDataOperationRequestMessage placeholderMessageResendRequest */
+            placeholderMessageResendRequest?: (proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest[]|null);
         }
 
         /** Represents a PeerDataOperationRequestMessage. */
@@ -14205,6 +16905,9 @@ export namespace proto {
 
             /** PeerDataOperationRequestMessage historySyncOnDemandRequest. */
             public historySyncOnDemandRequest?: (proto.Message.PeerDataOperationRequestMessage.IHistorySyncOnDemandRequest|null);
+
+            /** PeerDataOperationRequestMessage placeholderMessageResendRequest. */
+            public placeholderMessageResendRequest: proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest[];
 
             /**
              * Creates a new PeerDataOperationRequestMessage instance using the specified properties.
@@ -14393,6 +17096,96 @@ export namespace proto {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a PlaceholderMessageResendRequest. */
+            interface IPlaceholderMessageResendRequest {
+
+                /** PlaceholderMessageResendRequest messageKey */
+                messageKey?: (proto.IMessageKey|null);
+            }
+
+            /** Represents a PlaceholderMessageResendRequest. */
+            class PlaceholderMessageResendRequest implements IPlaceholderMessageResendRequest {
+
+                /**
+                 * Constructs a new PlaceholderMessageResendRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest);
+
+                /** PlaceholderMessageResendRequest messageKey. */
+                public messageKey?: (proto.IMessageKey|null);
+
+                /**
+                 * Creates a new PlaceholderMessageResendRequest instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns PlaceholderMessageResendRequest instance
+                 */
+                public static create(properties?: proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest): proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest;
+
+                /**
+                 * Encodes the specified PlaceholderMessageResendRequest message. Does not implicitly {@link proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest.verify|verify} messages.
+                 * @param message PlaceholderMessageResendRequest message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified PlaceholderMessageResendRequest message, length delimited. Does not implicitly {@link proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest.verify|verify} messages.
+                 * @param message PlaceholderMessageResendRequest message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: proto.Message.PeerDataOperationRequestMessage.IPlaceholderMessageResendRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a PlaceholderMessageResendRequest message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns PlaceholderMessageResendRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest;
+
+                /**
+                 * Decodes a PlaceholderMessageResendRequest message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns PlaceholderMessageResendRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest;
+
+                /**
+                 * Verifies a PlaceholderMessageResendRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PlaceholderMessageResendRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PlaceholderMessageResendRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest;
+
+                /**
+                 * Creates a plain object from a PlaceholderMessageResendRequest message. Also converts values to other types if specified.
+                 * @param message PlaceholderMessageResendRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: proto.Message.PeerDataOperationRequestMessage.PlaceholderMessageResendRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PlaceholderMessageResendRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a RequestStickerReupload. */
             interface IRequestStickerReupload {
 
@@ -14488,6 +17281,9 @@ export namespace proto {
 
                 /** RequestUrlPreview url */
                 url?: (string|null);
+
+                /** RequestUrlPreview includeHqThumbnail */
+                includeHqThumbnail?: (boolean|null);
             }
 
             /** Represents a RequestUrlPreview. */
@@ -14501,6 +17297,9 @@ export namespace proto {
 
                 /** RequestUrlPreview url. */
                 public url: string;
+
+                /** RequestUrlPreview includeHqThumbnail. */
+                public includeHqThumbnail: boolean;
 
                 /**
                  * Creates a new RequestUrlPreview instance using the specified properties.
@@ -14689,6 +17488,9 @@ export namespace proto {
 
                 /** PeerDataOperationResult linkPreviewResponse */
                 linkPreviewResponse?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.ILinkPreviewResponse|null);
+
+                /** PeerDataOperationResult placeholderMessageResendResponse */
+                placeholderMessageResendResponse?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse|null);
             }
 
             /** Represents a PeerDataOperationResult. */
@@ -14708,6 +17510,9 @@ export namespace proto {
 
                 /** PeerDataOperationResult linkPreviewResponse. */
                 public linkPreviewResponse?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.ILinkPreviewResponse|null);
+
+                /** PeerDataOperationResult placeholderMessageResendResponse. */
+                public placeholderMessageResendResponse?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse|null);
 
                 /**
                  * Creates a new PeerDataOperationResult instance using the specified properties.
@@ -14805,6 +17610,9 @@ export namespace proto {
 
                     /** LinkPreviewResponse previewType */
                     previewType?: (string|null);
+
+                    /** LinkPreviewResponse hqThumbnail */
+                    hqThumbnail?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail|null);
                 }
 
                 /** Represents a LinkPreviewResponse. */
@@ -14836,6 +17644,9 @@ export namespace proto {
 
                     /** LinkPreviewResponse previewType. */
                     public previewType: string;
+
+                    /** LinkPreviewResponse hqThumbnail. */
+                    public hqThumbnail?: (proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail|null);
 
                     /**
                      * Creates a new LinkPreviewResponse instance using the specified properties.
@@ -14907,6 +17718,225 @@ export namespace proto {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                namespace LinkPreviewResponse {
+
+                    /** Properties of a LinkPreviewHighQualityThumbnail. */
+                    interface ILinkPreviewHighQualityThumbnail {
+
+                        /** LinkPreviewHighQualityThumbnail directPath */
+                        directPath?: (string|null);
+
+                        /** LinkPreviewHighQualityThumbnail thumbHash */
+                        thumbHash?: (string|null);
+
+                        /** LinkPreviewHighQualityThumbnail encThumbHash */
+                        encThumbHash?: (string|null);
+
+                        /** LinkPreviewHighQualityThumbnail mediaKey */
+                        mediaKey?: (Uint8Array|null);
+
+                        /** LinkPreviewHighQualityThumbnail mediaKeyTimestampMs */
+                        mediaKeyTimestampMs?: (number|Long|null);
+
+                        /** LinkPreviewHighQualityThumbnail thumbWidth */
+                        thumbWidth?: (number|null);
+
+                        /** LinkPreviewHighQualityThumbnail thumbHeight */
+                        thumbHeight?: (number|null);
+                    }
+
+                    /** Represents a LinkPreviewHighQualityThumbnail. */
+                    class LinkPreviewHighQualityThumbnail implements ILinkPreviewHighQualityThumbnail {
+
+                        /**
+                         * Constructs a new LinkPreviewHighQualityThumbnail.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail);
+
+                        /** LinkPreviewHighQualityThumbnail directPath. */
+                        public directPath: string;
+
+                        /** LinkPreviewHighQualityThumbnail thumbHash. */
+                        public thumbHash: string;
+
+                        /** LinkPreviewHighQualityThumbnail encThumbHash. */
+                        public encThumbHash: string;
+
+                        /** LinkPreviewHighQualityThumbnail mediaKey. */
+                        public mediaKey: Uint8Array;
+
+                        /** LinkPreviewHighQualityThumbnail mediaKeyTimestampMs. */
+                        public mediaKeyTimestampMs: (number|Long);
+
+                        /** LinkPreviewHighQualityThumbnail thumbWidth. */
+                        public thumbWidth: number;
+
+                        /** LinkPreviewHighQualityThumbnail thumbHeight. */
+                        public thumbHeight: number;
+
+                        /**
+                         * Creates a new LinkPreviewHighQualityThumbnail instance using the specified properties.
+                         * @param [properties] Properties to set
+                         * @returns LinkPreviewHighQualityThumbnail instance
+                         */
+                        public static create(properties?: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail;
+
+                        /**
+                         * Encodes the specified LinkPreviewHighQualityThumbnail message. Does not implicitly {@link proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail.verify|verify} messages.
+                         * @param message LinkPreviewHighQualityThumbnail message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encode(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Encodes the specified LinkPreviewHighQualityThumbnail message, length delimited. Does not implicitly {@link proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail.verify|verify} messages.
+                         * @param message LinkPreviewHighQualityThumbnail message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encodeDelimited(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.ILinkPreviewHighQualityThumbnail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Decodes a LinkPreviewHighQualityThumbnail message from the specified reader or buffer.
+                         * @param reader Reader or buffer to decode from
+                         * @param [length] Message length if known beforehand
+                         * @returns LinkPreviewHighQualityThumbnail
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail;
+
+                        /**
+                         * Decodes a LinkPreviewHighQualityThumbnail message from the specified reader or buffer, length delimited.
+                         * @param reader Reader or buffer to decode from
+                         * @returns LinkPreviewHighQualityThumbnail
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail;
+
+                        /**
+                         * Verifies a LinkPreviewHighQualityThumbnail message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a LinkPreviewHighQualityThumbnail message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns LinkPreviewHighQualityThumbnail
+                         */
+                        public static fromObject(object: { [k: string]: any }): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail;
+
+                        /**
+                         * Creates a plain object from a LinkPreviewHighQualityThumbnail message. Also converts values to other types if specified.
+                         * @param message LinkPreviewHighQualityThumbnail
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.LinkPreviewResponse.LinkPreviewHighQualityThumbnail, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this LinkPreviewHighQualityThumbnail to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+
+                /** Properties of a PlaceholderMessageResendResponse. */
+                interface IPlaceholderMessageResendResponse {
+
+                    /** PlaceholderMessageResendResponse webMessageInfoBytes */
+                    webMessageInfoBytes?: (Uint8Array|null);
+                }
+
+                /** Represents a PlaceholderMessageResendResponse. */
+                class PlaceholderMessageResendResponse implements IPlaceholderMessageResendResponse {
+
+                    /**
+                     * Constructs a new PlaceholderMessageResendResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse);
+
+                    /** PlaceholderMessageResendResponse webMessageInfoBytes. */
+                    public webMessageInfoBytes: Uint8Array;
+
+                    /**
+                     * Creates a new PlaceholderMessageResendResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns PlaceholderMessageResendResponse instance
+                     */
+                    public static create(properties?: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse;
+
+                    /**
+                     * Encodes the specified PlaceholderMessageResendResponse message. Does not implicitly {@link proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse.verify|verify} messages.
+                     * @param message PlaceholderMessageResendResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified PlaceholderMessageResendResponse message, length delimited. Does not implicitly {@link proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse.verify|verify} messages.
+                     * @param message PlaceholderMessageResendResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.IPlaceholderMessageResendResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a PlaceholderMessageResendResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns PlaceholderMessageResendResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse;
+
+                    /**
+                     * Decodes a PlaceholderMessageResendResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns PlaceholderMessageResendResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse;
+
+                    /**
+                     * Verifies a PlaceholderMessageResendResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PlaceholderMessageResendResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PlaceholderMessageResendResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse;
+
+                    /**
+                     * Creates a plain object from a PlaceholderMessageResendResponse message. Also converts values to other types if specified.
+                     * @param message PlaceholderMessageResendResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: proto.Message.PeerDataOperationRequestResponseMessage.PeerDataOperationResult.PlaceholderMessageResendResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PlaceholderMessageResendResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
 
@@ -14915,116 +17945,117 @@ export namespace proto {
             UPLOAD_STICKER = 0,
             SEND_RECENT_STICKER_BOOTSTRAP = 1,
             GENERATE_LINK_PREVIEW = 2,
-            HISTORY_SYNC_ON_DEMAND = 3
+            HISTORY_SYNC_ON_DEMAND = 3,
+            PLACEHOLDER_MESSAGE_RESEND = 4
         }
 
-        /** Properties of a PinMessage. */
-        interface IPinMessage {
+        /** Properties of a PinInChatMessage. */
+        interface IPinInChatMessage {
 
-            /** PinMessage key */
+            /** PinInChatMessage key */
             key?: (proto.IMessageKey|null);
 
-            /** PinMessage pinMessageType */
-            pinMessageType?: (proto.Message.PinMessage.PinMessageType|null);
+            /** PinInChatMessage type */
+            type?: (proto.Message.PinInChatMessage.Type|null);
 
-            /** PinMessage senderTimestampMs */
+            /** PinInChatMessage senderTimestampMs */
             senderTimestampMs?: (number|Long|null);
         }
 
-        /** Represents a PinMessage. */
-        class PinMessage implements IPinMessage {
+        /** Represents a PinInChatMessage. */
+        class PinInChatMessage implements IPinInChatMessage {
 
             /**
-             * Constructs a new PinMessage.
+             * Constructs a new PinInChatMessage.
              * @param [properties] Properties to set
              */
-            constructor(properties?: proto.Message.IPinMessage);
+            constructor(properties?: proto.Message.IPinInChatMessage);
 
-            /** PinMessage key. */
+            /** PinInChatMessage key. */
             public key?: (proto.IMessageKey|null);
 
-            /** PinMessage pinMessageType. */
-            public pinMessageType: proto.Message.PinMessage.PinMessageType;
+            /** PinInChatMessage type. */
+            public type: proto.Message.PinInChatMessage.Type;
 
-            /** PinMessage senderTimestampMs. */
+            /** PinInChatMessage senderTimestampMs. */
             public senderTimestampMs: (number|Long);
 
             /**
-             * Creates a new PinMessage instance using the specified properties.
+             * Creates a new PinInChatMessage instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns PinMessage instance
+             * @returns PinInChatMessage instance
              */
-            public static create(properties?: proto.Message.IPinMessage): proto.Message.PinMessage;
+            public static create(properties?: proto.Message.IPinInChatMessage): proto.Message.PinInChatMessage;
 
             /**
-             * Encodes the specified PinMessage message. Does not implicitly {@link proto.Message.PinMessage.verify|verify} messages.
-             * @param message PinMessage message or plain object to encode
+             * Encodes the specified PinInChatMessage message. Does not implicitly {@link proto.Message.PinInChatMessage.verify|verify} messages.
+             * @param message PinInChatMessage message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: proto.Message.IPinMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encode(message: proto.Message.IPinInChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified PinMessage message, length delimited. Does not implicitly {@link proto.Message.PinMessage.verify|verify} messages.
-             * @param message PinMessage message or plain object to encode
+             * Encodes the specified PinInChatMessage message, length delimited. Does not implicitly {@link proto.Message.PinInChatMessage.verify|verify} messages.
+             * @param message PinInChatMessage message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: proto.Message.IPinMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encodeDelimited(message: proto.Message.IPinInChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a PinMessage message from the specified reader or buffer.
+             * Decodes a PinInChatMessage message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns PinMessage
+             * @returns PinInChatMessage
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.PinMessage;
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.Message.PinInChatMessage;
 
             /**
-             * Decodes a PinMessage message from the specified reader or buffer, length delimited.
+             * Decodes a PinInChatMessage message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns PinMessage
+             * @returns PinInChatMessage
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.PinMessage;
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.Message.PinInChatMessage;
 
             /**
-             * Verifies a PinMessage message.
+             * Verifies a PinInChatMessage message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a PinMessage message from a plain object. Also converts values to their respective internal types.
+             * Creates a PinInChatMessage message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns PinMessage
+             * @returns PinInChatMessage
              */
-            public static fromObject(object: { [k: string]: any }): proto.Message.PinMessage;
+            public static fromObject(object: { [k: string]: any }): proto.Message.PinInChatMessage;
 
             /**
-             * Creates a plain object from a PinMessage message. Also converts values to other types if specified.
-             * @param message PinMessage
+             * Creates a plain object from a PinInChatMessage message. Also converts values to other types if specified.
+             * @param message PinInChatMessage
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: proto.Message.PinMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: proto.Message.PinInChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this PinMessage to JSON.
+             * Converts this PinInChatMessage to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace PinMessage {
+        namespace PinInChatMessage {
 
-            /** PinMessageType enum. */
-            enum PinMessageType {
-                UNKNOWN_PIN_MESSAGE_TYPE = 0,
+            /** Type enum. */
+            enum Type {
+                UNKNOWN_TYPE = 0,
                 PIN_FOR_ALL = 1,
                 UNPIN_FOR_ALL = 2
             }
@@ -16034,6 +19065,9 @@ export namespace proto {
 
             /** ProtocolMessage peerDataOperationRequestResponseMessage */
             peerDataOperationRequestResponseMessage?: (proto.Message.IPeerDataOperationRequestResponseMessage|null);
+
+            /** ProtocolMessage botFeedbackMessage */
+            botFeedbackMessage?: (proto.Message.IBotFeedbackMessage|null);
         }
 
         /** Represents a ProtocolMessage. */
@@ -16086,6 +19120,9 @@ export namespace proto {
 
             /** ProtocolMessage peerDataOperationRequestResponseMessage. */
             public peerDataOperationRequestResponseMessage?: (proto.Message.IPeerDataOperationRequestResponseMessage|null);
+
+            /** ProtocolMessage botFeedbackMessage. */
+            public botFeedbackMessage?: (proto.Message.IBotFeedbackMessage|null);
 
             /**
              * Creates a new ProtocolMessage instance using the specified properties.
@@ -16174,7 +19211,9 @@ export namespace proto {
                 SHARE_PHONE_NUMBER = 11,
                 MESSAGE_EDIT = 14,
                 PEER_DATA_OPERATION_REQUEST_MESSAGE = 16,
-                PEER_DATA_OPERATION_REQUEST_RESPONSE_MESSAGE = 17
+                PEER_DATA_OPERATION_REQUEST_RESPONSE_MESSAGE = 17,
+                REQUEST_WELCOME_MESSAGE = 18,
+                BOT_FEEDBACK_MESSAGE = 19
             }
         }
 
@@ -16970,6 +20009,9 @@ export namespace proto {
 
             /** StickerMessage isAvatar */
             isAvatar?: (boolean|null);
+
+            /** StickerMessage isAiSticker */
+            isAiSticker?: (boolean|null);
         }
 
         /** Represents a StickerMessage. */
@@ -17031,6 +20073,9 @@ export namespace proto {
 
             /** StickerMessage isAvatar. */
             public isAvatar: boolean;
+
+            /** StickerMessage isAiSticker. */
+            public isAiSticker: boolean;
 
             /**
              * Creates a new StickerMessage instance using the specified properties.
@@ -17948,6 +20993,96 @@ export namespace proto {
         }
     }
 
+    /** Properties of a MessageAddOnContextInfo. */
+    interface IMessageAddOnContextInfo {
+
+        /** MessageAddOnContextInfo messageAddOnDurationInSecs */
+        messageAddOnDurationInSecs?: (number|null);
+    }
+
+    /** Represents a MessageAddOnContextInfo. */
+    class MessageAddOnContextInfo implements IMessageAddOnContextInfo {
+
+        /**
+         * Constructs a new MessageAddOnContextInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IMessageAddOnContextInfo);
+
+        /** MessageAddOnContextInfo messageAddOnDurationInSecs. */
+        public messageAddOnDurationInSecs: number;
+
+        /**
+         * Creates a new MessageAddOnContextInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MessageAddOnContextInfo instance
+         */
+        public static create(properties?: proto.IMessageAddOnContextInfo): proto.MessageAddOnContextInfo;
+
+        /**
+         * Encodes the specified MessageAddOnContextInfo message. Does not implicitly {@link proto.MessageAddOnContextInfo.verify|verify} messages.
+         * @param message MessageAddOnContextInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IMessageAddOnContextInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified MessageAddOnContextInfo message, length delimited. Does not implicitly {@link proto.MessageAddOnContextInfo.verify|verify} messages.
+         * @param message MessageAddOnContextInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IMessageAddOnContextInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a MessageAddOnContextInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MessageAddOnContextInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.MessageAddOnContextInfo;
+
+        /**
+         * Decodes a MessageAddOnContextInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MessageAddOnContextInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.MessageAddOnContextInfo;
+
+        /**
+         * Verifies a MessageAddOnContextInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MessageAddOnContextInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MessageAddOnContextInfo
+         */
+        public static fromObject(object: { [k: string]: any }): proto.MessageAddOnContextInfo;
+
+        /**
+         * Creates a plain object from a MessageAddOnContextInfo message. Also converts values to other types if specified.
+         * @param message MessageAddOnContextInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.MessageAddOnContextInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MessageAddOnContextInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a MessageContextInfo. */
     interface IMessageContextInfo {
 
@@ -17962,6 +21097,15 @@ export namespace proto {
 
         /** MessageContextInfo paddingBytes */
         paddingBytes?: (Uint8Array|null);
+
+        /** MessageContextInfo messageAddOnDurationInSecs */
+        messageAddOnDurationInSecs?: (number|null);
+
+        /** MessageContextInfo botMessageSecret */
+        botMessageSecret?: (Uint8Array|null);
+
+        /** MessageContextInfo botMetadata */
+        botMetadata?: (proto.IBotMetadata|null);
     }
 
     /** Represents a MessageContextInfo. */
@@ -17984,6 +21128,15 @@ export namespace proto {
 
         /** MessageContextInfo paddingBytes. */
         public paddingBytes: Uint8Array;
+
+        /** MessageContextInfo messageAddOnDurationInSecs. */
+        public messageAddOnDurationInSecs: number;
+
+        /** MessageContextInfo botMessageSecret. */
+        public botMessageSecret: Uint8Array;
+
+        /** MessageContextInfo botMetadata. */
+        public botMetadata?: (proto.IBotMetadata|null);
 
         /**
          * Creates a new MessageContextInfo instance using the specified properties.
@@ -18159,6 +21312,108 @@ export namespace proto {
 
         /**
          * Converts this MessageKey to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a MessageSecretMessage. */
+    interface IMessageSecretMessage {
+
+        /** MessageSecretMessage version */
+        version?: (number|null);
+
+        /** MessageSecretMessage encIv */
+        encIv?: (Uint8Array|null);
+
+        /** MessageSecretMessage encPayload */
+        encPayload?: (Uint8Array|null);
+    }
+
+    /** Represents a MessageSecretMessage. */
+    class MessageSecretMessage implements IMessageSecretMessage {
+
+        /**
+         * Constructs a new MessageSecretMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IMessageSecretMessage);
+
+        /** MessageSecretMessage version. */
+        public version: number;
+
+        /** MessageSecretMessage encIv. */
+        public encIv: Uint8Array;
+
+        /** MessageSecretMessage encPayload. */
+        public encPayload: Uint8Array;
+
+        /**
+         * Creates a new MessageSecretMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MessageSecretMessage instance
+         */
+        public static create(properties?: proto.IMessageSecretMessage): proto.MessageSecretMessage;
+
+        /**
+         * Encodes the specified MessageSecretMessage message. Does not implicitly {@link proto.MessageSecretMessage.verify|verify} messages.
+         * @param message MessageSecretMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IMessageSecretMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified MessageSecretMessage message, length delimited. Does not implicitly {@link proto.MessageSecretMessage.verify|verify} messages.
+         * @param message MessageSecretMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IMessageSecretMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a MessageSecretMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MessageSecretMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.MessageSecretMessage;
+
+        /**
+         * Decodes a MessageSecretMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MessageSecretMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.MessageSecretMessage;
+
+        /**
+         * Verifies a MessageSecretMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MessageSecretMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MessageSecretMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.MessageSecretMessage;
+
+        /**
+         * Creates a plain object from a MessageSecretMessage message. Also converts values to other types if specified.
+         * @param message MessageSecretMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.MessageSecretMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MessageSecretMessage to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -18346,6 +21601,9 @@ export namespace proto {
 
         /** MsgOpaqueData encReactionEncIv */
         encReactionEncIv?: (Uint8Array|null);
+
+        /** MsgOpaqueData botMessageSecret */
+        botMessageSecret?: (Uint8Array|null);
     }
 
     /** Represents a MsgOpaqueData. */
@@ -18434,6 +21692,9 @@ export namespace proto {
 
         /** MsgOpaqueData encReactionEncIv. */
         public encReactionEncIv: Uint8Array;
+
+        /** MsgOpaqueData botMessageSecret. */
+        public botMessageSecret: Uint8Array;
 
         /**
          * Creates a new MsgOpaqueData instance using the specified properties.
@@ -19011,6 +22272,126 @@ export namespace proto {
 
         /**
          * Converts this NotificationMessageInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a NotificationSettings. */
+    interface INotificationSettings {
+
+        /** NotificationSettings messageVibrate */
+        messageVibrate?: (string|null);
+
+        /** NotificationSettings messagePopup */
+        messagePopup?: (string|null);
+
+        /** NotificationSettings messageLight */
+        messageLight?: (string|null);
+
+        /** NotificationSettings lowPriorityNotifications */
+        lowPriorityNotifications?: (boolean|null);
+
+        /** NotificationSettings reactionsMuted */
+        reactionsMuted?: (boolean|null);
+
+        /** NotificationSettings callVibrate */
+        callVibrate?: (string|null);
+    }
+
+    /** Represents a NotificationSettings. */
+    class NotificationSettings implements INotificationSettings {
+
+        /**
+         * Constructs a new NotificationSettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.INotificationSettings);
+
+        /** NotificationSettings messageVibrate. */
+        public messageVibrate: string;
+
+        /** NotificationSettings messagePopup. */
+        public messagePopup: string;
+
+        /** NotificationSettings messageLight. */
+        public messageLight: string;
+
+        /** NotificationSettings lowPriorityNotifications. */
+        public lowPriorityNotifications: boolean;
+
+        /** NotificationSettings reactionsMuted. */
+        public reactionsMuted: boolean;
+
+        /** NotificationSettings callVibrate. */
+        public callVibrate: string;
+
+        /**
+         * Creates a new NotificationSettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns NotificationSettings instance
+         */
+        public static create(properties?: proto.INotificationSettings): proto.NotificationSettings;
+
+        /**
+         * Encodes the specified NotificationSettings message. Does not implicitly {@link proto.NotificationSettings.verify|verify} messages.
+         * @param message NotificationSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.INotificationSettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified NotificationSettings message, length delimited. Does not implicitly {@link proto.NotificationSettings.verify|verify} messages.
+         * @param message NotificationSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.INotificationSettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a NotificationSettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns NotificationSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.NotificationSettings;
+
+        /**
+         * Decodes a NotificationSettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns NotificationSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.NotificationSettings;
+
+        /**
+         * Verifies a NotificationSettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a NotificationSettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns NotificationSettings
+         */
+        public static fromObject(object: { [k: string]: any }): proto.NotificationSettings;
+
+        /**
+         * Creates a plain object from a NotificationSettings message. Also converts values to other types if specified.
+         * @param message NotificationSettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.NotificationSettings, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this NotificationSettings to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -19815,6 +23196,130 @@ export namespace proto {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a PinInChat. */
+    interface IPinInChat {
+
+        /** PinInChat type */
+        type?: (proto.PinInChat.Type|null);
+
+        /** PinInChat key */
+        key?: (proto.IMessageKey|null);
+
+        /** PinInChat senderTimestampMs */
+        senderTimestampMs?: (number|Long|null);
+
+        /** PinInChat serverTimestampMs */
+        serverTimestampMs?: (number|Long|null);
+
+        /** PinInChat messageAddOnContextInfo */
+        messageAddOnContextInfo?: (proto.IMessageAddOnContextInfo|null);
+    }
+
+    /** Represents a PinInChat. */
+    class PinInChat implements IPinInChat {
+
+        /**
+         * Constructs a new PinInChat.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IPinInChat);
+
+        /** PinInChat type. */
+        public type: proto.PinInChat.Type;
+
+        /** PinInChat key. */
+        public key?: (proto.IMessageKey|null);
+
+        /** PinInChat senderTimestampMs. */
+        public senderTimestampMs: (number|Long);
+
+        /** PinInChat serverTimestampMs. */
+        public serverTimestampMs: (number|Long);
+
+        /** PinInChat messageAddOnContextInfo. */
+        public messageAddOnContextInfo?: (proto.IMessageAddOnContextInfo|null);
+
+        /**
+         * Creates a new PinInChat instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PinInChat instance
+         */
+        public static create(properties?: proto.IPinInChat): proto.PinInChat;
+
+        /**
+         * Encodes the specified PinInChat message. Does not implicitly {@link proto.PinInChat.verify|verify} messages.
+         * @param message PinInChat message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IPinInChat, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PinInChat message, length delimited. Does not implicitly {@link proto.PinInChat.verify|verify} messages.
+         * @param message PinInChat message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IPinInChat, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PinInChat message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns PinInChat
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.PinInChat;
+
+        /**
+         * Decodes a PinInChat message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns PinInChat
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.PinInChat;
+
+        /**
+         * Verifies a PinInChat message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PinInChat message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PinInChat
+         */
+        public static fromObject(object: { [k: string]: any }): proto.PinInChat;
+
+        /**
+         * Creates a plain object from a PinInChat message. Also converts values to other types if specified.
+         * @param message PinInChat
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.PinInChat, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PinInChat to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace PinInChat {
+
+        /** Type enum. */
+        enum Type {
+            UNKNOWN_TYPE = 0,
+            PIN_FOR_ALL = 1,
+            UNPIN_FOR_ALL = 2
+        }
+    }
+
     /** Properties of a Point. */
     interface IPoint {
 
@@ -20325,6 +23830,216 @@ export namespace proto {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a PreKeySignalMessage. */
+    interface IPreKeySignalMessage {
+
+        /** PreKeySignalMessage registrationId */
+        registrationId?: (number|null);
+
+        /** PreKeySignalMessage preKeyId */
+        preKeyId?: (number|null);
+
+        /** PreKeySignalMessage signedPreKeyId */
+        signedPreKeyId?: (number|null);
+
+        /** PreKeySignalMessage baseKey */
+        baseKey?: (Uint8Array|null);
+
+        /** PreKeySignalMessage identityKey */
+        identityKey?: (Uint8Array|null);
+
+        /** PreKeySignalMessage message */
+        message?: (Uint8Array|null);
+    }
+
+    /** Represents a PreKeySignalMessage. */
+    class PreKeySignalMessage implements IPreKeySignalMessage {
+
+        /**
+         * Constructs a new PreKeySignalMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IPreKeySignalMessage);
+
+        /** PreKeySignalMessage registrationId. */
+        public registrationId: number;
+
+        /** PreKeySignalMessage preKeyId. */
+        public preKeyId: number;
+
+        /** PreKeySignalMessage signedPreKeyId. */
+        public signedPreKeyId: number;
+
+        /** PreKeySignalMessage baseKey. */
+        public baseKey: Uint8Array;
+
+        /** PreKeySignalMessage identityKey. */
+        public identityKey: Uint8Array;
+
+        /** PreKeySignalMessage message. */
+        public message: Uint8Array;
+
+        /**
+         * Creates a new PreKeySignalMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PreKeySignalMessage instance
+         */
+        public static create(properties?: proto.IPreKeySignalMessage): proto.PreKeySignalMessage;
+
+        /**
+         * Encodes the specified PreKeySignalMessage message. Does not implicitly {@link proto.PreKeySignalMessage.verify|verify} messages.
+         * @param message PreKeySignalMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IPreKeySignalMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PreKeySignalMessage message, length delimited. Does not implicitly {@link proto.PreKeySignalMessage.verify|verify} messages.
+         * @param message PreKeySignalMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IPreKeySignalMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PreKeySignalMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns PreKeySignalMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.PreKeySignalMessage;
+
+        /**
+         * Decodes a PreKeySignalMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns PreKeySignalMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.PreKeySignalMessage;
+
+        /**
+         * Verifies a PreKeySignalMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PreKeySignalMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PreKeySignalMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.PreKeySignalMessage;
+
+        /**
+         * Creates a plain object from a PreKeySignalMessage message. Also converts values to other types if specified.
+         * @param message PreKeySignalMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.PreKeySignalMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PreKeySignalMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a PremiumMessageInfo. */
+    interface IPremiumMessageInfo {
+
+        /** PremiumMessageInfo serverCampaignId */
+        serverCampaignId?: (string|null);
+    }
+
+    /** Represents a PremiumMessageInfo. */
+    class PremiumMessageInfo implements IPremiumMessageInfo {
+
+        /**
+         * Constructs a new PremiumMessageInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IPremiumMessageInfo);
+
+        /** PremiumMessageInfo serverCampaignId. */
+        public serverCampaignId: string;
+
+        /**
+         * Creates a new PremiumMessageInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PremiumMessageInfo instance
+         */
+        public static create(properties?: proto.IPremiumMessageInfo): proto.PremiumMessageInfo;
+
+        /**
+         * Encodes the specified PremiumMessageInfo message. Does not implicitly {@link proto.PremiumMessageInfo.verify|verify} messages.
+         * @param message PremiumMessageInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IPremiumMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PremiumMessageInfo message, length delimited. Does not implicitly {@link proto.PremiumMessageInfo.verify|verify} messages.
+         * @param message PremiumMessageInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IPremiumMessageInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PremiumMessageInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns PremiumMessageInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.PremiumMessageInfo;
+
+        /**
+         * Decodes a PremiumMessageInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns PremiumMessageInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.PremiumMessageInfo;
+
+        /**
+         * Verifies a PremiumMessageInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PremiumMessageInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PremiumMessageInfo
+         */
+        public static fromObject(object: { [k: string]: any }): proto.PremiumMessageInfo;
+
+        /**
+         * Creates a plain object from a PremiumMessageInfo message. Also converts values to other types if specified.
+         * @param message PremiumMessageInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.PremiumMessageInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PremiumMessageInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a Pushname. */
     interface IPushname {
 
@@ -20419,6 +24134,419 @@ export namespace proto {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a QP. */
+    interface IQP {
+    }
+
+    /** Represents a QP. */
+    class QP implements IQP {
+
+        /**
+         * Constructs a new QP.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.IQP);
+
+        /**
+         * Creates a new QP instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QP instance
+         */
+        public static create(properties?: proto.IQP): proto.QP;
+
+        /**
+         * Encodes the specified QP message. Does not implicitly {@link proto.QP.verify|verify} messages.
+         * @param message QP message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.IQP, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QP message, length delimited. Does not implicitly {@link proto.QP.verify|verify} messages.
+         * @param message QP message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.IQP, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QP message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QP
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.QP;
+
+        /**
+         * Decodes a QP message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QP
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.QP;
+
+        /**
+         * Verifies a QP message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QP message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QP
+         */
+        public static fromObject(object: { [k: string]: any }): proto.QP;
+
+        /**
+         * Creates a plain object from a QP message. Also converts values to other types if specified.
+         * @param message QP
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.QP, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QP to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace QP {
+
+        /** ClauseType enum. */
+        enum ClauseType {
+            AND = 1,
+            OR = 2,
+            NOR = 3
+        }
+
+        /** Properties of a Filter. */
+        interface IFilter {
+
+            /** Filter filterName */
+            filterName: string;
+
+            /** Filter parameters */
+            parameters?: (proto.QP.IFilterParameters[]|null);
+
+            /** Filter filterResult */
+            filterResult?: (proto.QP.FilterResult|null);
+
+            /** Filter clientNotSupportedConfig */
+            clientNotSupportedConfig: proto.QP.FilterClientNotSupportedConfig;
+        }
+
+        /** Represents a Filter. */
+        class Filter implements IFilter {
+
+            /**
+             * Constructs a new Filter.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.QP.IFilter);
+
+            /** Filter filterName. */
+            public filterName: string;
+
+            /** Filter parameters. */
+            public parameters: proto.QP.IFilterParameters[];
+
+            /** Filter filterResult. */
+            public filterResult: proto.QP.FilterResult;
+
+            /** Filter clientNotSupportedConfig. */
+            public clientNotSupportedConfig: proto.QP.FilterClientNotSupportedConfig;
+
+            /**
+             * Creates a new Filter instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Filter instance
+             */
+            public static create(properties?: proto.QP.IFilter): proto.QP.Filter;
+
+            /**
+             * Encodes the specified Filter message. Does not implicitly {@link proto.QP.Filter.verify|verify} messages.
+             * @param message Filter message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.QP.IFilter, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Filter message, length delimited. Does not implicitly {@link proto.QP.Filter.verify|verify} messages.
+             * @param message Filter message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.QP.IFilter, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Filter message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns Filter
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.QP.Filter;
+
+            /**
+             * Decodes a Filter message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns Filter
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.QP.Filter;
+
+            /**
+             * Verifies a Filter message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Filter message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Filter
+             */
+            public static fromObject(object: { [k: string]: any }): proto.QP.Filter;
+
+            /**
+             * Creates a plain object from a Filter message. Also converts values to other types if specified.
+             * @param message Filter
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.QP.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Filter to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a FilterClause. */
+        interface IFilterClause {
+
+            /** FilterClause clauseType */
+            clauseType: proto.QP.ClauseType;
+
+            /** FilterClause clauses */
+            clauses?: (proto.QP.IFilterClause[]|null);
+
+            /** FilterClause filters */
+            filters?: (proto.QP.IFilter[]|null);
+        }
+
+        /** Represents a FilterClause. */
+        class FilterClause implements IFilterClause {
+
+            /**
+             * Constructs a new FilterClause.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.QP.IFilterClause);
+
+            /** FilterClause clauseType. */
+            public clauseType: proto.QP.ClauseType;
+
+            /** FilterClause clauses. */
+            public clauses: proto.QP.IFilterClause[];
+
+            /** FilterClause filters. */
+            public filters: proto.QP.IFilter[];
+
+            /**
+             * Creates a new FilterClause instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns FilterClause instance
+             */
+            public static create(properties?: proto.QP.IFilterClause): proto.QP.FilterClause;
+
+            /**
+             * Encodes the specified FilterClause message. Does not implicitly {@link proto.QP.FilterClause.verify|verify} messages.
+             * @param message FilterClause message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.QP.IFilterClause, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified FilterClause message, length delimited. Does not implicitly {@link proto.QP.FilterClause.verify|verify} messages.
+             * @param message FilterClause message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.QP.IFilterClause, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a FilterClause message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns FilterClause
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.QP.FilterClause;
+
+            /**
+             * Decodes a FilterClause message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns FilterClause
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.QP.FilterClause;
+
+            /**
+             * Verifies a FilterClause message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a FilterClause message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns FilterClause
+             */
+            public static fromObject(object: { [k: string]: any }): proto.QP.FilterClause;
+
+            /**
+             * Creates a plain object from a FilterClause message. Also converts values to other types if specified.
+             * @param message FilterClause
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.QP.FilterClause, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this FilterClause to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** FilterClientNotSupportedConfig enum. */
+        enum FilterClientNotSupportedConfig {
+            PASS_BY_DEFAULT = 1,
+            FAIL_BY_DEFAULT = 2
+        }
+
+        /** Properties of a FilterParameters. */
+        interface IFilterParameters {
+
+            /** FilterParameters key */
+            key?: (string|null);
+
+            /** FilterParameters value */
+            value?: (string|null);
+        }
+
+        /** Represents a FilterParameters. */
+        class FilterParameters implements IFilterParameters {
+
+            /**
+             * Constructs a new FilterParameters.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.QP.IFilterParameters);
+
+            /** FilterParameters key. */
+            public key: string;
+
+            /** FilterParameters value. */
+            public value: string;
+
+            /**
+             * Creates a new FilterParameters instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns FilterParameters instance
+             */
+            public static create(properties?: proto.QP.IFilterParameters): proto.QP.FilterParameters;
+
+            /**
+             * Encodes the specified FilterParameters message. Does not implicitly {@link proto.QP.FilterParameters.verify|verify} messages.
+             * @param message FilterParameters message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.QP.IFilterParameters, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified FilterParameters message, length delimited. Does not implicitly {@link proto.QP.FilterParameters.verify|verify} messages.
+             * @param message FilterParameters message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.QP.IFilterParameters, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a FilterParameters message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns FilterParameters
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.QP.FilterParameters;
+
+            /**
+             * Decodes a FilterParameters message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns FilterParameters
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.QP.FilterParameters;
+
+            /**
+             * Verifies a FilterParameters message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a FilterParameters message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns FilterParameters
+             */
+            public static fromObject(object: { [k: string]: any }): proto.QP.FilterParameters;
+
+            /**
+             * Creates a plain object from a FilterParameters message. Also converts values to other types if specified.
+             * @param message FilterParameters
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.QP.FilterParameters, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this FilterParameters to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** FilterResult enum. */
+        enum FilterResult {
+            TRUE = 1,
+            FALSE = 2,
+            UNKNOWN = 3
+        }
     }
 
     /** Properties of a Reaction. */
@@ -20722,6 +24850,216 @@ export namespace proto {
 
         /**
          * Converts this RecordStructure to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a SenderKeyDistributionMessage. */
+    interface ISenderKeyDistributionMessage {
+
+        /** SenderKeyDistributionMessage id */
+        id?: (number|null);
+
+        /** SenderKeyDistributionMessage iteration */
+        iteration?: (number|null);
+
+        /** SenderKeyDistributionMessage chainKey */
+        chainKey?: (Uint8Array|null);
+
+        /** SenderKeyDistributionMessage signingKey */
+        signingKey?: (Uint8Array|null);
+    }
+
+    /** Represents a SenderKeyDistributionMessage. */
+    class SenderKeyDistributionMessage implements ISenderKeyDistributionMessage {
+
+        /**
+         * Constructs a new SenderKeyDistributionMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.ISenderKeyDistributionMessage);
+
+        /** SenderKeyDistributionMessage id. */
+        public id: number;
+
+        /** SenderKeyDistributionMessage iteration. */
+        public iteration: number;
+
+        /** SenderKeyDistributionMessage chainKey. */
+        public chainKey: Uint8Array;
+
+        /** SenderKeyDistributionMessage signingKey. */
+        public signingKey: Uint8Array;
+
+        /**
+         * Creates a new SenderKeyDistributionMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SenderKeyDistributionMessage instance
+         */
+        public static create(properties?: proto.ISenderKeyDistributionMessage): proto.SenderKeyDistributionMessage;
+
+        /**
+         * Encodes the specified SenderKeyDistributionMessage message. Does not implicitly {@link proto.SenderKeyDistributionMessage.verify|verify} messages.
+         * @param message SenderKeyDistributionMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.ISenderKeyDistributionMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified SenderKeyDistributionMessage message, length delimited. Does not implicitly {@link proto.SenderKeyDistributionMessage.verify|verify} messages.
+         * @param message SenderKeyDistributionMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.ISenderKeyDistributionMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a SenderKeyDistributionMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SenderKeyDistributionMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SenderKeyDistributionMessage;
+
+        /**
+         * Decodes a SenderKeyDistributionMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SenderKeyDistributionMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SenderKeyDistributionMessage;
+
+        /**
+         * Verifies a SenderKeyDistributionMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SenderKeyDistributionMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SenderKeyDistributionMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.SenderKeyDistributionMessage;
+
+        /**
+         * Creates a plain object from a SenderKeyDistributionMessage message. Also converts values to other types if specified.
+         * @param message SenderKeyDistributionMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.SenderKeyDistributionMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SenderKeyDistributionMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a SenderKeyMessage. */
+    interface ISenderKeyMessage {
+
+        /** SenderKeyMessage id */
+        id?: (number|null);
+
+        /** SenderKeyMessage iteration */
+        iteration?: (number|null);
+
+        /** SenderKeyMessage ciphertext */
+        ciphertext?: (Uint8Array|null);
+    }
+
+    /** Represents a SenderKeyMessage. */
+    class SenderKeyMessage implements ISenderKeyMessage {
+
+        /**
+         * Constructs a new SenderKeyMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.ISenderKeyMessage);
+
+        /** SenderKeyMessage id. */
+        public id: number;
+
+        /** SenderKeyMessage iteration. */
+        public iteration: number;
+
+        /** SenderKeyMessage ciphertext. */
+        public ciphertext: Uint8Array;
+
+        /**
+         * Creates a new SenderKeyMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SenderKeyMessage instance
+         */
+        public static create(properties?: proto.ISenderKeyMessage): proto.SenderKeyMessage;
+
+        /**
+         * Encodes the specified SenderKeyMessage message. Does not implicitly {@link proto.SenderKeyMessage.verify|verify} messages.
+         * @param message SenderKeyMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.ISenderKeyMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified SenderKeyMessage message, length delimited. Does not implicitly {@link proto.SenderKeyMessage.verify|verify} messages.
+         * @param message SenderKeyMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.ISenderKeyMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a SenderKeyMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SenderKeyMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SenderKeyMessage;
+
+        /**
+         * Decodes a SenderKeyMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SenderKeyMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SenderKeyMessage;
+
+        /**
+         * Verifies a SenderKeyMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SenderKeyMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SenderKeyMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.SenderKeyMessage;
+
+        /**
+         * Creates a plain object from a SenderKeyMessage message. Also converts values to other types if specified.
+         * @param message SenderKeyMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.SenderKeyMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SenderKeyMessage to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -22014,6 +26352,114 @@ export namespace proto {
         }
     }
 
+    /** Properties of a SignalMessage. */
+    interface ISignalMessage {
+
+        /** SignalMessage ratchetKey */
+        ratchetKey?: (Uint8Array|null);
+
+        /** SignalMessage counter */
+        counter?: (number|null);
+
+        /** SignalMessage previousCounter */
+        previousCounter?: (number|null);
+
+        /** SignalMessage ciphertext */
+        ciphertext?: (Uint8Array|null);
+    }
+
+    /** Represents a SignalMessage. */
+    class SignalMessage implements ISignalMessage {
+
+        /**
+         * Constructs a new SignalMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: proto.ISignalMessage);
+
+        /** SignalMessage ratchetKey. */
+        public ratchetKey: Uint8Array;
+
+        /** SignalMessage counter. */
+        public counter: number;
+
+        /** SignalMessage previousCounter. */
+        public previousCounter: number;
+
+        /** SignalMessage ciphertext. */
+        public ciphertext: Uint8Array;
+
+        /**
+         * Creates a new SignalMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SignalMessage instance
+         */
+        public static create(properties?: proto.ISignalMessage): proto.SignalMessage;
+
+        /**
+         * Encodes the specified SignalMessage message. Does not implicitly {@link proto.SignalMessage.verify|verify} messages.
+         * @param message SignalMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: proto.ISignalMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified SignalMessage message, length delimited. Does not implicitly {@link proto.SignalMessage.verify|verify} messages.
+         * @param message SignalMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: proto.ISignalMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a SignalMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SignalMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SignalMessage;
+
+        /**
+         * Decodes a SignalMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SignalMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SignalMessage;
+
+        /**
+         * Verifies a SignalMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SignalMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SignalMessage
+         */
+        public static fromObject(object: { [k: string]: any }): proto.SignalMessage;
+
+        /**
+         * Creates a plain object from a SignalMessage message. Also converts values to other types if specified.
+         * @param message SignalMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: proto.SignalMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SignalMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SignedPreKeyRecordStructure. */
     interface ISignedPreKeyRecordStructure {
 
@@ -22580,6 +27026,24 @@ export namespace proto {
 
         /** SyncActionValue pnForLidChatAction */
         pnForLidChatAction?: (proto.SyncActionValue.IPnForLidChatAction|null);
+
+        /** SyncActionValue marketingMessageAction */
+        marketingMessageAction?: (proto.SyncActionValue.IMarketingMessageAction|null);
+
+        /** SyncActionValue marketingMessageBroadcastAction */
+        marketingMessageBroadcastAction?: (proto.SyncActionValue.IMarketingMessageBroadcastAction|null);
+
+        /** SyncActionValue externalWebBetaAction */
+        externalWebBetaAction?: (proto.SyncActionValue.IExternalWebBetaAction|null);
+
+        /** SyncActionValue privacySettingRelayAllCalls */
+        privacySettingRelayAllCalls?: (proto.SyncActionValue.IPrivacySettingRelayAllCalls|null);
+
+        /** SyncActionValue callLogAction */
+        callLogAction?: (proto.SyncActionValue.ICallLogAction|null);
+
+        /** SyncActionValue statusPrivacy */
+        statusPrivacy?: (proto.SyncActionValue.IStatusPrivacyAction|null);
     }
 
     /** Represents a SyncActionValue. */
@@ -22686,6 +27150,24 @@ export namespace proto {
 
         /** SyncActionValue pnForLidChatAction. */
         public pnForLidChatAction?: (proto.SyncActionValue.IPnForLidChatAction|null);
+
+        /** SyncActionValue marketingMessageAction. */
+        public marketingMessageAction?: (proto.SyncActionValue.IMarketingMessageAction|null);
+
+        /** SyncActionValue marketingMessageBroadcastAction. */
+        public marketingMessageBroadcastAction?: (proto.SyncActionValue.IMarketingMessageBroadcastAction|null);
+
+        /** SyncActionValue externalWebBetaAction. */
+        public externalWebBetaAction?: (proto.SyncActionValue.IExternalWebBetaAction|null);
+
+        /** SyncActionValue privacySettingRelayAllCalls. */
+        public privacySettingRelayAllCalls?: (proto.SyncActionValue.IPrivacySettingRelayAllCalls|null);
+
+        /** SyncActionValue callLogAction. */
+        public callLogAction?: (proto.SyncActionValue.ICallLogAction|null);
+
+        /** SyncActionValue statusPrivacy. */
+        public statusPrivacy?: (proto.SyncActionValue.IStatusPrivacyAction|null);
 
         /**
          * Creates a new SyncActionValue instance using the specified properties.
@@ -23043,6 +27525,96 @@ export namespace proto {
 
             /**
              * Converts this ArchiveChatAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a CallLogAction. */
+        interface ICallLogAction {
+
+            /** CallLogAction callLogRecord */
+            callLogRecord?: (proto.ICallLogRecord|null);
+        }
+
+        /** Represents a CallLogAction. */
+        class CallLogAction implements ICallLogAction {
+
+            /**
+             * Constructs a new CallLogAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.ICallLogAction);
+
+            /** CallLogAction callLogRecord. */
+            public callLogRecord?: (proto.ICallLogRecord|null);
+
+            /**
+             * Creates a new CallLogAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CallLogAction instance
+             */
+            public static create(properties?: proto.SyncActionValue.ICallLogAction): proto.SyncActionValue.CallLogAction;
+
+            /**
+             * Encodes the specified CallLogAction message. Does not implicitly {@link proto.SyncActionValue.CallLogAction.verify|verify} messages.
+             * @param message CallLogAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.ICallLogAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CallLogAction message, length delimited. Does not implicitly {@link proto.SyncActionValue.CallLogAction.verify|verify} messages.
+             * @param message CallLogAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.ICallLogAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CallLogAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CallLogAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.CallLogAction;
+
+            /**
+             * Decodes a CallLogAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CallLogAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.CallLogAction;
+
+            /**
+             * Verifies a CallLogAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CallLogAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CallLogAction
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.CallLogAction;
+
+            /**
+             * Creates a plain object from a CallLogAction message. Also converts values to other types if specified.
+             * @param message CallLogAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.CallLogAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CallLogAction to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -23606,6 +28178,96 @@ export namespace proto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of an ExternalWebBetaAction. */
+        interface IExternalWebBetaAction {
+
+            /** ExternalWebBetaAction isOptIn */
+            isOptIn?: (boolean|null);
+        }
+
+        /** Represents an ExternalWebBetaAction. */
+        class ExternalWebBetaAction implements IExternalWebBetaAction {
+
+            /**
+             * Constructs a new ExternalWebBetaAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.IExternalWebBetaAction);
+
+            /** ExternalWebBetaAction isOptIn. */
+            public isOptIn: boolean;
+
+            /**
+             * Creates a new ExternalWebBetaAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExternalWebBetaAction instance
+             */
+            public static create(properties?: proto.SyncActionValue.IExternalWebBetaAction): proto.SyncActionValue.ExternalWebBetaAction;
+
+            /**
+             * Encodes the specified ExternalWebBetaAction message. Does not implicitly {@link proto.SyncActionValue.ExternalWebBetaAction.verify|verify} messages.
+             * @param message ExternalWebBetaAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.IExternalWebBetaAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ExternalWebBetaAction message, length delimited. Does not implicitly {@link proto.SyncActionValue.ExternalWebBetaAction.verify|verify} messages.
+             * @param message ExternalWebBetaAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.IExternalWebBetaAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an ExternalWebBetaAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExternalWebBetaAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.ExternalWebBetaAction;
+
+            /**
+             * Decodes an ExternalWebBetaAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExternalWebBetaAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.ExternalWebBetaAction;
+
+            /**
+             * Verifies an ExternalWebBetaAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExternalWebBetaAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExternalWebBetaAction
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.ExternalWebBetaAction;
+
+            /**
+             * Creates a plain object from an ExternalWebBetaAction message. Also converts values to other types if specified.
+             * @param message ExternalWebBetaAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.ExternalWebBetaAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExternalWebBetaAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a KeyExpiration. */
         interface IKeyExpiration {
 
@@ -24075,6 +28737,230 @@ export namespace proto {
 
             /**
              * Converts this MarkChatAsReadAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a MarketingMessageAction. */
+        interface IMarketingMessageAction {
+
+            /** MarketingMessageAction name */
+            name?: (string|null);
+
+            /** MarketingMessageAction message */
+            message?: (string|null);
+
+            /** MarketingMessageAction type */
+            type?: (proto.SyncActionValue.MarketingMessageAction.MarketingMessagePrototypeType|null);
+
+            /** MarketingMessageAction createdAt */
+            createdAt?: (number|Long|null);
+
+            /** MarketingMessageAction lastSentAt */
+            lastSentAt?: (number|Long|null);
+
+            /** MarketingMessageAction isDeleted */
+            isDeleted?: (boolean|null);
+
+            /** MarketingMessageAction mediaId */
+            mediaId?: (string|null);
+        }
+
+        /** Represents a MarketingMessageAction. */
+        class MarketingMessageAction implements IMarketingMessageAction {
+
+            /**
+             * Constructs a new MarketingMessageAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.IMarketingMessageAction);
+
+            /** MarketingMessageAction name. */
+            public name: string;
+
+            /** MarketingMessageAction message. */
+            public message: string;
+
+            /** MarketingMessageAction type. */
+            public type: proto.SyncActionValue.MarketingMessageAction.MarketingMessagePrototypeType;
+
+            /** MarketingMessageAction createdAt. */
+            public createdAt: (number|Long);
+
+            /** MarketingMessageAction lastSentAt. */
+            public lastSentAt: (number|Long);
+
+            /** MarketingMessageAction isDeleted. */
+            public isDeleted: boolean;
+
+            /** MarketingMessageAction mediaId. */
+            public mediaId: string;
+
+            /**
+             * Creates a new MarketingMessageAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MarketingMessageAction instance
+             */
+            public static create(properties?: proto.SyncActionValue.IMarketingMessageAction): proto.SyncActionValue.MarketingMessageAction;
+
+            /**
+             * Encodes the specified MarketingMessageAction message. Does not implicitly {@link proto.SyncActionValue.MarketingMessageAction.verify|verify} messages.
+             * @param message MarketingMessageAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.IMarketingMessageAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified MarketingMessageAction message, length delimited. Does not implicitly {@link proto.SyncActionValue.MarketingMessageAction.verify|verify} messages.
+             * @param message MarketingMessageAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.IMarketingMessageAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a MarketingMessageAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MarketingMessageAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.MarketingMessageAction;
+
+            /**
+             * Decodes a MarketingMessageAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MarketingMessageAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.MarketingMessageAction;
+
+            /**
+             * Verifies a MarketingMessageAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MarketingMessageAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MarketingMessageAction
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.MarketingMessageAction;
+
+            /**
+             * Creates a plain object from a MarketingMessageAction message. Also converts values to other types if specified.
+             * @param message MarketingMessageAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.MarketingMessageAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MarketingMessageAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MarketingMessageAction {
+
+            /** MarketingMessagePrototypeType enum. */
+            enum MarketingMessagePrototypeType {
+                PERSONALIZED = 0
+            }
+        }
+
+        /** Properties of a MarketingMessageBroadcastAction. */
+        interface IMarketingMessageBroadcastAction {
+
+            /** MarketingMessageBroadcastAction repliedCount */
+            repliedCount?: (number|null);
+        }
+
+        /** Represents a MarketingMessageBroadcastAction. */
+        class MarketingMessageBroadcastAction implements IMarketingMessageBroadcastAction {
+
+            /**
+             * Constructs a new MarketingMessageBroadcastAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.IMarketingMessageBroadcastAction);
+
+            /** MarketingMessageBroadcastAction repliedCount. */
+            public repliedCount: number;
+
+            /**
+             * Creates a new MarketingMessageBroadcastAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MarketingMessageBroadcastAction instance
+             */
+            public static create(properties?: proto.SyncActionValue.IMarketingMessageBroadcastAction): proto.SyncActionValue.MarketingMessageBroadcastAction;
+
+            /**
+             * Encodes the specified MarketingMessageBroadcastAction message. Does not implicitly {@link proto.SyncActionValue.MarketingMessageBroadcastAction.verify|verify} messages.
+             * @param message MarketingMessageBroadcastAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.IMarketingMessageBroadcastAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified MarketingMessageBroadcastAction message, length delimited. Does not implicitly {@link proto.SyncActionValue.MarketingMessageBroadcastAction.verify|verify} messages.
+             * @param message MarketingMessageBroadcastAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.IMarketingMessageBroadcastAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a MarketingMessageBroadcastAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MarketingMessageBroadcastAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.MarketingMessageBroadcastAction;
+
+            /**
+             * Decodes a MarketingMessageBroadcastAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MarketingMessageBroadcastAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.MarketingMessageBroadcastAction;
+
+            /**
+             * Verifies a MarketingMessageBroadcastAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MarketingMessageBroadcastAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MarketingMessageBroadcastAction
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.MarketingMessageBroadcastAction;
+
+            /**
+             * Creates a plain object from a MarketingMessageBroadcastAction message. Also converts values to other types if specified.
+             * @param message MarketingMessageBroadcastAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.MarketingMessageBroadcastAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MarketingMessageBroadcastAction to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -24627,6 +29513,96 @@ export namespace proto {
 
             /**
              * Converts this PrimaryVersionAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a PrivacySettingRelayAllCalls. */
+        interface IPrivacySettingRelayAllCalls {
+
+            /** PrivacySettingRelayAllCalls isEnabled */
+            isEnabled?: (boolean|null);
+        }
+
+        /** Represents a PrivacySettingRelayAllCalls. */
+        class PrivacySettingRelayAllCalls implements IPrivacySettingRelayAllCalls {
+
+            /**
+             * Constructs a new PrivacySettingRelayAllCalls.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.IPrivacySettingRelayAllCalls);
+
+            /** PrivacySettingRelayAllCalls isEnabled. */
+            public isEnabled: boolean;
+
+            /**
+             * Creates a new PrivacySettingRelayAllCalls instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns PrivacySettingRelayAllCalls instance
+             */
+            public static create(properties?: proto.SyncActionValue.IPrivacySettingRelayAllCalls): proto.SyncActionValue.PrivacySettingRelayAllCalls;
+
+            /**
+             * Encodes the specified PrivacySettingRelayAllCalls message. Does not implicitly {@link proto.SyncActionValue.PrivacySettingRelayAllCalls.verify|verify} messages.
+             * @param message PrivacySettingRelayAllCalls message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.IPrivacySettingRelayAllCalls, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified PrivacySettingRelayAllCalls message, length delimited. Does not implicitly {@link proto.SyncActionValue.PrivacySettingRelayAllCalls.verify|verify} messages.
+             * @param message PrivacySettingRelayAllCalls message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.IPrivacySettingRelayAllCalls, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a PrivacySettingRelayAllCalls message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns PrivacySettingRelayAllCalls
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.PrivacySettingRelayAllCalls;
+
+            /**
+             * Decodes a PrivacySettingRelayAllCalls message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns PrivacySettingRelayAllCalls
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.PrivacySettingRelayAllCalls;
+
+            /**
+             * Verifies a PrivacySettingRelayAllCalls message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a PrivacySettingRelayAllCalls message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns PrivacySettingRelayAllCalls
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.PrivacySettingRelayAllCalls;
+
+            /**
+             * Creates a plain object from a PrivacySettingRelayAllCalls message. Also converts values to other types if specified.
+             * @param message PrivacySettingRelayAllCalls
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.PrivacySettingRelayAllCalls, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this PrivacySettingRelayAllCalls to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -25194,6 +30170,112 @@ export namespace proto {
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a StatusPrivacyAction. */
+        interface IStatusPrivacyAction {
+
+            /** StatusPrivacyAction mode */
+            mode?: (proto.SyncActionValue.StatusPrivacyAction.StatusDistributionMode|null);
+
+            /** StatusPrivacyAction userJid */
+            userJid?: (string[]|null);
+        }
+
+        /** Represents a StatusPrivacyAction. */
+        class StatusPrivacyAction implements IStatusPrivacyAction {
+
+            /**
+             * Constructs a new StatusPrivacyAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.SyncActionValue.IStatusPrivacyAction);
+
+            /** StatusPrivacyAction mode. */
+            public mode: proto.SyncActionValue.StatusPrivacyAction.StatusDistributionMode;
+
+            /** StatusPrivacyAction userJid. */
+            public userJid: string[];
+
+            /**
+             * Creates a new StatusPrivacyAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns StatusPrivacyAction instance
+             */
+            public static create(properties?: proto.SyncActionValue.IStatusPrivacyAction): proto.SyncActionValue.StatusPrivacyAction;
+
+            /**
+             * Encodes the specified StatusPrivacyAction message. Does not implicitly {@link proto.SyncActionValue.StatusPrivacyAction.verify|verify} messages.
+             * @param message StatusPrivacyAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.SyncActionValue.IStatusPrivacyAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified StatusPrivacyAction message, length delimited. Does not implicitly {@link proto.SyncActionValue.StatusPrivacyAction.verify|verify} messages.
+             * @param message StatusPrivacyAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.SyncActionValue.IStatusPrivacyAction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a StatusPrivacyAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns StatusPrivacyAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.SyncActionValue.StatusPrivacyAction;
+
+            /**
+             * Decodes a StatusPrivacyAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns StatusPrivacyAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.SyncActionValue.StatusPrivacyAction;
+
+            /**
+             * Verifies a StatusPrivacyAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a StatusPrivacyAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns StatusPrivacyAction
+             */
+            public static fromObject(object: { [k: string]: any }): proto.SyncActionValue.StatusPrivacyAction;
+
+            /**
+             * Creates a plain object from a StatusPrivacyAction message. Also converts values to other types if specified.
+             * @param message StatusPrivacyAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.SyncActionValue.StatusPrivacyAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this StatusPrivacyAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace StatusPrivacyAction {
+
+            /** StatusDistributionMode enum. */
+            enum StatusDistributionMode {
+                ALLOW_LIST = 0,
+                DENY_LIST = 1,
+                CONTACTS = 2
+            }
         }
 
         /** Properties of a StickerAction. */
@@ -28051,6 +33133,18 @@ export namespace proto {
 
         /** WebMessageInfo revokeMessageTimestamp */
         revokeMessageTimestamp?: (number|Long|null);
+
+        /** WebMessageInfo pinInChat */
+        pinInChat?: (proto.IPinInChat|null);
+
+        /** WebMessageInfo premiumMessageInfo */
+        premiumMessageInfo?: (proto.IPremiumMessageInfo|null);
+
+        /** WebMessageInfo is1PBizBotMessage */
+        is1PBizBotMessage?: (boolean|null);
+
+        /** WebMessageInfo isGroupHistoryMessage */
+        isGroupHistoryMessage?: (boolean|null);
     }
 
     /** Represents a WebMessageInfo. */
@@ -28190,6 +33284,18 @@ export namespace proto {
 
         /** WebMessageInfo revokeMessageTimestamp. */
         public revokeMessageTimestamp: (number|Long);
+
+        /** WebMessageInfo pinInChat. */
+        public pinInChat?: (proto.IPinInChat|null);
+
+        /** WebMessageInfo premiumMessageInfo. */
+        public premiumMessageInfo?: (proto.IPremiumMessageInfo|null);
+
+        /** WebMessageInfo is1PBizBotMessage. */
+        public is1PBizBotMessage: boolean;
+
+        /** WebMessageInfo isGroupHistoryMessage. */
+        public isGroupHistoryMessage: boolean;
 
         /**
          * Creates a new WebMessageInfo instance using the specified properties.
@@ -28445,7 +33551,38 @@ export namespace proto {
             COMMUNITY_PARENT_GROUP_SUBJECT_CHANGED = 158,
             CAG_INVITE_AUTO_ADD = 159,
             BIZ_CHAT_ASSIGNMENT_UNASSIGN = 160,
-            CAG_INVITE_AUTO_JOINED = 161
+            CAG_INVITE_AUTO_JOINED = 161,
+            SCHEDULED_CALL_START_MESSAGE = 162,
+            COMMUNITY_INVITE_RICH = 163,
+            COMMUNITY_INVITE_AUTO_ADD_RICH = 164,
+            SUB_GROUP_INVITE_RICH = 165,
+            SUB_GROUP_PARTICIPANT_ADD_RICH = 166,
+            COMMUNITY_LINK_PARENT_GROUP_RICH = 167,
+            COMMUNITY_PARTICIPANT_ADD_RICH = 168,
+            SILENCED_UNKNOWN_CALLER_AUDIO = 169,
+            SILENCED_UNKNOWN_CALLER_VIDEO = 170,
+            GROUP_MEMBER_ADD_MODE = 171,
+            GROUP_MEMBERSHIP_JOIN_APPROVAL_REQUEST_NON_ADMIN_ADD = 172,
+            COMMUNITY_CHANGE_DESCRIPTION = 173,
+            SENDER_INVITE = 174,
+            RECEIVER_INVITE = 175,
+            COMMUNITY_ALLOW_MEMBER_ADDED_GROUPS = 176,
+            PINNED_MESSAGE_IN_CHAT = 177,
+            PAYMENT_INVITE_SETUP_INVITER = 178,
+            PAYMENT_INVITE_SETUP_INVITEE_RECEIVE_ONLY = 179,
+            PAYMENT_INVITE_SETUP_INVITEE_SEND_AND_RECEIVE = 180,
+            LINKED_GROUP_CALL_START = 181,
+            REPORT_TO_ADMIN_ENABLED_STATUS = 182,
+            EMPTY_SUBGROUP_CREATE = 183,
+            SCHEDULED_CALL_CANCEL = 184,
+            SUBGROUP_ADMIN_TRIGGERED_AUTO_ADD_RICH = 185,
+            GROUP_CHANGE_RECENT_HISTORY_SHARING = 186,
+            PAID_MESSAGE_SERVER_CAMPAIGN_ID = 187,
+            GENERAL_CHAT_CREATE = 188,
+            GENERAL_CHAT_ADD = 189,
+            GENERAL_CHAT_AUTO_ADD_DISABLED = 190,
+            SUGGESTED_SUBGROUP_ANNOUNCE = 191,
+            BIZ_BOT_1P_MESSAGING_ENABLED = 192
         }
     }
 

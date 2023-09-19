@@ -66,6 +66,8 @@ export type SocketConfig = {
      * map to store the retry counts for failed messages;
      * used to determine whether to retry a message or not */
     msgRetryCounterCache?: CacheStore
+
+    msgRetryCounterMap?: Record<string, number>
     /** provide a cache to store a user's device list */
     userDevicesCache?: CacheStore
     /** cache to store call offers */

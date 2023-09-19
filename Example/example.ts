@@ -37,7 +37,7 @@ const startSock = async() => {
 		// implement to handle retries
 		getMessage: async key => {
 			if(store) {
-				const msg = await store.loadMessage(key.remoteJid!, key.id!, undefined)
+				const msg = await store.loadMessage(key.remoteJid!, key.id!)
 				return msg?.message || undefined
 			}
 
