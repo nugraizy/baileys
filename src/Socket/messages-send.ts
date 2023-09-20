@@ -748,7 +748,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					}
 				}
 
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options?.cachedGroupMetadata, additionalAttributes, participant: options?.participant, statusJidList: options.statusJidList })
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options?.cachedGroupMetadata, additionalAttributes, participant: options?.participant, statusJidList: options?.statusJidList })
 				if(config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => (
