@@ -19,6 +19,8 @@
 	"scripts": {
 		"test": "jest",
 		"postinstall": "tsc",
+		"build": "tsc",
+		"install": "tsc",
 		"build:all": "tsc && typedoc",
 		"build:docs": "typedoc",
 		"build:tsc": "tsc",
