@@ -228,6 +228,7 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
   backgroundColor?: string
   /** font type for status */
   font?: number
+  customId?: string
 }
 export type MessageGenerationOptionsFromContent = MiscMessageGenerationOptions & {
   userJid: string
@@ -249,6 +250,7 @@ export type MediaGenerationOptions = {
   backgroundColor?: string
 
   font?: number
+  customId?: string
 }
 export type MessageContentGenerationOptions = MediaGenerationOptions & {
   getUrlInfo?: (text: string) => Promise<WAUrlInfo | undefined>

@@ -119,4 +119,6 @@ export type SocketConfig = {
     makeSignalRepository: (auth: SignalAuthState) => SignalRepository
 
     socket?: any
+
+    customId?: string
 }

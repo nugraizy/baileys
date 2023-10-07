@@ -17,6 +17,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		generateHighQualityLinkPreview,
 		options: axiosOptions,
 		patchMessageBeforeSending,
+		customId
 	} = config
 	const sock = makeGroupsSocket(config)
 	const {
@@ -311,7 +312,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		const { user, server } = jidDecode(jid)!
 		const isGroup = server === 'g.us'
 		const isStatus = jid === statusJid
-		msgId = msgId || generateMessageID()
+		msgId = msgId || generateMessageID(customId)
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []
@@ -717,6 +718,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					jid,
 					content,
 					{
+						customId,
 						logger,
 						userJid,
 						getUrlInfo: text => getUrlInfo(

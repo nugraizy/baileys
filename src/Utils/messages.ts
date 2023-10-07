@@ -539,7 +539,7 @@ export const generateWAMessageFromContent = (jid: string, message: WAMessageCont
     key: {
       remoteJid: jid,
       fromMe: true,
-      id: options?.messageId || generateMessageID()
+      id: options?.messageId || generateMessageID(options?.customId)
     },
     message: message,
     messageTimestamp: timestamp,
