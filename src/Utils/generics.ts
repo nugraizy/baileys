@@ -335,12 +335,12 @@ const UNEXPECTED_SERVER_CODE_TEXT = 'Unexpected server response: '
 
 export const getCodeFromWSError = (error: Error) => {
 	let statusCode = 500
-	if(error.message.includes(UNEXPECTED_SERVER_CODE_TEXT)) {
+	if(error?.message?.includes(UNEXPECTED_SERVER_CODE_TEXT)) {
 		const code = +error.message.slice(UNEXPECTED_SERVER_CODE_TEXT.length)
 		if(!Number.isNaN(code) && code >= 400) {
 			statusCode = code
 		}
-	} else if((error as any).code?.startsWith('E')) {
+	} else if((error as any)?.code?.startsWith('E')) {
 		// handle ETIMEOUT, ENOTFOUND etc
 		statusCode = 408
 	}
@@ -356,7 +356,7 @@ export const isWABusinessPlatform = (platform: string) => {
 	return platform === 'smbi' || platform === 'smba'
 }
 
-export function trimUndefineds(obj: any) {
+export function trimUndefined(obj: any) {
 	for(const key in obj) {
 		if(typeof obj[key] === 'undefined') {
 			delete obj[key]
@@ -364,4 +364,28 @@ export function trimUndefineds(obj: any) {
 	}
 
 	return obj
+}
+
+const CROCKFORD_CHARACTERS = '123456789ABCDEFGHJKLMNPQRSTVWXYZ'
+
+export function bytesToCrockford(buffer: Buffer): string {
+	let value = 0
+	let bitCount = 0
+	const crockford: string[] = []
+
+	for(let i = 0; i < buffer.length; i++) {
+		value = (value << 8) | (buffer[i] & 0xff)
+		bitCount += 8
+
+		while(bitCount >= 5) {
+			crockford.push(CROCKFORD_CHARACTERS.charAt((value >>> (bitCount - 5)) & 31))
+			bitCount -= 5
+		}
+	}
+
+	if(bitCount > 0) {
+		crockford.push(CROCKFORD_CHARACTERS.charAt((value << (5 - bitCount)) & 31))
+	}
+
+	return crockford.join('')
 }

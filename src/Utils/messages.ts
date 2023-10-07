@@ -32,7 +32,7 @@ import { downloadContentFromMessage, encryptedStream, generateThumbnail, getAudi
 type MediaUploadData = {
   media: WAMediaUpload
   caption?: string
-  ptt?: boolean | string
+  ptt?: boolean
   seconds?: number
   gifPlayback?: boolean
   fileName?: string
@@ -151,8 +151,8 @@ export const prepareWAMessageMedia = async (message: AnyMediaMessageContent, opt
 
   const requiresDurationComputation = mediaType === 'audio' && typeof uploadData.seconds === 'undefined'
   const requiresThumbnailComputation = (mediaType === 'image' || mediaType === 'video') && typeof uploadData['jpegThumbnail'] === 'undefined'
-  const requiresWaveformProcessing = mediaType === 'audio' && uploadData.ptt === 'true' || true
-	const requiresAudioBackground = options.backgroundColor && mediaType === 'audio' && uploadData.ptt === 'true' || true
+  const requiresWaveformProcessing = mediaType === 'audio' && uploadData.ptt === true
+	const requiresAudioBackground = options.backgroundColor && mediaType === 'audio' && uploadData.ptt === true
   const requiresOriginalForSomeProcessing = requiresDurationComputation || requiresThumbnailComputation
   const { mediaKey, encWriteStream, bodyPath, fileEncSha256, fileSha256, fileLength, didSaveToTmpPath } = await encryptedStream(uploadData.media, options.mediaTypeOverride || mediaType, requiresOriginalForSomeProcessing)
   // url safe Base64 encode the SHA256 hash of the body

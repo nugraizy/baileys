@@ -1,7 +1,7 @@
 import { Boom } from '@hapi/boom'
 import { Logger } from 'pino'
 import { proto } from '../../WAProto'
-import { NOISE_MODE, NOISE_WA_HEADER, WA_CERT_DETAILS } from '../Defaults'
+import { NOISE_MODE, WA_CERT_DETAILS } from '../Defaults'
 import { KeyPair } from '../Types'
 import { BinaryNode, decodeBinaryNode } from '../WABinary'
 import { aesDecryptGCM, aesEncryptGCM, Curve, hkdf, sha256 } from './crypto'
@@ -13,7 +13,17 @@ const generateIV = (counter: number) => {
 	return new Uint8Array(iv)
 }
 
-export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: KeyPair, logger: Logger) => {
+export const makeNoiseHandler = ({
+	keyPair: { private: privateKey, public: publicKey },
+	NOISE_HEADER,
+	mobile,
+	logger,
+}: {
+	keyPair: KeyPair
+	NOISE_HEADER: Uint8Array
+	mobile: boolean
+	logger: Logger
+}) => {
 	logger = logger.child({ class: 'ns' })
 
 	const authenticate = (data: Uint8Array) => {
@@ -83,7 +93,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 
 	let inBytes = Buffer.alloc(0)
 
-	authenticate(NOISE_WA_HEADER)
+	authenticate(NOISE_HEADER)
 	authenticate(publicKey)
 
 	return {
@@ -100,12 +110,17 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 			mixIntoKey(Curve.sharedKey(privateKey, decStaticContent))
 
 			const certDecoded = decrypt(serverHello!.payload!)
-			const { intermediate: certIntermediate } = proto.CertChain.decode(certDecoded)
 
-			const { issuerSerial } = proto.CertChain.NoiseCertificate.Details.decode(certIntermediate!.details!)
+			if(mobile) {
+				proto.CertChain.NoiseCertificate.decode(certDecoded)
+			} else {
+				const { intermediate: certIntermediate } = proto.CertChain.decode(certDecoded)
 
-			if(issuerSerial !== WA_CERT_DETAILS.SERIAL) {
-				throw new Boom('certification match failed', { statusCode: 400 })
+				const { issuerSerial } = proto.CertChain.NoiseCertificate.Details.decode(certIntermediate!.details!)
+
+				if(issuerSerial !== WA_CERT_DETAILS.SERIAL) {
+					throw new Boom('certification match failed', { statusCode: 400 })
+				}
 			}
 
 			const keyEnc = encrypt(noiseKey.public)
@@ -118,11 +133,11 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 				data = encrypt(data)
 			}
 
-			const introSize = sentIntro ? 0 : NOISE_WA_HEADER.length
+			const introSize = sentIntro ? 0 : NOISE_HEADER.length
 			const frame = Buffer.alloc(introSize + 3 + data.byteLength)
 
 			if(!sentIntro) {
-				frame.set(NOISE_WA_HEADER)
+				frame.set(NOISE_HEADER)
 				sentIntro = true
 			}
 
@@ -142,7 +157,7 @@ export const makeNoiseHandler = ({ public: publicKey, private: privateKey }: Key
 				}
 			}
 
-			inBytes = Buffer.concat([inBytes, newData])
+			inBytes = Buffer.concat([ inBytes, newData ])
 
 			logger.trace(`recv ${newData.length} bytes, total recv ${inBytes.length} bytes`)
 

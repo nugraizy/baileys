@@ -79,11 +79,13 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 			logger.debug({ chatsAdded }, 'synced chats')
 
 			const oldContacts = contactsUpsert(newContacts)
-			for (const jid of oldContacts) {
-				delete contacts[jid]
+			if(isLatest) {
+				for(const jid of oldContacts) {
+					delete contacts[jid]
+				}
 			}
 
-			logger.debug({ deletedContacts: oldContacts.size, newContacts }, 'synced contacts')
+			logger.debug({ deletedContacts: isLatest ? oldContacts.size : 0, newContacts }, 'synced contacts')
 
 			for (const msg of newMessages) {
 				const jid = msg.key.remoteJid!
@@ -92,6 +94,9 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 			}
 
 			logger.debug({ messages: newMessages.length }, 'synced messages')
+		})
+		ev.on('contacts.upsert', contacts => {
+			contactsUpsert(contacts)
 		})
 		ev.on('contacts.update', (updates) => {
 			for (const update of updates) {
@@ -133,7 +138,9 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 		})
 		ev.on('chats.delete', (deletions) => {
 			for (const item of deletions) {
-				chats.deleteById(item)
+				if(chats.get(item)) {
+					chats.deleteById(item)
+				}
 			}
 		})
 		ev.on('messages.upsert', ({ messages: newMessages, type }) => {

@@ -6,7 +6,7 @@ import { BinaryNode } from './types'
 
 export const getBinaryNodeChildren = (node: BinaryNode | undefined, childTag: string) => {
 	if(Array.isArray(node?.content)) {
-		return node!.content.filter((item) => item.tag === childTag)
+		return node!.content.filter(item => item.tag === childTag)
 	}
 
 	return []
@@ -22,7 +22,7 @@ export const getAllBinaryNodeChildren = ({ content }: BinaryNode) => {
 
 export const getBinaryNodeChild = (node: BinaryNode | undefined, childTag: string) => {
 	if(Array.isArray(node?.content)) {
-		return node?.content.find((item) => item.tag === childTag)
+		return node?.content.find(item => item.tag === childTag)
 	}
 }
 
@@ -58,10 +58,12 @@ export const assertNodeErrorFree = (node: BinaryNode) => {
 
 export const reduceBinaryNodeToDictionary = (node: BinaryNode, tag: string) => {
 	const nodes = getBinaryNodeChildren(node, tag)
-	const dict = nodes.reduce((dict, { attrs }) => {
-		dict[attrs.name || attrs.config_code] = attrs.value || attrs.config_value
-		return dict
-	}, {} as { [_: string]: string })
+	const dict = nodes.reduce(
+		(dict, { attrs }) => {
+			dict[attrs.name || attrs.config_code] = attrs.value || attrs.config_value
+			return dict
+		}, { } as { [_: string]: string }
+	)
 	return dict
 }
 
@@ -85,4 +87,35 @@ function bufferToUInt(e: Uint8Array | Buffer, t: number) {
 	}
 
 	return a
+}
+
+const tabs = (n: number) => '\t'.repeat(n)
+
+export function binaryNodeToString(node: BinaryNode | BinaryNode['content'], i = 0) {
+	if(!node) {
+		return node
+	}
+
+	if(typeof node === 'string') {
+		return tabs(i) + node
+	}
+
+	if(node instanceof Uint8Array) {
+		return tabs(i) + Buffer.from(node).toString('hex')
+	}
+
+	if(Array.isArray(node)) {
+		return node.map((x) => tabs(i + 1) + binaryNodeToString(x, i + 1)).join('\n')
+	}
+
+	const children = binaryNodeToString(node.content, i + 1)
+
+	const tag = `<${node.tag} ${Object.entries(node.attrs || {})
+		.filter(([, v]) => v !== undefined)
+		.map(([k, v]) => `${k}='${v}'`)
+		.join(' ')}`
+
+	const content: string = children ? `>\n${children}\n${tabs(i)}</${node.tag}>` : '/>'
+
+	return tag + content
 }

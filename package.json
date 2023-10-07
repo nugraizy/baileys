@@ -39,11 +39,13 @@
 		"audio-decode": "^2.1.4",
 		"axios": "^0.24.0",
 		"futoin-hkdf": "^1.5.0",
+		"libphonenumber-js": "^1.10.20",
 		"libsignal": "git+https://github.com/adiwajshing/libsignal-node",
 		"music-metadata": "^7.12.3",
 		"node-cache": "^5.1.2",
 		"pino": "^7.0.0",
 		"protobufjs": "^6.11.3",
+		"uuid": "^9.0.0",
 		"ws": "^8.0.0"
 	},
 	"peerDependencies": {
