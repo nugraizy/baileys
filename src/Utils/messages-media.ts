@@ -378,9 +378,9 @@ export const downloadEncryptedContent = async(downloadUrl: string, { cipherKey, 
 
 	const endChunk = endByte ? toSmallestChunkSize(endByte || 0) + AES_CHUNK_SIZE : undefined
 
-	const headers: { [_: string]: string } = {
-		...(options?.headers || {}),
-		Origin: DEFAULT_ORIGIN
+	const headers: AxiosRequestConfig['headers'] = {
+		...options?.headers || { },
+		Origin: DEFAULT_ORIGIN,
 	}
 	if(startChunk || endChunk) {
 		headers.Range = `bytes=${startChunk}-`
