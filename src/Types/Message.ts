@@ -52,6 +52,10 @@ type Mentionable = {
   /** list of jids that are mentioned in the accompanying text */
   mentions?: string[]
 }
+type Contextable = {
+  /** add contextInfo to the message */
+  contextInfo?: proto.IContextInfo
+}
 type ViewOnce = {
   viewOnce?: boolean
 }
@@ -64,6 +68,9 @@ type Templatable = {
   templateButtons?: proto.IHydratedTemplateButton[]
 
   footer?: string
+}
+type Editable = {
+  edit?: WAMessageKey
 }
 type Listable = {
   /** Sections of the List */
@@ -91,42 +98,34 @@ export type PollMessageOptions = {
 
 export type MediaType = keyof typeof MEDIA_HKDF_KEY_MAPPING
 export type AnyMediaMessageContent = (
-  | ({
+  ({
       image: WAMediaUpload
       caption?: string
       jpegThumbnail?: string
-    } & Mentionable &
-      Buttonable &
-      Templatable &
-      WithDimensions)
+  } & Mentionable & Contextable & Buttonable & Templatable & WithDimensions)
   | ({
       video: WAMediaUpload
       caption?: string
       gifPlayback?: boolean
       jpegThumbnail?: string
-    } & Mentionable &
-      Buttonable &
-      Templatable &
-      WithDimensions)
+  } & Mentionable & Contextable & Buttonable & Templatable & WithDimensions)
   | {
       audio: WAMediaUpload
       /** if set to true, will send as a `voice note` */
       ptt?: boolean
       /** optionally tell the duration of the audio */
       seconds?: number
-    }
+  }
   | ({
       sticker: WAMediaUpload
       isAnimated?: boolean
-    } & WithDimensions)
-  | ({
+  } & WithDimensions) | ({
       document: WAMediaUpload
       mimetype: string
       fileName?: string
       caption?: string
-    } & Buttonable &
-      Templatable)
-) & { mimetype?: string }
+  } & Contextable & Buttonable & Templatable))
+  & { mimetype?: string } & Editable
 
 export type ButtonReplyInfo = {
   displayText: string
@@ -139,47 +138,39 @@ export type WASendableProduct = Omit<proto.Message.ProductMessage.IProductSnapsh
 }
 
 export type AnyRegularMessageContent = (
-  | ({
-      text: string
+  ({
+    text: string
       linkPreview?: WAUrlInfo | null
-    } & Mentionable &
-      Buttonable &
-      Templatable &
-      Listable)
-  | AnyMediaMessageContent
+  }
+  & Mentionable & Contextable & Buttonable & Templatable & Listable & Editable)
+  | (AnyMediaMessageContent & { benchmark?: boolean, timeOnProcess?: number })
   | ({
       poll: PollMessageOptions
-    } & Mentionable &
-      Buttonable &
-      Templatable)
+  } & Mentionable & Contextable & Buttonable & Templatable & Editable)
   | {
       contacts: {
-        displayName?: string
-        contacts: proto.Message.IContactMessage[]
+          displayName?: string
+          contacts: proto.Message.IContactMessage[]
       }
-    }
+  }
   | {
       location: WALocationMessage
-    }
+  }
   | { react: proto.Message.IReactionMessage }
   | {
       buttonReply: ButtonReplyInfo
       type: 'template' | 'plain'
-    }
+  }
   | {
       listReply: Omit<proto.Message.IListResponseMessage, 'contextInfo'>
-    }
+  }
   | {
       product: WASendableProduct
       businessOwnerJid?: string
       body?: string
       footer?: string
-    }
-) &
-  ViewOnce & {
-    benchmark?: boolean
-    timeOnProcess?: number
   }
+) & ViewOnce
 
 export type AnyMessageContent =
   | AnyRegularMessageContent

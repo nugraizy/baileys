@@ -475,14 +475,13 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
     message.edit
 		m = {
 			protocolMessage: {
-				key: message.edit!,
+				key: message.edit,
 				editedMessage: m,
 				timestampMs: Date.now(),
 				type: WAProto.Message.ProtocolMessage.Type.MESSAGE_EDIT
 			}
 		}
 	}
-
 
   if('contextInfo' in message && !!message.contextInfo) {
 		const [messageType] = Object.keys(m)
