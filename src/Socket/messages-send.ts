@@ -3,7 +3,7 @@ import { Boom } from '@hapi/boom'
 import NodeCache from 'node-cache'
 import { proto } from '../../WAProto'
 import { DEFAULT_CACHE_TTLS, WA_DEFAULT_EPHEMERAL } from '../Defaults'
-import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types'
+import type { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types'
 import { aggregateMessageKeysNotFromMe, assertMediaContent, bindWaitForEvent, decryptMediaRetryData, encodeSignedDeviceIdentity, encodeWAMessage, encryptMediaRetryRequest, extractDeviceJids, generateMessageID, generateWAMessage, getStatusCodeForMediaRetry, getUrlFromDirectPath, getWAUploadToServer, parseAndInjectE2ESessions, unixTimestampSeconds } from '../Utils'
 import { getUrlInfo } from '../Utils/link-preview'
 import { areJidsSameUser, BinaryNode, BinaryNodeAttributes, getBinaryNodeChild, getBinaryNodeChildren, isJidGroup, isJidUser, jidDecode, jidEncode, jidNormalizedUser, JidWithDevice, S_WHATSAPP_NET } from '../WABinary'
@@ -702,6 +702,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			options: MiscMessageGenerationOptions
 		) => {
 			const userJid = authState.creds.me!.id
+			const now = Date.now()
 			if(
 				typeof content === 'object' &&
 				'disappearingMessagesInChat' in content &&
@@ -750,6 +751,23 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 						additionalAttributes.edit = '8'
 					} else {
 						additionalAttributes.edit = '7'
+					}
+				}
+
+				const benchmark = 'benchmark' in content
+
+				if(benchmark) {
+					const timeOnProcess = 'timeOnProcess' in content && content.timeOnProcess || now
+
+					const typeMessage = Object.keys(fullMsg.message!).find((v) => v.endsWith('Message'))!
+
+					if(fullMsg.message?.[typeMessage]?.caption) {
+						if(fullMsg.message?.[typeMessage].caption) {
+							const caption = fullMsg.message[typeMessage].caption
+							fullMsg.message[typeMessage].caption = `${caption}\n\n⏱️ ${timeOnProcess - now}ms`
+						}
+
+						fullMsg.message[typeMessage].caption = `${fullMsg.message[typeMessage].caption}\n\n⏱️ ${timeOnProcess - now}ms`
 					}
 				}
 

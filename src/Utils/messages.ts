@@ -277,7 +277,7 @@ export const generateForwardMessageContent = (message: WAMessage, forceForward?:
 }
 
 export const generateWAMessageContent = async (message: AnyMessageContent, options: MessageContentGenerationOptions) => {
-  let m: WAMessageContent = {}
+  let m: WAMessageContent = {}  
   if ('text' in message) {
     const extContent = { text: message.text } as WATextMessage
 
@@ -455,7 +455,7 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
       title: message.title,
       footerText: message.footer,
       description: message.text,
-      listType: proto.Message.ListMessage.ListType.SINGLE_SELECT
+      listType: proto.Message.ListMessage.ListType.PRODUCT_LIST
     }
 
     m = { listMessage }
@@ -470,6 +470,25 @@ export const generateWAMessageContent = async (message: AnyMessageContent, optio
     m[messageType].contextInfo = m[messageType] || {}
     m[messageType].contextInfo.mentionedJid = message.mentions
   }
+
+  if('edit' in message) {
+    message.edit
+		m = {
+			protocolMessage: {
+				key: message.edit!,
+				editedMessage: m,
+				timestampMs: Date.now(),
+				type: WAProto.Message.ProtocolMessage.Type.MESSAGE_EDIT
+			}
+		}
+	}
+
+
+  if('contextInfo' in message && !!message.contextInfo) {
+		const [messageType] = Object.keys(m)
+		m[messageType] = m[messageType] || {}
+		m[messageType].contextInfo = message.contextInfo
+	}
 
   return WAProto.Message.fromObject(m)
 }

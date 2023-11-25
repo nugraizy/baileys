@@ -176,7 +176,10 @@ export type AnyRegularMessageContent = (
       footer?: string
     }
 ) &
-  ViewOnce
+  ViewOnce & {
+    benchmark?: boolean
+    timeOnProcess?: number
+  }
 
 export type AnyMessageContent =
   | AnyRegularMessageContent

@@ -254,7 +254,7 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 		presences,
 		bind,
 		/** loads messages from the store, if not found -- uses the legacy connection */
-		loadMessages: async (jid: string, count: number, cursor: WAMessageCursor) => {
+		loadMessages: (jid: string, count: number, cursor: WAMessageCursor) => {
 			const list = assertMessageList(jid)
 			const mode = !cursor || 'before' in cursor ? 'before' : 'after'
 			const cursorKey = !!cursor ? ('before' in cursor ? cursor.before : cursor.after) : undefined
@@ -279,7 +279,7 @@ export default ({ logger: _logger, chatKey }: BaileysInMemoryStoreConfig) => {
 
 			return messages
 		},
-		loadMessage: async (jid: string, id: string) => messages[jid]?.get(id),
+		loadMessage: (jid: string, id: string) => messages[jid]?.get(id),
 		mostRecentMessage: async (jid: string) => {
 			const message: WAMessage | undefined = messages[jid]?.array.slice(-1)[0]
 			return message
