@@ -761,13 +761,9 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 					const typeMessage = Object.keys(fullMsg.message!).find((v) => v.endsWith('Message'))!
 
-					if(fullMsg.message?.[typeMessage]?.caption) {
-						if(fullMsg.message?.[typeMessage].caption) {
-							const caption = fullMsg.message[typeMessage].caption
-							fullMsg.message[typeMessage].caption = `${caption}\n\n⏱️ ${timeOnProcess - now}ms`
-						}
-
-						fullMsg.message[typeMessage].caption = `${fullMsg.message[typeMessage].caption}\n\n⏱️ ${timeOnProcess - now}ms`
+					if(fullMsg.message?.[typeMessage].caption) {
+						const caption = fullMsg.message[typeMessage].caption
+						fullMsg.message[typeMessage].caption = `${caption}\n\n⏱️ ${timeOnProcess - now}ms`
 					}
 				}
 
